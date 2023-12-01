@@ -1,0 +1,9 @@
+.cell-container{
+    height: 50px;
+    width: 50px;
+    background-color: green;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,17 +1,12 @@
-
+import Cell from "../cell/cell.component";
+import "./xo.styles.css"
 const XO = () => {
     return (
-        <div className="grid grid-cols-3 grid-rows-3 gap-4 border p-2">
-        <button className="border p-2">X</button>
-        <button className="border p-2">O</button>
-        <button className="border p-2">X</button>
-        <button className="border p-2">O</button>
-        <button className="border p-2">X</button>
-        <button className="border p-2">O</button>
-        <button className="border p-2">X</button>
-        <button className="border p-2">O</button>
-        <button className="border p-2">X</button>
-    </div>
+        <div className="grid-container">
+            {
+                [...Array(9)].map((_, i) => <Cell key={i} />)
+            }
+        </div>
     )
 }
 
