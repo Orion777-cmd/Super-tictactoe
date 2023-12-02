@@ -17,16 +17,18 @@
     align-items: center;
 
 }
-.cell-container:hover{
+.cell-container:hover {
     cursor :pointer;
     border-radius: 50%;
     background-color: #00ff00;
 }
 
+
 .render-X {
     position: relative;
     height: 50px;
     width: 50px;
+    background-color: white;
     animation: fadeIn 0.5s forwards;
 }
 
@@ -39,7 +41,7 @@
     background-color: green;
     top: 20px;
     left: 5px;
-    transition: transform 0.5s ease;
+    /* transition: transform 0.5s ease; */
 }
 
 .render-X::before {
@@ -54,9 +56,10 @@
     position: relative;
     height: 50px;
     width: 50px;
-    border-radius: 50%;
-    background-color: green;
+    /* border-radius: 50%; */
+    background-color: white;
     animation: fadeIn 0.5s forwards;
+    overflow: hidden;
 }
 
 .render-O::before {
@@ -66,10 +69,23 @@
     width: 20px;
     border-radius: 50%;
     background-color: white;
-    top: 10px;
-    left: 10px;
-    border: 5px solid white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
 }
+.render-O::after{
+    content : '';
+    position: absolute;
+    height: 100%;
+    width : 100%;
+    border-radius: 50%;
+    background-color: green;
+    top: 0;
+    left: 0;
+    border: 0;
+}
+
 
 @keyframes fadeIn {
     0% {

@@ -1,4 +1,4 @@
-// import "../../tailwind.css";
+
 import "./bigXo.styles.css"
 import XO from "../XO/xo.component";
 const BigXO = () => {

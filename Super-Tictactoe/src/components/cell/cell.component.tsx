@@ -1,24 +1,16 @@
 import "./cell.styles.css"
 import {useState} from "react";
 
+type CellProps = {
+    renderSign: () => null;
+    sign: string | null;
+  };
 
-
-const Cell = () => {
-    const renderSign = () => {
-        setClicked(true);
-        if (sign === "X") {
-
-            setSign("O");
-        }
-        else {
-            setSign("X");
-        }
-    }
-    const [sign, setSign] = useState("X");
-    const [clicked, setClicked] = useState(false);
+const Cell: React.FC<CellProps> = ({renderSign , sign}) => {
+    
     return (
-        <div className={`cell-container ${clicked? "transparent-container": ''}`} onClick={renderSign}>
-            {clicked && <div className={`render-${sign}`}></div>}
+        <div className="cell-container" onClick={renderSign}>
+            {sign && <div className={`render-${sign}`}></div>}
         </div>
     )
 }
