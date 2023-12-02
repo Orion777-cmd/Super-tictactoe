@@ -17,22 +17,26 @@ const XO = () => {
         }
         return null;
     }
-    const {sign, toggleSign} = useTicTacToe();
-    const [clicked, setClicked] = useState(false);
+    const {sign, toggleSign, gridStates, updateGridState} = useTicTacToe();
+    // const [clicked, setClicked] = useState(false);
     const [board, setBoard] = useState(Array(9).fill(null));
 
     const winner = calculateWinner(board);
     let status;
+    let finished: boolean;
     if(winner){
-        status = `Winner: ${winner}`
+        status = `${winner}`
+        finished = true;
     }else if (!board.includes(null)){
         status = `draw`;
+        finished = true;
     }else{
-        status = `Next Player: ${sign}`
+        status = false;
+        finished = false;
     }
-
+    console.log(winner,board,  finished)
     return (
-        <div className="grid-container">
+        <div className={`grid-container ${finished? `${status}` : '' }`}>
            {board.map((cell, index) => (
                 <Cell key={index} renderSign={() => renderSign(index)} sign={cell} />
             ))}
