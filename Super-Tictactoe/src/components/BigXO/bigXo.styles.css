@@ -7,3 +7,85 @@
     align-items: center;
 
 }
+
+
+.winner-X {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    animation: fadeIn 0.5s forwards;
+    
+}
+
+.winner-X::before,
+.winner-X::after {
+    content: '';
+    position: absolute;
+    height: 180px;
+    width: 50px;
+    background-color: green;
+    top: -10;
+    left: 50px;
+    z-index: 3;
+    /* transform: translate(-50%, -50%); */
+    /* transition: transform 0.5s ease; */
+}
+
+.winner-X::before {
+    transform: rotate(45deg);
+}
+
+.winner-X::after {
+    transform: rotate(-45deg);
+}
+
+.winner-O {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    /* border-radius: 50%; */
+    background-color: white;
+    animation: fadeIn 0.5s forwards;
+    overflow: hidden;
+}
+
+.winner-O::before {
+    content: '';
+    position: absolute;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    background-color: white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+.winner-O::after{
+    content : '';
+    position: absolute;
+    height: 100%;
+    width : 100%;
+    border-radius: 50%;
+    background-color: green;
+    top: 0;
+    left: 0;
+    border: 0;
+}
+
+.winner-draw{
+    background-color: green;
+}
+
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

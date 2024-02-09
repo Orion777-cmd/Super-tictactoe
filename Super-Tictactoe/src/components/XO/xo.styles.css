@@ -5,26 +5,31 @@
     gap: 5px;
     justify-content: center;
     align-items: center;
+    background: white;
+   
     
 }
 
 .winner-X {
     position: relative;
-    height: 50px;
-    width: 50px;
+    height: 100%;
+    width: 100%;
     background-color: white;
     animation: fadeIn 0.5s forwards;
+    
 }
 
 .winner-X::before,
 .winner-X::after {
     content: '';
     position: absolute;
-    height: 15px;
-    width: 45px;
+    height: 180px;
+    width: 50px;
     background-color: green;
-    top: 17px;
-    left: 3px;
+    top: -10;
+    left: 50px;
+    z-index: 3;
+    /* transform: translate(-50%, -50%); */
     /* transition: transform 0.5s ease; */
 }
 
@@ -38,8 +43,8 @@
 
 .winner-O {
     position: relative;
-    height: 50px;
-    width: 50px;
+    height: 100%;
+    width: 100%;
     /* border-radius: 50%; */
     background-color: white;
     animation: fadeIn 0.5s forwards;
@@ -49,8 +54,8 @@
 .winner-O::before {
     content: '';
     position: absolute;
-    height: 20px;
-    width: 20px;
+    height: 50px;
+    width: 50px;
     border-radius: 50%;
     background-color: white;
     top: 50%;

@@ -1,5 +1,5 @@
-
-export const calculateWinner = (squares : string[]) => {
+type GridState = string | null;
+export const calculateWinner = (squares : GridState[]) => {
     const lines = [
         [0, 1, 2],
         [3, 4, 5],

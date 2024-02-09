@@ -1,53 +1,61 @@
 // TicTacToeContext.js
+
 import { createContext, useContext, useState, ReactNode } from "react";
 
-type GridState = "X" | "O" | "draw" | null;
-
-type TicTacToeGrid = GridState[][];
+type GridState = string | null;
 
 interface TicTacToeContextProps {
     sign: "X" | "O";
-    toggleSign : () => void;
-    gridStates: TicTacToeGrid;
-    updateGridState: (row: number, col: number, state: GridState) => void;
+    toggleSign : () => void; 
+    updateGridState: (index: number, state: GridState | null) => void;
     board : GridState[];
     setBoard: React.Dispatch<React.SetStateAction<GridState[]>>;
+    finished : boolean;
+    setFinishedState: (isFinished: boolean) => void;
 }
 
-const defaultGrid: TicTacToeGrid = [
-    [null , null, null],
-    [null, null , null],
-    [null, null, null],
-];
-
-
+// const defaultGrid: GridState[] = [null, null, null, null, null, null, null, null, null];
 
 const TicTacToeContext = createContext<TicTacToeContextProps>({
         sign: "X",
         toggleSign: () => {},
-        gridStates: defaultGrid,
         updateGridState: () => {},
         board: [],
         setBoard: () => {},
+        finished: false,
+        setFinishedState : () => {},
     } );
 
 export const TicTacToeProvider = ({ children }: {children: ReactNode}) => {
   const [sign, setSign] = useState<"X" | "O">("O");
-  const [gridStates, setGridStates] = useState<TicTacToeGrid>(defaultGrid);
+  // const [gridStates, setGridStates] = useState<GridState[]>(defaultGrid);
   const [board, setBoard] = useState<Array<GridState>>(Array(9).fill(null));
+  const [finished, setFinished] = useState<boolean>(false);
+ 
+
 
   const toggleSign = () => {
     setSign((prevSign) => (prevSign === "X" ? "O" : "X"));
   };
 
-  const updateGridState = (row: number, col: number, state: GridState) => {
-    const newGridStates = [...gridStates];
-    newGridStates[row][col] = state;
-    setGridStates(newGridStates)
+  const updateGridState = (index: number, state: string | null) => {
+    const newBoard = [...board];
+    if (state) {
+        newBoard[index] = state;
+    }
+    setBoard(newBoard);
+
+  
+    
+};
+
+
+  const setFinishedState  = (isFinished: boolean) => {
+    setFinished(isFinished)
   }
 
   return (
-    <TicTacToeContext.Provider value={{ sign, toggleSign, gridStates, updateGridState,board, setBoard }}>
+    <TicTacToeContext.Provider value={{ sign, toggleSign, updateGridState,board, setBoard, finished, setFinishedState}}>
       {children}
     </TicTacToeContext.Provider>
   );
