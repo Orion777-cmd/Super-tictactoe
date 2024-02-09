@@ -2,7 +2,7 @@ import Cell from "../cell/cell.component";
 import "./xo.styles.css"
 import {useState,useEffect} from "react";
 import { useTicTacToe } from "../../state/tictactoeContext";
-import { calculateWinner } from "./tictactoe.logic";
+import { calculateWinner } from "../../util/findWinner.util";
 
 type XOpropType = {
     updateGameState: (status: string | null) => void;

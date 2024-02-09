@@ -3,7 +3,7 @@ import "./bigXo.styles.css"
 import XO from "../XO/xo.component";
 import { useTicTacToe } from "../../state/tictactoeContext";
 import {useState} from "react";
-import { calculateWinner } from "../XO/tictactoe.logic";
+import { calculateWinner } from "../../util/findWinner.util";
 
 const BigXO = () => {
     const { updateGridState, board, sign ,setBoard} = useTicTacToe();
