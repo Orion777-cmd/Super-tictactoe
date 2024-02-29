@@ -1,4 +1,4 @@
-type GridState = string | null;
+type GridState = "X" |"O" |"draw" |  null;
 export const calculateWinner = (squares : GridState[]) => {
     const lines = [
         [0, 1, 2],

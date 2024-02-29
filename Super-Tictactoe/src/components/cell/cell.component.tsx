@@ -4,6 +4,7 @@ import {useState} from "react";
 type CellProps = {
     renderSign: () => void;
     sign: string | null;
+    
   };
 
 const Cell: React.FC<CellProps> = ({renderSign , sign}) => {
