@@ -1,5 +1,3 @@
-// TicTacToeContext.tsx
-
 import { createContext, useContext, useState, ReactNode } from "react";
 
 type GridState = "X" | "O" | null;
@@ -7,15 +5,15 @@ type GridState = "X" | "O" | null;
 interface TicTacToeContextProps {
     sign: "X" | "O";
     toggleSign: () => void;
-    updateWinnerBoardState: (index: number, state: GridState) => void;
-    winner: GridState[];
-    setWinner: React.Dispatch<React.SetStateAction<GridState[]>>;
-    bigBoard: (GridState | "draw")[][]; // Change type to a 2D array
-    setBigBoard: React.Dispatch<React.SetStateAction<(GridState | "draw")[][]>>; // Adjusted type
+    updateWinnerBoardState: (index: number, state: GridState | "draw") => void;
+    winner: (GridState | "draw")[];
+    setWinner: React.Dispatch<React.SetStateAction<(GridState | "draw")[]>>;
+    bigBoard: (GridState | "draw")[][]; 
+    setBigBoard: React.Dispatch<React.SetStateAction<(GridState | "draw")[][]>>; 
     updateBigBoardState: (index: number, innerIndex: number, state: GridState | "draw") => void;
-    wholeGameWinner: GridState | "draw" | null;
+    wholeGameWinner: GridState | "draw";
     setWholeGameWinner: React.Dispatch<React.SetStateAction<GridState | "draw" | null>>;
-    updateWholeGameWinner: (state: GridState) => void;
+    updateWholeGameWinner: (state: GridState | "draw") => void;
 }
 
 const TicTacToeContext = createContext<TicTacToeContextProps>({
@@ -24,7 +22,7 @@ const TicTacToeContext = createContext<TicTacToeContextProps>({
     updateWinnerBoardState: () => {},
     winner: [],
     setWinner: () => {},
-    bigBoard: [[]], // Initialize as an array of empty arrays
+    bigBoard: [[]], 
     setBigBoard: () => {},
     updateBigBoardState: () => {},
     wholeGameWinner: null,
@@ -35,15 +33,22 @@ const TicTacToeContext = createContext<TicTacToeContextProps>({
 
 export const TicTacToeProvider = ({ children }: { children: ReactNode }) => {
     const [sign, setSign] = useState<"X" | "O">("O");
-    const [winner, setWinner] = useState<Array<GridState>>(Array(9).fill(null));
-    const [bigBoard, setBigBoard] = useState<Array<Array<GridState | "draw">>>(Array(9).fill(Array(9).fill(null)));
+    const [winner, setWinner] = useState<Array<GridState|"draw">>(Array(9).fill(null));
+    const [bigBoard, setBigBoard] = useState<Array<Array<GridState | "draw">>>(() => {
+        const initialBoard: Array<Array<GridState | "draw">> = [];
+        for (let i = 0; i < 9; i++) {
+            initialBoard.push(Array(9).fill(null));
+        }
+        return initialBoard;
+    });
+    
     
 
     const toggleSign = () => {
         setSign((prevSign) => (prevSign === "X" ? "O" : "X"));
     };
 
-    const updateWinnerBoardState = (index: number, state: GridState) => {
+    const updateWinnerBoardState = (index: number, state: GridState | "draw") => {
         const newBoard = [...winner];
         if (state) {
             newBoard[index] = state;
@@ -52,10 +57,13 @@ export const TicTacToeProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const updateBigBoardState = (index: number, innerIndex: number, state: GridState | "draw") => {
+        
+        
         const newBigBoard = [...bigBoard];
         if (state) {
             newBigBoard[index][innerIndex] = state;
         }
+       
         setBigBoard(newBigBoard);
     };
 

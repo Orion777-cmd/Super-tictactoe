@@ -1,5 +1,5 @@
 type GridState = "X" |"O" |"draw" |  null;
-export const calculateWinner = (squares : GridState[]) => {
+export const calculateWinner = (squares : (GridState | "draw")[]) => {
     const lines = [
         [0, 1, 2],
         [3, 4, 5],
@@ -16,6 +16,10 @@ export const calculateWinner = (squares : GridState[]) => {
         if(squares[a] && squares[a] === squares[b] && squares[a] === squares[c]){
             return squares[a];
         }
+    }
+
+    if (squares.every(square => square !== null)){
+        return "draw";
     }
     return null
 }
