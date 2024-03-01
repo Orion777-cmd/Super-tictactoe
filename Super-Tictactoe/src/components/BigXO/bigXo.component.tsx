@@ -6,7 +6,7 @@ import { calculateWinner } from "../../util/findWinner.util";
 
 
 const BigXO = () => {
-    const { winner, wholeGameWinner, bigBoard, setWholeGameWinner, updateWholeGameWinner} = useTicTacToe();
+    const { winner, wholeGameWinner, bigBoard, updateWholeGameWinner} = useTicTacToe();
     
     useEffect ( () => {
         
@@ -17,14 +17,15 @@ const BigXO = () => {
         
     },[winner])
     return (
-        <>
-        {wholeGameWinner && <p>{wholeGameWinner == "draw"? "it is a draw": `${wholeGameWinner} wins!`}</p>}
-        <div className={`ultimate-container ${wholeGameWinner !== null ? `winner-${wholeGameWinner}`: ""}`}>
-            {bigBoard.map((_, index) => (
+                
+        <div className={`ultimate-container `}>
+            {wholeGameWinner != null ? <div className={`winner-${wholeGameWinner}`}></div>
+            :
+            bigBoard.map((_, index) => (
                 <XO key={index} idx={index} />
             ))}
         </div>
-        </>
+        
     );
 };
 

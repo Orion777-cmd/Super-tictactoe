@@ -3,15 +3,14 @@
     grid-template-columns: repeat(3, 50px);
     grid-template-rows: repeat(3, 50px);
     gap: 5px;
-    justify-content: center;
-    align-items: center;
+    place-content: center;
     background: white;
-   
+   position: relative;
     
 }
 
 .winner-X {
-    position: relative;
+    position: absolute;
     height: 100%;
     width: 100%;
     background-color: white;
@@ -29,8 +28,7 @@
     top: -10;
     left: 50px;
     z-index: 3;
-    /* transform: translate(-50%, -50%); */
-    /* transition: transform 0.5s ease; */
+ 
 }
 
 .winner-X::before {
@@ -42,43 +40,48 @@
 }
 
 .winner-O {
-    position: relative;
+    position: absolute;
     height: 100%;
     width: 100%;
-    /* border-radius: 50%; */
     background-color: white;
     animation: fadeIn 0.5s forwards;
     overflow: hidden;
+   
 }
 
 .winner-O::before {
     content: '';
     position: absolute;
-    height: 50px;
-    width: 50px;
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    background-color:green;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+.winner-O::after{
+    content : '';
+    position: absolute;
+    height: 50%;
+    width : 50%;
     border-radius: 50%;
     background-color: white;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 2;
-}
-.winner-O::after{
-    content : '';
-    position: absolute;
-    height: 100%;
-    width : 100%;
-    border-radius: 50%;
-    background-color: green;
-    top: 0;
-    left: 0;
     border: 0;
+    z-index: 2
 }
 
 .winner-draw{
     background-color: green;
 }
 
+.board-active{
+    filter: drop-shadow(0 0 0.75rem crimson);
+}
 
 @keyframes fadeIn {
     0% {

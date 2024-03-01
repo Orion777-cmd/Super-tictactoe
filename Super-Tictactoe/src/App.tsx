@@ -8,7 +8,6 @@ import BigXO from "./components/BigXO/bigXo.component";
 
 function App() {
   
-
   return (
     <div className="container">
       <BigXO />

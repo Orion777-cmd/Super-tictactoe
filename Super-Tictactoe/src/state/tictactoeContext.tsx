@@ -14,6 +14,8 @@ interface TicTacToeContextProps {
     wholeGameWinner: GridState | "draw";
     setWholeGameWinner: React.Dispatch<React.SetStateAction<GridState | "draw" | null>>;
     updateWholeGameWinner: (state: GridState | "draw") => void;
+    activeBoard : boolean[];
+    updateActiveBoardState: (index: number) => void;
 }
 
 const TicTacToeContext = createContext<TicTacToeContextProps>({
@@ -28,6 +30,8 @@ const TicTacToeContext = createContext<TicTacToeContextProps>({
     wholeGameWinner: null,
     setWholeGameWinner: () => {},
     updateWholeGameWinner: () => {},
+    activeBoard: [],
+    updateActiveBoardState: () => {}
   
 });
 
@@ -42,7 +46,7 @@ export const TicTacToeProvider = ({ children }: { children: ReactNode }) => {
         return initialBoard;
     });
     
-    
+    const [activeBoard, setActiveBoard] = useState<boolean[]>(Array(9).fill(true));
 
     const toggleSign = () => {
         setSign((prevSign) => (prevSign === "X" ? "O" : "X"));
@@ -72,8 +76,26 @@ export const TicTacToeProvider = ({ children }: { children: ReactNode }) => {
         setWholeGameWinner(state);
     };
 
+    const updateActiveBoardState = (index: number) => {
+        const newActiveBoard = [...activeBoard];
+        newActiveBoard[index] = !newActiveBoard[index];
+        setActiveBoard(newActiveBoard);
+    }
+
     return (
-        <TicTacToeContext.Provider value={{ sign, toggleSign, updateWinnerBoardState, winner, bigBoard, updateBigBoardState, setWinner, setBigBoard, wholeGameWinner,setWholeGameWinner, updateWholeGameWinner}}>
+        <TicTacToeContext.Provider value={{ sign,
+                                             toggleSign,
+                                             updateWinnerBoardState,
+                                             winner, bigBoard, 
+                                            updateBigBoardState, 
+                                            setWinner, 
+                                            setBigBoard, 
+                                            wholeGameWinner,
+                                            setWholeGameWinner,
+                                            updateWholeGameWinner,
+                                            activeBoard,
+                                            updateActiveBoardState,
+                                            }}>
             {children}
         </TicTacToeContext.Provider>
     );

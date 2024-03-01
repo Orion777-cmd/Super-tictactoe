@@ -11,9 +11,9 @@ type XOpropType = {
     
 }
 const XO: React.FC<XOpropType> = ({ idx }) => {
-    const { sign, toggleSign, updateBigBoardState, bigBoard, updateWinnerBoardState, winner } = useTicTacToe();
+    const { activeBoard, updateActiveBoardState, sign, toggleSign, updateBigBoardState, bigBoard, updateWinnerBoardState, winner } = useTicTacToe();
  
-
+    console.log("active board state: ", activeBoard[idx])
     const renderSign = (index: number) => {
         console.log("renderSign", idx, index);
         if (bigBoard[idx][index] === null) {
@@ -27,13 +27,13 @@ const XO: React.FC<XOpropType> = ({ idx }) => {
         }
         return null;
     }
-
-    
-    
+   
     return (
-        <div className={`grid-container ${winner[idx] != null ? `winner-${winner[idx]}` : ''}`}>
-            {bigBoard[idx].map((cell, index) => (
-                <Cell key={index} renderSign={renderSign} sign={cell} innerIndex={index} />
+        <div className={`grid-container ${activeBoard[idx] == true}: "board-active": ""`}>
+            {winner[idx]!= null ? <div className={`winner-${winner[idx]}`}></div>
+            :
+            bigBoard[idx].map((cell, index) => (
+                <Cell key={index} renderSign={renderSign} sign={cell} innerIndex={index} outerIndex={idx} />
             ))}
         </div>
     )
