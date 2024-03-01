@@ -1,7 +1,6 @@
 import "./cell.styles.css"
-import {useState} from "react";
 import { useTicTacToe } from "../../state/tictactoeContext";
-import { act } from "react-dom/test-utils";
+
 
 type CellProps = {
     renderSign: (innerIndex: number) => void;

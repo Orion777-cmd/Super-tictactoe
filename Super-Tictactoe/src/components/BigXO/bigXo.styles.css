@@ -1,13 +1,10 @@
 .ultimate-container{
     display: grid;
-    position: relative;
+    place-content: center;    
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     gap: 20px;
-    justify-content: center;
-    align-items: center;
-    width: 40%;
-    height: 60%;
+    position: relative;
 
 }
 
@@ -17,6 +14,9 @@
     width: 100%;
     background-color: white;
     animation: fadeIn 0.5s forwards;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     
 }
 
@@ -24,11 +24,10 @@
 .winner-X::after {
     content: '';
     position: absolute;
-    height: 180px;
+    height: 150px;
     width: 50px;
     background-color: green;
-    top: -10;
-    left: 50px;
+  
     z-index: 3;
   
 }
