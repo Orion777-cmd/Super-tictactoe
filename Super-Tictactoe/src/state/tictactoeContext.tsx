@@ -14,8 +14,7 @@ interface TicTacToeContextProps {
     wholeGameWinner: GridState | "draw";
     setWholeGameWinner: React.Dispatch<React.SetStateAction<GridState | "draw" | null>>;
     updateWholeGameWinner: (state: GridState | "draw") => void;
-    activeBoard : boolean[];
-    updateActiveBoardState: (index: number) => void;
+   
     activeIndex : number ;
     updateActiveIndexState : (index: number) => void;
     isGameStarted: boolean;
@@ -34,8 +33,7 @@ const TicTacToeContext = createContext<TicTacToeContextProps>({
     wholeGameWinner: null,
     setWholeGameWinner: () => {},
     updateWholeGameWinner: () => {},
-    activeBoard: [],
-    updateActiveBoardState: () => {},
+    
     activeIndex: -1,
     updateActiveIndexState: () => {},
     isGameStarted: false,
@@ -54,7 +52,7 @@ export const TicTacToeProvider = ({ children }: { children: ReactNode }) => {
         return initialBoard;
     });
     
-    const [activeBoard, setActiveBoard] = useState<boolean[]>(Array(9).fill(true));
+    
     const [activeIndex, setActiveIndex] = useState<number>(-1);
     const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
 
@@ -91,11 +89,6 @@ export const TicTacToeProvider = ({ children }: { children: ReactNode }) => {
         setWholeGameWinner(state);
     };
 
-    const updateActiveBoardState = (index: number) => {
-        const newActiveBoard = [...activeBoard];
-        newActiveBoard[index] = !newActiveBoard[index];
-        setActiveBoard(newActiveBoard);
-    }
 
     const updateActiveIndexState = (index : number) => {
         setActiveIndex(index);
@@ -116,8 +109,6 @@ export const TicTacToeProvider = ({ children }: { children: ReactNode }) => {
                                             wholeGameWinner,
                                             setWholeGameWinner,
                                             updateWholeGameWinner,
-                                            activeBoard,
-                                            updateActiveBoardState,
                                             activeIndex, 
                                             updateActiveIndexState,
                                             isGameStarted,
