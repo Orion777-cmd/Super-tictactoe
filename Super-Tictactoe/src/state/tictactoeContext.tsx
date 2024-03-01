@@ -71,8 +71,7 @@ export const TicTacToeProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const updateBigBoardState = (index: number, innerIndex: number, state: GridState | "draw") => {
-        console.log("winner: ", winner, "index: ");
-        console.log("is this board finished: ", winner[innerIndex] !== null);
+     
         if (winner[innerIndex] === null) {
             updateActiveIndexState(innerIndex);
         }else{
