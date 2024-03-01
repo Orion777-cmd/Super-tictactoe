@@ -1,6 +1,5 @@
 import "./cell.styles.css"
 import { useTicTacToe } from "../../state/tictactoeContext";
-import { useEffect } from "react";
 
 
 type CellProps = {
@@ -18,7 +17,7 @@ const Cell: React.FC<CellProps> = ({renderSign , sign, innerIndex, outerIndex, }
 
     return (
         <div className="cell-container" onClick={() => renderSign(innerIndex)} >
-      {sign && <div className={`render-${sign} ${activeIndex == outerIndex?  "cell-active": "cell-disable"}` }></div>}
+      {sign && <div className={`render-${sign} ${activeIndex === outerIndex?  "cell-active": "cell-disable"}` }></div>}
     </div>
     )
 }

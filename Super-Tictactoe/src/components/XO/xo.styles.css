@@ -82,13 +82,15 @@
     background-color: green;
 }
 
-.board-active{
-    background-color: black;
+.grid-container.board-active{
+    /* background: crimson; */
     filter: drop-shadow(0 0 0.75rem crimson);
+    box-shadow: 0 0 0.75rem 0.2rem crimson;
 }
-.board-disable{
+.grid-container.board-disable{
     pointer-events: none;
     cursor: none;
+    opacity: 0.5;
 }
 
 @keyframes fadeIn {

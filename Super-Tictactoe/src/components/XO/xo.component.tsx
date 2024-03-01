@@ -4,7 +4,7 @@ import "./xo.styles.css"
 import { useTicTacToe } from "../../state/tictactoeContext";
 
 import { calculateWinner } from "../../util/findWinner.util";
-import { useEffect } from "react";
+
 
 
 
@@ -13,7 +13,7 @@ type XOpropType = {
     
 }
 const XO: React.FC<XOpropType> = ({ idx }) => {
-    const { updateActiveIndexState, isGameStarted,updateIsGameStarted,wholeGameWinner,activeIndex, sign, toggleSign, updateBigBoardState, bigBoard, updateWinnerBoardState, winner } = useTicTacToe();
+    const { isGameStarted,updateIsGameStarted,wholeGameWinner,activeIndex, sign, toggleSign, updateBigBoardState, bigBoard, updateWinnerBoardState, winner } = useTicTacToe();
  
     
     const renderSign = (index: number) => {
@@ -38,11 +38,8 @@ const XO: React.FC<XOpropType> = ({ idx }) => {
     }
     
    
-    
-    
-   console.log("current Active index: ", activeIndex);
     return (
-        <div className={`grid-container ${activeIndex == idx}: "board-active": "board-disable"`}>
+        <div className={`grid-container ${winner[idx] === null && (activeIndex === -1 || activeIndex == idx)? "board-active": "board-disable"}`}>
             {winner[idx]!= null ? <div className={`winner-${winner[idx]}`}></div>
             :
             bigBoard[idx].map((cell, index) => (
