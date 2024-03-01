@@ -1,35 +1,40 @@
 .ultimate-container{
     display: grid;
-    place-content: center;    
+    justify-content: center;
+    align-items: center;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     gap: 20px;
     position: relative;
-
+    width: 400px;
+    height: 400px;
+    
+}
+.wrappper-container{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
 }
 
 .winner-X {
-    position: absolute;
-    height: 100%;
-    width: 100%;
+    position: relative;
     background-color: white;
-    animation: fadeIn 0.5s forwards;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    
+    animation: fadeIn 0.5s forwards;   
+    width: 100%;
+    height: 100%;
 }
 
 .winner-X::before,
 .winner-X::after {
     content: '';
     position: absolute;
-    height: 150px;
-    width: 50px;
+    height: 100%;
+    width: 70px;
     background-color: green;
-  
-    z-index: 3;
-  
+    z-index: 1;
 }
 
 .winner-X::before {
@@ -44,10 +49,10 @@
     position: absolute;
     height: 100%;
     width: 100%;
+    border-radius: 50%;
     background-color: white;
     animation: fadeIn 0.5s forwards;
-    overflow: hidden;
-   
+    overflow: hidden;   
 }
 
 .winner-O::before {
@@ -77,6 +82,10 @@
 }
 
 .winner-draw{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    animation: fadeIn 0.5s forwards;
     background-color: green;
 }
 

@@ -5,7 +5,7 @@
     grid-template-rows: repeat(3, 50px);
     gap: 5px;
     place-content: center;
-    background: white;
+    
     
     
 }
@@ -26,10 +26,10 @@
 .winner-X::after {
     content: '';
     position: absolute;
-    height: 150px;
-    width: 40px;
-    
-    left: 50%;
+    height: 170px;
+    width: 50px;
+    top: -60%;
+    left: 65%;
     transform: translate(-50%, -50%);
     background-color: green;
     z-index: 1;
@@ -83,7 +83,12 @@
 }
 
 .board-active{
+    background-color: black;
     filter: drop-shadow(0 0 0.75rem crimson);
+}
+.board-disable{
+    pointer-events: none;
+    cursor: none;
 }
 
 @keyframes fadeIn {

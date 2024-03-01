@@ -19,7 +19,11 @@ const BigXO = () => {
     return (
                 
         <div className={`ultimate-container `}>
-            {wholeGameWinner != null ? <div className={`winner-container winner-${wholeGameWinner}`}></div>
+            {wholeGameWinner != null ? 
+            
+                <div className="wrapper-container">
+                    <div className={`winner-${wholeGameWinner}`}></div>
+                </div>
             :
             bigBoard.map((_, index) => (
                 <XO key={index} idx={index} />

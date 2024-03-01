@@ -16,6 +16,10 @@ interface TicTacToeContextProps {
     updateWholeGameWinner: (state: GridState | "draw") => void;
     activeBoard : boolean[];
     updateActiveBoardState: (index: number) => void;
+    activeIndex : number ;
+    updateActiveIndexState : (index: number) => void;
+    isGameStarted: boolean;
+    updateIsGameStarted: () => void;
 }
 
 const TicTacToeContext = createContext<TicTacToeContextProps>({
@@ -31,7 +35,11 @@ const TicTacToeContext = createContext<TicTacToeContextProps>({
     setWholeGameWinner: () => {},
     updateWholeGameWinner: () => {},
     activeBoard: [],
-    updateActiveBoardState: () => {}
+    updateActiveBoardState: () => {},
+    activeIndex: -1,
+    updateActiveIndexState: () => {},
+    isGameStarted: false,
+    updateIsGameStarted: () => {},
   
 });
 
@@ -47,6 +55,8 @@ export const TicTacToeProvider = ({ children }: { children: ReactNode }) => {
     });
     
     const [activeBoard, setActiveBoard] = useState<boolean[]>(Array(9).fill(true));
+    const [activeIndex, setActiveIndex] = useState<number>(-1);
+    const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
 
     const toggleSign = () => {
         setSign((prevSign) => (prevSign === "X" ? "O" : "X"));
@@ -61,7 +71,11 @@ export const TicTacToeProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const updateBigBoardState = (index: number, innerIndex: number, state: GridState | "draw") => {
-        
+        if (winner[index] === null) {
+            updateActiveIndexState(innerIndex);
+        }else{
+            updateActiveIndexState(-1);
+        }
         
         const newBigBoard = [...bigBoard];
         if (state) {
@@ -82,11 +96,19 @@ export const TicTacToeProvider = ({ children }: { children: ReactNode }) => {
         setActiveBoard(newActiveBoard);
     }
 
+    const updateActiveIndexState = (index : number) => {
+        setActiveIndex(index);
+    }
+
+    const updateIsGameStarted = () => {
+        setIsGameStarted(!isGameStarted);
+    }
+
     return (
         <TicTacToeContext.Provider value={{ sign,
-                                             toggleSign,
-                                             updateWinnerBoardState,
-                                             winner, bigBoard, 
+                                            toggleSign,
+                                            updateWinnerBoardState,
+                                            winner, bigBoard, 
                                             updateBigBoardState, 
                                             setWinner, 
                                             setBigBoard, 
@@ -95,6 +117,10 @@ export const TicTacToeProvider = ({ children }: { children: ReactNode }) => {
                                             updateWholeGameWinner,
                                             activeBoard,
                                             updateActiveBoardState,
+                                            activeIndex, 
+                                            updateActiveIndexState,
+                                            isGameStarted,
+                                            updateIsGameStarted,
                                             }}>
             {children}
         </TicTacToeContext.Provider>

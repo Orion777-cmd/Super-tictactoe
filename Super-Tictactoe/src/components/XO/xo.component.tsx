@@ -4,6 +4,8 @@ import "./xo.styles.css"
 import { useTicTacToe } from "../../state/tictactoeContext";
 
 import { calculateWinner } from "../../util/findWinner.util";
+import { useEffect } from "react";
+
 
 
 type XOpropType = {
@@ -11,29 +13,40 @@ type XOpropType = {
     
 }
 const XO: React.FC<XOpropType> = ({ idx }) => {
-    const { activeBoard, updateActiveBoardState, sign, toggleSign, updateBigBoardState, bigBoard, updateWinnerBoardState, winner } = useTicTacToe();
+    const { updateActiveIndexState, isGameStarted,updateIsGameStarted,wholeGameWinner,activeIndex, sign, toggleSign, updateBigBoardState, bigBoard, updateWinnerBoardState, winner } = useTicTacToe();
  
-    console.log("active board state: ", activeBoard[idx])
+    
     const renderSign = (index: number) => {
-        console.log("renderSign", idx, index);
+        if (wholeGameWinner === null &&  !isGameStarted) {
+            updateIsGameStarted();
+        }
         if (bigBoard[idx][index] === null) {
             updateBigBoardState(idx, index, sign);
+        
             if (winner[idx] === null) {
                 const newWinner = calculateWinner(bigBoard[idx]);
-                console.log("newWinner: ", newWinner);
+                
                 updateWinnerBoardState(idx, newWinner);
-            }   
+            }  
+            
+           
+           
             toggleSign();
         }
+       
         return null;
     }
+    
    
+    
+    
+   console.log("current Active index: ", activeIndex);
     return (
-        <div className={`grid-container ${activeBoard[idx] == true}: "board-active": ""`}>
+        <div className={`grid-container ${activeIndex == idx}: "board-active": "board-disable"`}>
             {winner[idx]!= null ? <div className={`winner-${winner[idx]}`}></div>
             :
             bigBoard[idx].map((cell, index) => (
-                <Cell key={index} renderSign={renderSign} sign={cell} innerIndex={index} outerIndex={idx} />
+                <Cell key={index} renderSign={renderSign} sign={cell} innerIndex={index} outerIndex={idx}  />
             ))}
         </div>
     )
