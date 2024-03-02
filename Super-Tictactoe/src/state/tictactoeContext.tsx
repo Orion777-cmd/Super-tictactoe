@@ -32,8 +32,7 @@ const TicTacToeContext = createContext<TicTacToeContextProps>({
     updateBigBoardState: () => {},
     wholeGameWinner: null,
     setWholeGameWinner: () => {},
-    updateWholeGameWinner: () => {},
-    
+    updateWholeGameWinner: () => {},    
     activeIndex: -1,
     updateActiveIndexState: () => {},
     isGameStarted: false,
@@ -66,6 +65,9 @@ export const TicTacToeProvider = ({ children }: { children: ReactNode }) => {
             newBoard[index] = state;
         }
         setWinner(newBoard);
+        if (activeIndex === index){
+            updateActiveIndexState(-1);
+        }
     };
 
     const updateBigBoardState = (index: number, innerIndex: number, state: GridState | "draw") => {
@@ -82,6 +84,7 @@ export const TicTacToeProvider = ({ children }: { children: ReactNode }) => {
         }
        
         setBigBoard(newBigBoard);
+        
     };
 
     const [wholeGameWinner, setWholeGameWinner] = useState<GridState | "draw" | null>(null);

@@ -1,7 +1,7 @@
 .cell-container{
     height: 50px;
     width: 50px;
-    background-color: green;
+    background-color: black;
     border-radius: 5px;
     display: flex;
     justify-content: center;
@@ -39,7 +39,7 @@
     position: absolute;
     height: 15px;
     width: 45px;
-    background-color: green;
+    background-color: black;
     top: 17px;
     left: 3px;
     /* transition: transform 0.5s ease; */
@@ -81,7 +81,7 @@
     height: 100%;
     width : 100%;
     border-radius: 50%;
-    background-color: green;
+    background-color: black;
     top: 0;
     left: 0;
     border: 0;
