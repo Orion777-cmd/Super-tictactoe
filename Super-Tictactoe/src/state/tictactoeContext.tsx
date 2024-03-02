@@ -65,9 +65,12 @@ export const TicTacToeProvider = ({ children }: { children: ReactNode }) => {
             newBoard[index] = state;
         }
         setWinner(newBoard);
-        if (activeIndex === index){
+        
+        if (activeIndex === index || activeIndex === -1){
             updateActiveIndexState(-1);
         }
+
+        
     };
 
     const updateBigBoardState = (index: number, innerIndex: number, state: GridState | "draw") => {

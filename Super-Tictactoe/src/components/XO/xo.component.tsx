@@ -14,8 +14,7 @@ type XOpropType = {
 }
 const XO: React.FC<XOpropType> = ({ idx }) => {
     const { isGameStarted,updateIsGameStarted,wholeGameWinner,activeIndex, sign, toggleSign, updateBigBoardState, bigBoard, updateWinnerBoardState, winner } = useTicTacToe();
- 
-    
+       
     const renderSign = (index: number) => {
         if (wholeGameWinner === null &&  !isGameStarted) {
             updateIsGameStarted();
