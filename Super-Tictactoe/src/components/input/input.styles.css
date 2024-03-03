@@ -1,0 +1,24 @@
+
+.input-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+input {
+    height: 60px;
+    top: 10px;
+    border: none;
+    background: transparent;
+    
+    font-size: 1.2rem;
+    color: rgba(0, 0, 0, 0.8);
+    font-weight: 300;
+  }
+
+  label {
+    
+    font-size: 1.2rem;
+    color: rgba(0, 0, 0, 0.8);
+    font-weight: 300;
+  }

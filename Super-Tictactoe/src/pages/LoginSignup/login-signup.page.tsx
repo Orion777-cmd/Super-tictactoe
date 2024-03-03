@@ -1,7 +1,8 @@
 
 import './LoginForm.css';
 import {useState} from 'react';
-
+import SignupComponent from "../../components/signup/signup.component";
+import LoginComponent from "../../components/login/login.component";
 
 const LoginSignupForm = () => {
 
@@ -14,19 +15,7 @@ const LoginSignupForm = () => {
         return (
             <div>
                 <div className="cont">
-                    <div className="form sign-in">
-                        <h2>Welcome</h2>
-                        <label>
-                            <span>Email</span>
-                            <input type="email" />
-                        </label>
-                        <label>
-                            <span>Password</span>
-                            <input type="password" />
-                        </label>
-                        <p className="forgot-pass">Forgot password?</p>
-                        <button type="button" className="submit">Sign In</button>
-                    </div>
+                    <LoginComponent />
                     <div className="sub-cont">
                         <div className="img">
                             <div className="img__text m--up">
@@ -40,22 +29,7 @@ const LoginSignupForm = () => {
                                 <span className="m--in">Sign In</span>
                             </div>
                         </div>
-                        <div className="form sign-up">
-                            <h2>Create your Account</h2>
-                            <label>
-                                <span>Name</span>
-                                <input type="text" />
-                            </label>
-                            <label>
-                                <span>Email</span>
-                                <input type="email" />
-                            </label>
-                            <label>
-                                <span>Password</span>
-                                <input type="password" />
-                            </label>
-                            <button type="button" className="submit">Sign Up</button>
-                        </div>
+                        <SignupComponent />
                     </div>
                 </div>
             </div>
