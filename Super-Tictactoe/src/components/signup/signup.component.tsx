@@ -1,4 +1,4 @@
-import "./signup.styles.scss";
+import "./signup.styles.css";
 import Input from "../input/input.component";
 import Button from "../button/button.component";
 
