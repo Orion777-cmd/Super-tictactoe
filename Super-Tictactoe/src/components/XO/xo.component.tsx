@@ -25,12 +25,10 @@ const XO: React.FC<XOpropType> = ({ idx }) => {
             if (winner[idx] === null) {
                 const newWinner = calculateWinner(bigBoard[idx]);
                 if (newWinner !== null){
-                    updateWinnerBoardState(idx, newWinner);
+                    updateWinnerBoardState(idx, index,  newWinner);
                 }
                 
-            }  
-            
-           
+            }            
            
             toggleSign();
         }

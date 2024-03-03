@@ -5,7 +5,7 @@ type GridState = "X" | "O" | null;
 interface TicTacToeContextProps {
     sign: "X" | "O";
     toggleSign: () => void;
-    updateWinnerBoardState: (index: number, state: GridState | "draw") => void;
+    updateWinnerBoardState: (index: number,innerIndex: number,  state: GridState | "draw") => void;
     winner: (GridState | "draw")[];
     setWinner: React.Dispatch<React.SetStateAction<(GridState | "draw")[]>>;
     bigBoard: (GridState | "draw")[][]; 
@@ -59,22 +59,27 @@ export const TicTacToeProvider = ({ children }: { children: ReactNode }) => {
         setSign((prevSign) => (prevSign === "X" ? "O" : "X"));
     };
 
-    const updateWinnerBoardState = (index: number, state: GridState | "draw") => {
+    const updateWinnerBoardState = (index: number,innerIndex: number, state: GridState | "draw") => {
+
+        if (winner[innerIndex] === null && innerIndex !== index) {
+            updateActiveIndexState(innerIndex);
+        }else{
+            updateActiveIndexState(-1);
+        }
+
         const newBoard = [...winner];
         if (state) {
             newBoard[index] = state;
         }
         setWinner(newBoard);
         
-        if (activeIndex === index || activeIndex === -1){
-            updateActiveIndexState(-1);
-        }
+        
 
         
     };
 
     const updateBigBoardState = (index: number, innerIndex: number, state: GridState | "draw") => {
-     
+        console.log("one one one");
         if (winner[innerIndex] === null) {
             updateActiveIndexState(innerIndex);
         }else{
