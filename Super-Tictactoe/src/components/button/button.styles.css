@@ -1,10 +1,19 @@
 button {
-    width: 100%;
+    width: 50%;
     line-height: 64px;
     left: 0%;
     background-color: transparent;
-    border: 3px solid rgba(0, 0, 0, 0.1);
+    border: 3px solid #ED2553;
     font-weight: 900;
     font-size: 18px;
-    color: rgba(0, 0, 0, 0.2);
+    background-color: #ED2553;
+    color: rgba(0, 0, 0, 0.8);
+    
   }
+
+  button:hover {
+    background: rgba(0, 0, 0, 0.8);
+    color: #ED2553;
+  }
+
+  
