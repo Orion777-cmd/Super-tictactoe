@@ -6,7 +6,7 @@ import LoginComponent from "../../components/login/login.component";
 
 const LoginSignupForm = () => {
 
-    const [isSignUp, setIsSignUp] = useState(true);
+    const [isSignUp, setIsSignUp] = useState(false);
     const toggleForm = () =>  {
         console.log("isSignup: ", isSignUp);
         setIsSignUp(!isSignUp);
@@ -15,7 +15,7 @@ const LoginSignupForm = () => {
     
         return (
             <div>
-                <div className="cont">
+                <div className={`cont ${isSignUp? "s--signup": ""}`}>
                     <div className="login-container sign-in">
                         <LoginComponent />
                     </div>
@@ -32,9 +32,9 @@ const LoginSignupForm = () => {
                                 <div className="img__text m--in">
                                 <h3>If you already have an account, just Login.</h3>
                             </div>}
-                            <div className={`img__btn ${isSignUp? "s--signup": ""}`} >
-                                <span className="m--up" onClick={toggleForm}>Sign Up</span>
-                                {!isSignUp &&<span className="m--in" onClick={toggleForm}>Login</span>}
+                            <div className={`img__btn `} onClick={toggleForm} >
+                                {isSignUp ?  <span className="m--up" >Sign Up</span> : 
+                                <span className="m--in" >Login</span>}
                             </div>
                         </div>
                         <div className={`signup-container signup`}>

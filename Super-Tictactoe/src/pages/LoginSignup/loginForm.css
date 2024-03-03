@@ -6,6 +6,8 @@
     text-align: center;
 }
 
+
+
 .cont {
     border-radius: 20px;
     overflow: hidden;
@@ -158,9 +160,6 @@ h2 {
     text-align: center;
 }
 
-
-
-
 input {
     height: 60px;
     top: 10px;
@@ -198,3 +197,10 @@ input {
 .cont.s--signup .sign-up {
     transform: translateX(0);
 }
+.signup-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+

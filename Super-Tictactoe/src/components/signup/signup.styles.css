@@ -1,0 +1,10 @@
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 80%;
+    background-color: transparent;
+    gap: 1.5rem;
+    
+}

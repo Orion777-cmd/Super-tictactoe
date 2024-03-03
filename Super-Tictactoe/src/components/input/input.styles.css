@@ -35,6 +35,7 @@
 .input-container label {
     
     position: absolute;
+    font-size: 1.3rem;
     bottom: 0;
     left: 0;
     z-index: 2;
