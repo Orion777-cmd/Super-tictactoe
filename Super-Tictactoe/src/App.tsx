@@ -1,6 +1,8 @@
 
 import './App.css'
 import BigXO from "./components/BigXO/bigXo.component";
+import GamePage from "./pages/gamepage/game.page";
+import LoginSignupPage from "./pages/LoginSignup/login-signup.page";
 // import XO from "./components/XO/xo.component";
 
 
@@ -13,7 +15,7 @@ function App() {
   
   return (
     <div className="container">
-      <BigXO />
+      <LoginSignupPage />
     </div>
   )
 }
