@@ -1,13 +1,13 @@
 .ultimate-container{
     display: grid;
-    justify-content: center;
-    align-items: center;
+    place-content:center;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     gap: 20px;
     position: relative;
     width: 400px;
     height: 400px;
+  
     
 }
 .wrappper-container{
