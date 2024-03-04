@@ -12,11 +12,8 @@ import {
 import GamePage from "./pages/gamepage/game.page";
 import LoginSignupPage from "./pages/LoginSignup/login-signup.page";
 import HomePage from "./pages/homepage/homepage";
-
-
-
-// import XO from "./components/XO/xo.component";
-
+import CreatePage from "./pages/createRoomPage/createroom.page";
+import JoinPage from "./pages/joinRoomPage/joinroom.page";
 
 // DO NOT FORGET TO ADD JOHN MAYERS SONG X 0 TO THE PROJECT
 
@@ -39,7 +36,19 @@ function App() {
           path="game/:roomId"
           element={<GamePage />}
           
-          />
+        />
+
+        <Route
+          path="create-room"
+          element={<CreatePage />}
+          // action={}
+        />
+
+        <Route
+          path="join-room"
+          element={<JoinPage />}
+          // action={}
+        />
 
         {/* <Route element={<ProtectionLayout />}>
           <Route path="create" element={<CreatePage />} />

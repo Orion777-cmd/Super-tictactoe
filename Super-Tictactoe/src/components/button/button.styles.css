@@ -1,5 +1,5 @@
 button {
-    width: 50%;
+    width: 100%;
     line-height: 64px;
     left: 0%;
     background-color: transparent;
@@ -8,7 +8,7 @@ button {
     font-size: 18px;
     background-color: #ED2553;
     color: rgba(0, 0, 0, 0.8);
-    
+    padding: 0.25em 1em;
   }
 
   button:hover {

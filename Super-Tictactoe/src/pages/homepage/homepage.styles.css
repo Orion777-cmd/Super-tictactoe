@@ -1,0 +1,88 @@
+.homepage-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    gap: 0.5rem;
+    background: grey;
+  
+}
+
+.title-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5rem;
+    width: 100%;
+    height: 150px;
+    background: transparent;
+}
+
+.title{
+    font-size: 2rem;
+    font-weight: 600;
+    color: white;
+}
+
+.description-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 90%;
+
+
+}
+
+.text-description{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width:50%;
+    flex: 1;
+
+}
+
+.text-description p{
+    text-align: start;
+    font-size: 1.2rem;
+    color: white;
+    font-weight: 300;
+    
+}
+
+.video-container{
+    display: flex;
+    align-items:stretch;
+    justify-content: center;
+    width: 50%;    
+   
+    height: 500px;
+}
+
+iframe{
+    width: 100%;
+    height: 100%;
+    border: none;
+   
+}
+
+.button-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4rem;
+    width: 100%;
+    height: 100px;
+}
+
+.links{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30%px;
+    text-decoration: none;
+
+}
+
