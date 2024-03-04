@@ -1,0 +1,137 @@
+:root{
+    --toast-background: #ECFDF5;
+    --progress-color: #34D399; 
+}
+.toast-container {
+    display: flex;
+    width: 384px;
+    padding: 16px;
+    align-items: flex-start;
+    gap: 16px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px -2px rgba(0, 0, 0, 0.05), 0px 10px 15px -3px rgba(0, 0, 0, 0.10);
+    border-left: 6px solid transparent;
+    overflow: hidden;
+    position: relative;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease-in-out;
+    
+
+    &.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.content-container{
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    flex: 1 0 0;
+}
+
+.label-text{
+    color: #065F46;
+
+    /* text-sm/leading-5/font-medium */
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; /* 142.857% */
+}
+
+.message-detail{
+    color: #047857;
+
+    /* text-sm/leading-5/font-normal */
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 142.857% */
+}
+
+.success {
+    background: var(--toast-background, #ECFDF5);
+    color: #34D399;
+    --toast-background: #ECFDF5;
+    --progress-color: #34D399;
+}
+
+.error {
+    background: var(--toast-background, #FEF2F2);
+    color: #F87171;
+    --toast-background: #FEF2F2;
+    --progress-color: #F87171;
+}
+
+.warning {
+    background: var(--toast-background, #FEFCEA);
+    color: #FBBF24;
+    --toast-background: #FEFCEA;
+    --progress-color: #FBBF24;
+}
+
+.neutral {
+    background: var(--toast-background, #F0F4FF);
+    color: #60A5FA;
+    --toast-background: #F0F4FF;
+    --progress-color: #60A5FA;
+}
+
+.progress{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    transition: width 3s ease-in-out;
+    background: var(--progress-color);
+}
+.progress.animate{
+    width: 0%;
+}
+
+.progress::before{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    background: var(--progress-color);
+    right: 20px;
+    width: 100%;
+    height: 100%
+}
+
+.progress.active::before{
+    animation: progress 5s linear forwards;
+
+}
+
+.button{
+    background: #0606c7;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    opacity: 0.6;
+    width: 80px;
+    height: 80px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    
+}
+
+.button:hover{
+    opacity: 1;
+}
+
+
+
+@keyframes progress {
+  
+    100%{
+        right: 0%;
+    }
+}
