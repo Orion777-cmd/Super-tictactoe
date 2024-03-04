@@ -1,22 +1,14 @@
 
-
-.tip {
-    font-size: 20px;
-    margin: 40px auto 50px;
-    text-align: center;
-}
-
-
-
 .cont {
     border-radius: 20px;
     overflow: hidden;
     position: relative;
     width: 900px;
     height: 550px;
-    margin: 0 auto 100px;
-    background: #fff;
-    box-shadow: 0 0 100px rgba(0, 0, 0, 0.1);
+    margin-inline: auto;
+    background: grey;
+    box-shadow: 0 0 2rem crimson;
+    
 }
 
 .login-container {
@@ -28,6 +20,7 @@
     width: 640px;
     height: 100%;
     transition: transform 1.2s ease-in-out;
+    background: grey;
     /* padding: 50px 30px 0; */
 }
 
@@ -39,7 +32,7 @@
     width: 900px;
     height: 100%;
     padding-left: 260px;
-    background: #fff;
+    background: grey;
     transition: transform 1.2s ease-in-out;
 }
 
@@ -60,20 +53,20 @@
     padding-top: 360px;
 }
 
-.img:before {
+.img::before {
     content: '';
     position: absolute;
     right: 0;
     top: 0;
     width: 900px;
     height: 100%;
-    background-color: crimson;
+    background-color: rgba(0, 0, 0, 0.8);
     opacity: .8;
     background-size: cover;
     transition: transform 1.2s ease-in-out;
 }
 
-.img:after {
+.img::after {
     content: '';
     position: absolute;
     left: 0;
@@ -83,7 +76,7 @@
     background: rgba(0, 0, 0, 0.6);
 }
 
-.cont.s--signup .img:before {
+.cont.s--signup .img::before {
     transform: translateX(640px);
 }
 
@@ -118,7 +111,7 @@
     cursor: pointer;
 }
 
-.img__btn:after {
+.img__btn::after {
     content: '';
     z-index: 2;
     position: absolute;
@@ -127,7 +120,7 @@
     width: 100%;
     height: 100%;
     border: 2px solid #fff;
-    border-radius: 30px;
+    /* border-radius: 30px; */
 }
 
 .img__btn span {
@@ -139,46 +132,35 @@
     align-items: center;
     width: 100%;
     height: 100%;
+    color: rgba(0, 0, 0, 0.8);
+    background: crimson;
     transition: transform 1.2s;
 }
 
-.img__btn span.m--in {
-    transform: translateY(-72px);
+.img_btn span:hover{
+    background: rgba(0, 0, 0, 0.8);
+    
 }
-
+.img_btn span.m--in {
+    transform: translateY(0px);
+}
+.img_btn span.m--up {
+    transform: translateY(72px);
+}
 .cont.s--signup .img__btn span.m--in {
-    transform: translateY(0);
+    transform: translateY(0px);
 }
 
 .cont.s--signup .img__btn span.m--up {
-    transform: translateY(72px);
+    transform: translateY(0px);
 }
+
 
 h2 {
     width: 100%;
     font-size: 26px;
     text-align: center;
 }
-
-input {
-    height: 60px;
-    top: 10px;
-    border: none;
-    background: transparent;
-    font-family: 'Roboto', sans-serif;
-    font-size: 24px;
-    color: rgba(0, 0, 0, 0.8);
-    font-weight: 300;
-  }
-
-  label {
-    font-family: 'Roboto', sans-serif;
-    font-size: 24px;
-    color: rgba(0, 0, 0, 0.8);
-    font-weight: 300;
-  }
-
-
 
 .sign-in {
     transition-timing-function: ease-out;
@@ -202,5 +184,6 @@ input {
     display: flex;
     justify-content: center;
     align-items: center;
+  
 }
 

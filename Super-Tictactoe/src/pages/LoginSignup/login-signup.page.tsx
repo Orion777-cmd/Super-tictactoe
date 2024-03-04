@@ -23,17 +23,17 @@ const LoginSignupForm = () => {
                     <div className="sub-cont">
                         <div className="img">
                             {
-                            isSignUp &&  
+                            !isSignUp ?  
                             <div className="img__text m--up">
                                 <h3>Don't have an account? Please Sign up!</h3>
-                            </div>}
-                            {
-                            !isSignUp &&
+                            </div>
+                            
+                            :
                                 <div className="img__text m--in">
                                 <h3>If you already have an account, just Login.</h3>
                             </div>}
                             <div className={`img__btn `} onClick={toggleForm} >
-                                {isSignUp ?  <span className="m--up" >Sign Up</span> : 
+                                {!isSignUp ?  <span className="m--up" >Sign Up</span> : 
                                 <span className="m--in" >Login</span>}
                             </div>
                         </div>
