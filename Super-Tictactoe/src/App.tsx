@@ -7,8 +7,14 @@ import {
   Route,
   Link
 } from "react-router-dom";
+
+//pages
 import GamePage from "./pages/gamepage/game.page";
 import LoginSignupPage from "./pages/LoginSignup/login-signup.page";
+import HomePage from "./pages/homepage/homepage";
+
+
+
 // import XO from "./components/XO/xo.component";
 
 
@@ -22,12 +28,18 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/">
-        <Route index element={<GamePage />} />
+        <Route index element={<HomePage />} />
         <Route
           path="login-signup"
           element={<LoginSignupPage />}
           // action={}
         />
+
+        <Route
+          path="game/:roomId"
+          element={<GamePage />}
+          
+          />
 
         {/* <Route element={<ProtectionLayout />}>
           <Route path="create" element={<CreatePage />} />
