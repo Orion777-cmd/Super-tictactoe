@@ -1,5 +1,5 @@
 button {
-    width: 100%;
+    width: 50%;
     line-height: 64px;
     left: 0%;
     background-color: transparent;
@@ -9,6 +9,7 @@ button {
     background-color: #ED2553;
     color: rgba(0, 0, 0, 0.8);
     padding: 0.25em 1em;
+    border-radius: 10px;
   }
 
   button:hover {

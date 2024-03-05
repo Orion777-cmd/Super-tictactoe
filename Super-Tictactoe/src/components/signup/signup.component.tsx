@@ -11,7 +11,9 @@ const SignupComponent = () => {
             <Input label="Name" type="text" name="userName" value="" onChange={() => {}} />
             <Input label="Email" type="email" name="email" value="" onChange={() => {}} />
             <Input label="Password" type="password" name="password" value="" onChange={() => {}} />
-            <Button label="Sign Up" onClick={() => {}} />
+            <div className="button-container">
+                <Button label="Sign Up" onClick={() => {}} />
+            </div>
         </div>
     )
 }

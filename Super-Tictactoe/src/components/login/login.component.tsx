@@ -11,7 +11,9 @@ const LoginComponent = () => {
             <Input label="Email" type="email" name="email" value="" onChange={() => {}} />
             <Input label="Password" type="password" name="password" value="" onChange={() => {}} />
        
-            <Button label="Login" onClick={() => {}} />
+            <div className="button-container">
+                <Button label="Login" onClick={() => {}} />
+            </div>
         </div>
     )
 }
