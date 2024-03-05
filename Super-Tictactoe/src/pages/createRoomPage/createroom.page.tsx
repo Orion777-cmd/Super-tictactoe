@@ -30,8 +30,9 @@ const CreateRoom = () => {
 
             <div className="text-desc">
                 <p className="text">
-                    Copy The Genrated URL to your opponentaccordion-Finally when you 
-                    are read click Play Game Button to get redirected to the game.
+                    Copy The Genrated URL and send it to your opponent via apporpirate platform
+                    -Finally when
+                    the Play Game Button is active, get redirected to the game.
                 </p>
             </div>
 
