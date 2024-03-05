@@ -1,20 +1,15 @@
 import React, {useEffect, useState} from "react";
-import "./toast.styles.scss";
+import "./toast.styles.css";
 
 
 type ToastPopupPropType = {
     children: string
     status : string 
-}
-const ToastPopups:React.FC<ToastPopupPropType> = ({children, status}) => {
-    const [toast, setToast] = useState(false);
+    toast: boolean
 
-    const TostAnimation = () => {
-        setToast(true);
-        setTimeout(() => {
-            setToast(false);
-        }, 3000);
-    }
+}
+const ToastPopups:React.FC<ToastPopupPropType> = ({children, status, toast}) => {
+    
     return (
         <>
             <div className={`toast-container ${status} ${toast ? 'show' : ''}`}>
@@ -26,7 +21,7 @@ const ToastPopups:React.FC<ToastPopupPropType> = ({children, status}) => {
                     </div>
                 </div>
             </div>
-            <button className="button" onClick={TostAnimation}>Toast</button>
+            
         </>
         
     )

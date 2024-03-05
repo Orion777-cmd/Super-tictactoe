@@ -3,15 +3,18 @@ import {useState} from "react";
 import { FaRegCopy } from "react-icons/fa";
 
 type CopyPropsTypes = {
-    text : string
+    text : string | null
+    isCopied: boolean
+    setIsCopied: (n: boolean) => void
 }
-const Copy: React.FC<CopyPropsTypes> = ({text}) => {
-
-    const [isCopied, setIsCopied] = useState<boolean>(false);
+const Copy: React.FC<CopyPropsTypes> = ({text , setIsCopied, isCopied}) => {
 
     const handlecopy = () => {
-        navigator.clipboard.writeText(text);
-        setIsCopied(true);
+        if (text){
+            navigator.clipboard.writeText(text);
+            setIsCopied(true);
+        }
+        
     }
 
     setTimeout(()  => {
@@ -21,7 +24,7 @@ const Copy: React.FC<CopyPropsTypes> = ({text}) => {
         <div className="button-container">
             <button onClick={handlecopy}>
                 <FaRegCopy size={20}/>
-                {isCopied? 'copied!': 'copy'}
+                {'copy'}
             </button>
         </div>
     )

@@ -1,7 +1,4 @@
-:root{
-    --toast-background: #ECFDF5;
-    --progress-color: #34D399; 
-}
+
 .toast-container {
     display: flex;
     width: 384px;
@@ -18,10 +15,11 @@
     transition: all 0.5s ease-in-out;
     
 
-    &.show {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    
+}
+.toast-container.show {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .content-container{
@@ -108,26 +106,6 @@
     animation: progress 5s linear forwards;
 
 }
-
-.button{
-    background: #0606c7;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 8px;
-    opacity: 0.6;
-    width: 80px;
-    height: 80px;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    
-}
-
-.button:hover{
-    opacity: 1;
-}
-
-
 
 @keyframes progress {
   
