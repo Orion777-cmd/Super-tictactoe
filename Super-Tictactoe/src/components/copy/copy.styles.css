@@ -1,9 +1,26 @@
-.button-container {
+.copy-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 3rem;
+    width: 20%;
     cursor: pointer;
-    border: none
+    border: none;
+    background: tranparent;
 
+}
+
+.copy-container button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding: 0.5rem;
+    border: none;
+    background: transparent;
+}
+
+
+.copy-container button:hover{
+    color: white;
+    transition: color 1s ease-in-out;
 }

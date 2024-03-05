@@ -21,7 +21,7 @@ const Copy: React.FC<CopyPropsTypes> = ({text , setIsCopied, isCopied}) => {
         setIsCopied(false);
     }, 2000);
     return (
-        <div className="button-container">
+        <div className="copy-container">
             <button onClick={handlecopy}>
                 <FaRegCopy size={20}/>
                 {'copy'}

@@ -104,11 +104,9 @@
 
 .progress.active::before{
     animation: progress 5s linear forwards;
-
 }
 
-@keyframes progress {
-  
+@keyframes progress {  
     100%{
         right: 0%;
     }
