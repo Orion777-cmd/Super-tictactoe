@@ -38,6 +38,7 @@
 
 .cont.s--signup .sub-cont {
     transform: translateX(-640px);
+    
 }
 
 
@@ -51,6 +52,10 @@
     width: 260px;
     height: 100%;
     padding-top: 360px;
+    border-top-left-radius: 100px;
+    border-bottom-left-radius: 100px;
+    transition: border-radius 1.2s ease-in-out;
+    
 }
 
 .img::before {
@@ -76,8 +81,15 @@
     background: rgba(0, 0, 0, 0.6);
 }
 
+.cont.s--signup .img {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+}
 .cont.s--signup .img::before {
     transform: translateX(640px);
+    
 }
 
 .img__text {
@@ -143,17 +155,21 @@
 }
 .img_btn span.m--in {
     transform: translateY(0px);
+    transition: transform 1.2s ease-in-out;
 }
 .img_btn span.m--up {
-    transform: translateY(72px);
+    transition: transform 1.2s ease-in-out;
+    transform: translateY(122px);
+ 
+}
+.cont.s--signup .img__btn span.m--up {
+    transform: translateY(0);
 }
 .cont.s--signup .img__btn span.m--in {
-    transform: translateY(0px);
+    transform: translateY(-122px);
 }
 
-.cont.s--signup .img__btn span.m--up {
-    transform: translateY(0px);
-}
+
 
 
 h2 {
