@@ -164,9 +164,11 @@
 }
 .cont.s--signup .img__btn span.m--up {
     transform: translateY(0);
+    transition: transform 1.2s ease-in-out;
 }
 .cont.s--signup .img__btn span.m--in {
     transform: translateY(-122px);
+    transition: transform 1.2s ease-in-out;
 }
 
 

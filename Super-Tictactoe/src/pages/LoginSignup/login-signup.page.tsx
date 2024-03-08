@@ -33,8 +33,8 @@ const LoginSignupForm = () => {
                                 <h3>If you already have an account, just Login.</h3>
                             </div>}
                             <div className={`img__btn `} onClick={toggleForm} >
-                                <span className="m--up" >Sign Up</span> 
-                                <span className="m--in" >Login</span>
+                                <span className="m--up" >Login</span> 
+                                <span className="m--in" >Sign Up</span>
                             </div>
                         </div>
                         <div className={`signup-container signup`}>
