@@ -1,7 +1,6 @@
 import {useState} from "react";
 import "./createroom.styles.css";
-import MainLogo from "../../../public/mainLogo.svg";
-
+import {Link } from "react-router-dom";
 import Copy from "../../components/copy/copy.component";
 import ToastPopups from "../../components/toast/toast.component";
 import Button from "../../components/button/button.component";
@@ -23,7 +22,7 @@ const CreateRoom = () => {
     return (
         <div className="createpage-container">
             <div className="logo-container">
-                <img src={MainLogo} alt="Main Logo" height={150} />
+                <img src="./mainLogo.svg" alt="Main Logo" height={150} />
 
                 <h1 className="title">Create Room</h1>
             </div>
@@ -43,11 +42,11 @@ const CreateRoom = () => {
             </div>
 
             <div className="optional-cotnainer">
-                <p>is there a create room? <span>Join Here!</span></p>
-            </div>
+                <p>is there a create room? <span className="join-link" ><Link to="/join-room">Join Here!</Link></span></p>
+            </div> 
             <div className="container-button">
                 {
-                    copiedValue && <Button label="Play Game" onClick={() => console.log("play button clicked")}/>
+                    copiedValue && <Button label="Create Room" onClick={() => console.log("play button clicked")}/>
                 }
             </div>
             

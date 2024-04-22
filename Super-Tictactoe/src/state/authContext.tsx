@@ -64,6 +64,7 @@ export const AuthProvider = ({children} : {children: React.ReactNode}) => {
             email: user.email,
             username,
         });
+        
     };
 
     const logout = async () => {

@@ -8,7 +8,7 @@ const LoginSignupForm = () => {
 
     const [isSignUp, setIsSignUp] = useState(false);
     const toggleForm = () =>  {
-        console.log("isSignup: ", isSignUp);
+       
         setIsSignUp(!isSignUp);
     }
 
@@ -38,7 +38,7 @@ const LoginSignupForm = () => {
                             </div>
                         </div>
                         <div className={`signup-container signup`}>
-                            <SignupComponent />
+                            <SignupComponent toggleForm={toggleForm}/>
                         </div>
                         
                     </div>

@@ -3,8 +3,10 @@ import Input from "../input/input.component";
 import Button from "../button/button.component";
 import {useAuth} from "../../state/authContext";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const LoginComponent = () => {
+    const navigate = useNavigate();
     const {login} = useAuth();
     const [email, setEmail]  = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -18,6 +20,7 @@ const LoginComponent = () => {
     const handleLogin = async () => {
         try {
           await login(email, password);
+          navigate('/')
          
         } catch (error) {
         
@@ -32,7 +35,7 @@ const LoginComponent = () => {
             <Input label="Password" type="password" name="password" value={password} onChange={handlePassword} />
        
             <div className="button-container">
-                <Button label="Login" onClick={(email: string, password: string) => handleLogin()} />
+                <Button label="Login" onClick={handleLogin} />
             </div>
         </div>
     )

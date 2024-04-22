@@ -4,10 +4,11 @@ import Button from "../button/button.component";
 import {useState} from "react";
 import {useAuth} from "../../state/authContext";
 
-
-const SignupComponent = () => {
+type SignupComponentProps = {
+    toggleForm : () => void;
+}
+const SignupComponent: React.FC<SignupComponentProps> = ({toggleForm}) => {
     const {signup} = useAuth();
-    console.log("signup: ", signup);
     const [email, setEmail] = useState<string>("");
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -26,7 +27,9 @@ const SignupComponent = () => {
     
     const handleSignup = async () => {
         try{
-            await signup(email, password, username)
+            await signup(email, password, username);
+            toggleForm();
+            
         }catch(err: any){
             console.log(err)
         }

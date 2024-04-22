@@ -38,7 +38,7 @@
 }
 
 .container-button {
-    width: 100%;
+    width: 20%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -60,4 +60,15 @@
 
 .optional-container span {
     color: white ;
+}
+
+.join-link a {
+    text-decoration: none;
+    cursor: pointer;
+    color: white;
+}
+
+.join-link a:hover{
+    text-decoration: underline;
+    
 }
