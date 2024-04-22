@@ -71,11 +71,8 @@ export const TicTacToeProvider = ({ children }: { children: ReactNode }) => {
         if (state) {
             newBoard[index] = state;
         }
-        setWinner(newBoard);
-        
-        
-
-        
+        setWinner(newBoard);       
+                
     };
 
     const updateBigBoardState = (index: number, innerIndex: number, state: GridState | "draw") => {
@@ -91,15 +88,13 @@ export const TicTacToeProvider = ({ children }: { children: ReactNode }) => {
             newBigBoard[index][innerIndex] = state;
         }
        
-        setBigBoard(newBigBoard);
-        
+        setBigBoard(newBigBoard);        
     };
 
     const [wholeGameWinner, setWholeGameWinner] = useState<GridState | "draw" | null>(null);
     const updateWholeGameWinner = (state: GridState | "draw") => {
         setWholeGameWinner(state);
     };
-
 
     const updateActiveIndexState = (index : number) => {
         setActiveIndex(index);

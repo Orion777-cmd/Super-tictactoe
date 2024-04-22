@@ -1,8 +1,8 @@
 .buttton {
-    width: 50%;
-    border: 3px solid #ED2553;
-    padding: 1.5rem;
+    width: 100%;
+    border: 3px solid #ED2553;   
     font-size: 1.2rem;
+    padding: 1rem 2rem; 
     font-weight: 500;
     background-color: #ED2553;
     color: rgba(0, 0, 0, 0.8);  

@@ -1,18 +1,38 @@
 import "./login.styles.css";
 import Input from "../input/input.component";
 import Button from "../button/button.component";
-import MainLogo from "../../../public/mainLogo.svg"
+import {useAuth} from "../../state/authContext";
+import { useState } from "react";
 
 const LoginComponent = () => {
+    const {login} = useAuth();
+    const [email, setEmail]  = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const handleEmail  = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEmail(e.target.value);
+    }
+    const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPassword(e.target.value);
+    }
+
+    const handleLogin = async () => {
+        try {
+          await login(email, password);
+         
+        } catch (error) {
+        
+          console.error('Login error:', error);
+        }
+      };
     return (
         <div className="login-container">
-            <img src={MainLogo} alt="Main Logo" height={150} />
+            <img src="./mainLogo.svg" alt="Main Logo" height={150} />
             <h2>Are you Read to play game?</h2>
-            <Input label="Email" type="email" name="email" value="" onChange={() => {}} />
-            <Input label="Password" type="password" name="password" value="" onChange={() => {}} />
+            <Input label="Email" type="email" name="email" value={email} onChange={handleEmail} />
+            <Input label="Password" type="password" name="password" value={password} onChange={handlePassword} />
        
             <div className="button-container">
-                <Button label="Login" onClick={() => {}} />
+                <Button label="Login" onClick={(email: string, password: string) => handleLogin()} />
             </div>
         </div>
     )

@@ -38,7 +38,7 @@ export const useUser = () => {
     return user;
 }
 
-const AuthProvider = ({children} : {children: React.ReactNode}) => {
+export const AuthProvider = ({children} : {children: React.ReactNode}) => {
     const [user, setUser] = useState<UserDB | null | undefined>(undefined);
 
     const syncUser = async (userId: string) => {
