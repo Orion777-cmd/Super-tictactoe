@@ -1,5 +1,5 @@
 
-import './LoginForm.css';
+import './loginForm.css';
 import {useState} from 'react';
 import SignupComponent from "../../components/signup/signup.component";
 import LoginComponent from "../../components/login/login.component";
