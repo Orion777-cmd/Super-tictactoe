@@ -1,17 +1,27 @@
 .buttton {
-    width: 100%;
-    border: 3px solid #ED2553;   
-    font-size: 1.2rem;
-    padding: 1rem 2rem; 
-    font-weight: 500;
-    background-color: #ED2553;
-    color: rgba(0, 0, 0, 0.8);  
-    border-radius: 10px;
-  }
+  width: 100%;
+  border: 3px solid #ed2553;
+  font-size: 1.2rem;
+  padding: 1rem 2rem;
+  font-weight: 500;
+  background-color: #ed2553;
+  color: rgba(0, 0, 0, 0.8);
+  border-radius: 10px;
+}
 
-  .buttton:hover {
-    background: rgba(0, 0, 0, 0.8);
-    color: #ED2553;
-  }
+.buttton:hover {
+  background: rgba(0, 0, 0, 0.8);
+  color: #ed2553;
+}
 
-  
+.buttton:disabled {
+  background-color: #ccc;
+  border-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.buttton:disabled:hover {
+  background-color: #ccc;
+  color: #666;
+}

@@ -1,52 +1,84 @@
 import "./signup.styles.css";
 import Input from "../input/input.component";
 import Button from "../button/button.component";
-import {useState} from "react";
-import {useAuth} from "../../state/authContext";
+import { useState } from "react";
+import { useAuth } from "../../state/authContext";
 
 type SignupComponentProps = {
-    toggleForm : () => void;
-}
-const SignupComponent: React.FC<SignupComponentProps> = ({toggleForm}) => {
-    const {signup} = useAuth();
-    const [email, setEmail] = useState<string>("");
-    const [username, setUsername] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
+  toggleForm: () => void;
+  showToast: (msg: string, status?: string) => void;
+};
+const SignupComponent: React.FC<SignupComponentProps> = ({
+  toggleForm,
+  showToast,
+}) => {
+  const { signup } = useAuth();
+  const [email, setEmail] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState(false);
 
-    const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEmail(e.target.value)
-    };
+  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
 
-    const handleUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setUsername(e.target.value);
+  const handleUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
+  };
+
+  const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+
+  const handleSignup = async () => {
+    setLoading(true);
+    try {
+      await signup(email, password, username);
+      showToast(
+        "Signup successful! Please check your email for confirmation and then login.",
+        "success"
+      );
+      setTimeout(() => toggleForm(), 1200);
+    } catch (err: any) {
+      showToast(err?.message || "Signup failed", "error");
+    } finally {
+      setLoading(false);
     }
-
-    const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPassword(e.target.value);
-    }
-    
-    const handleSignup = async () => {
-        try{
-            await signup(email, password, username);
-            toggleForm();
-            
-        }catch(err: any){
-            console.log(err)
-        }
-    }
-    return (
-        <div className="signup-container">
-            <img src="./mainLogo.svg" alt="Main Logo" height={150} />
-            <h2>Create your Account</h2>
-            <Input label="Name" type="text" name="userName" value={username} onChange={handleUsername} />
-            <Input label="Email" type="email" name="email" value={email} onChange={handleEmail} />
-            <Input label="Password" type="password" name="password" value={password} onChange={handlePassword} />
-            <div className="button-container">
-                <Button label="Sign Up" onClick={handleSignup} />
-            </div>
-        </div>
-    )
-}
-
+  };
+  return (
+    <div className="signup-container">
+      <img src="./mainLogo.svg" alt="Main Logo" height={150} />
+      <h2>Create your Account</h2>
+      <Input
+        label="Name"
+        type="text"
+        name="userName"
+        value={username}
+        onChange={handleUsername}
+      />
+      <Input
+        label="Email"
+        type="email"
+        name="email"
+        value={email}
+        onChange={handleEmail}
+      />
+      <Input
+        label="Password"
+        type="password"
+        name="password"
+        value={password}
+        onChange={handlePassword}
+      />
+      <div className="button-container">
+        <Button
+          label={loading ? "Signing up..." : "Sign Up"}
+          onClick={handleSignup}
+          disabled={loading}
+        />
+      </div>
+    </div>
+  );
+};
 
 export default SignupComponent;
