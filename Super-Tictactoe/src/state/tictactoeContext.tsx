@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from "react";
-
-type GridState = "X" | "O" | null;
+import { GridState } from '../types/gridStateType';
 
 interface TicTacToeContextProps {
     sign: "X" | "O";
@@ -19,6 +18,8 @@ interface TicTacToeContextProps {
     updateActiveIndexState : (index: number) => void;
     isGameStarted: boolean;
     updateIsGameStarted: () => void;
+    isGameCompleted: boolean;
+    updateIsGameCompleted: () => void;
 }
 
 const TicTacToeContext = createContext<TicTacToeContextProps>({
@@ -37,6 +38,8 @@ const TicTacToeContext = createContext<TicTacToeContextProps>({
     updateActiveIndexState: () => {},
     isGameStarted: false,
     updateIsGameStarted: () => {},
+    isGameCompleted: false,
+    updateIsGameCompleted: () => {},
   
 });
 
@@ -54,6 +57,7 @@ export const TicTacToeProvider = ({ children }: { children: ReactNode }) => {
     
     const [activeIndex, setActiveIndex] = useState<number>(-1);
     const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
+    const [isGameCompleted, setIsGameCompleted] = useState<boolean>(false);
 
     const toggleSign = () => {
         setSign((prevSign) => (prevSign === "X" ? "O" : "X"));
@@ -104,6 +108,10 @@ export const TicTacToeProvider = ({ children }: { children: ReactNode }) => {
         setIsGameStarted(!isGameStarted);
     }
 
+    const updateIsGameCompleted = () => {
+        setIsGameCompleted(!isGameCompleted);
+    }
+
     return (
         <TicTacToeContext.Provider value={{ sign,
                                             toggleSign,
@@ -119,6 +127,8 @@ export const TicTacToeProvider = ({ children }: { children: ReactNode }) => {
                                             updateActiveIndexState,
                                             isGameStarted,
                                             updateIsGameStarted,
+                                            isGameCompleted,
+                                            updateIsGameCompleted,
                                             }}>
             {children}
         </TicTacToeContext.Provider>

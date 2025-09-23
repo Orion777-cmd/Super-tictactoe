@@ -1,25 +1,24 @@
-import "./cell.styles.css"
-import { useTicTacToe } from "../../state/tictactoeContext";
+import "./cell.styles.css";
+import { GridState } from "../../types/gridStateType";
 
+interface CellProps {
+  value: GridState | null;
+  onClick: () => void;
+  disabled: boolean;
+}
 
-type CellProps = {
-    renderSign: (innerIndex: number) => void;
-    sign: string | null;
-    innerIndex: number;
-    outerIndex: number;
-    
+const Cell: React.FC<CellProps> = ({ value, onClick, disabled }) => {
+  const handleClick = () => {
+    if (!disabled) {
+      onClick();
+    }
   };
 
-const Cell: React.FC<CellProps> = ({renderSign , sign, innerIndex, outerIndex, }) => {
-    const {activeIndex} = useTicTacToe();
-
-    
-
-    return (
-        <div className="cell-container" onClick={() => renderSign(innerIndex)} >
-      {sign && <div className={`render-${sign} ${activeIndex === outerIndex?  "cell-active": "cell-disable"}` }></div>}
+  return (
+    <div className="cell-container" onClick={handleClick}>
+      {value && <div className={`render-${value}`}></div>}
     </div>
-    )
-}
+  );
+};
 
 export default Cell;

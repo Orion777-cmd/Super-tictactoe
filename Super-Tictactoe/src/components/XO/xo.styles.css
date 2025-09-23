@@ -1,105 +1,103 @@
-.grid-container{
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(3, 50px);
-    grid-template-rows: repeat(3, 50px);
-    gap: 5px;
-    place-content: center;
-    
-    
-    
+.grid-container {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 50px);
+  grid-template-rows: repeat(3, 50px);
+  gap: 5px;
+  place-content: center;
 }
 
 .winner-X {
-    position: relative;
-    height: 100%;
-    width: 100%;
-    background-color: white;
-    animation: fadeIn 0.5s forwards;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  animation: fadeIn 0.5s forwards;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .winner-X::before,
 .winner-X::after {
-    content: '';
-    position: absolute;
-    height: 170px;
-    width: 50px;
-    top: -60%;
-    left: 65%;
-    transform: translate(-50%, -50%);
-    background-color: black;
-    z-index: 1;
- 
+  content: "";
+  position: absolute;
+  height: 170px;
+  width: 50px;
+  top: -60%;
+  left: 65%;
+  transform: translate(-50%, -50%);
+  background-color: black;
+  z-index: 1;
 }
 
 .winner-X::before {
-    transform: rotate(45deg);
+  transform: rotate(45deg);
 }
 
 .winner-X::after {
-    transform: rotate(-45deg);
+  transform: rotate(-45deg);
 }
 
 .winner-O {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    background-color: white;
-    animation: fadeIn 0.5s forwards;
-    overflow: hidden;
-   
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  animation: fadeIn 0.5s forwards;
+  overflow: hidden;
 }
 
 .winner-O::before {
-    content: '';
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    border-radius: 50%;
-    background-color:black;
-    
-    z-index: 1;
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+  background-color: black;
+
+  z-index: 1;
 }
-.winner-O::after{
-    content : '';
-    position: absolute;
-    height: 50%;
-    width : 50%;
-    border-radius: 50%;
-    background-color: white;
-    z-index: 2
+.winner-O::after {
+  content: "";
+  position: absolute;
+  height: 50%;
+  width: 50%;
+  border-radius: 50%;
+  background-color: white;
+  z-index: 2;
 }
 
-.winner-draw{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    animation: fadeIn 0.5s forwards;
-    background-color: black;
+.winner-draw {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  animation: fadeIn 0.5s forwards;
+  background-color: black;
 }
 
-.grid-container.board-active{
-    /* background: crimson; */
-    filter: drop-shadow(0 0 0.75rem crimson);
-    box-shadow: 0 0 0.75rem 0.2rem crimson;
+.grid-container.board-active {
+  /* background: crimson; */
+  filter: drop-shadow(0 0 0.75rem crimson);
+  box-shadow: 0 0 0.75rem 0.2rem crimson;
 }
-.grid-container.board-disable{
-    pointer-events: none;
-    cursor: none;
-    opacity: 0.5;
+.grid-container.board-inactive {
+  opacity: 0.3;
+  filter: grayscale(50%);
+}
+.grid-container.board-disable {
+  pointer-events: none;
+  cursor: none;
+  opacity: 0.5;
 }
 
 @keyframes fadeIn {
-    0% {
-        opacity: 0;
-        transform: scale(0);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

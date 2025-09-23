@@ -1,113 +1,112 @@
-.cell-container{
-    height: 50px;
-    width: 50px;
-    background-color: black;
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 1;
+.cell-container {
+  height: 50px;
+  width: 50px;
+  background-color: black;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
 }
-.transparent-container{
-    height: 50px;
-    width: 50px;
-    background-color: transparent;
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
+.transparent-container {
+  height: 50px;
+  width: 50px;
+  background-color: transparent;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .cell-container:hover {
-    cursor :pointer;
-    border-radius: 50%;
-    background-color: crimson;
+  cursor: pointer;
+  border-radius: 50%;
+  background-color: crimson;
 }
 
-
 .render-X {
-    position: relative;
-    height: 50px;
-    width: 50px;
-    background-color: grey;
-    
-    animation: fadeIn 0.5s forwards;
+  position: relative;
+  height: 50px;
+  width: 50px;
+  background-color: grey;
+
+  animation: fadeIn 0.5s forwards;
 }
 
 .render-X::before,
 .render-X::after {
-    content: '';
-    position: absolute;
-    height: 15px;
-    width: 45px;
-    background-color: black;
-    top: 17px;
-    left: 3px;
-    /* transition: transform 0.5s ease; */
+  content: "";
+  position: absolute;
+  height: 15px;
+  width: 45px;
+  background-color: black;
+  top: 17px;
+  left: 3px;
+  /* transition: transform 0.5s ease; */
 }
 
 .render-X::before {
-    transform: rotate(45deg);
+  transform: rotate(45deg);
 }
 
 .render-X::after {
-    transform: rotate(-45deg);
+  transform: rotate(-45deg);
 }
 
 .render-O {
-    position: relative;
-    height: 50px;
-    width: 50px;
-    /* border-radius: 50%; */
-    background-color: grey;
-    animation: fadeIn 0.5s forwards;
-    overflow: hidden;
+  position: relative;
+  height: 50px;
+  width: 50px;
+  /* border-radius: 50%; */
+  background-color: grey;
+  animation: fadeIn 0.5s forwards;
+  overflow: hidden;
 }
 
 .render-O::before {
-    content: '';
-    position: absolute;
-    height: 20px;
-    width: 20px;
-    border-radius: 50%;
-    background-color: grey;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
+  content: "";
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background-color: grey;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
 }
-.render-O::after{
-    content : '';
-    position: absolute;
-    height: 100%;
-    width : 100%;
-    border-radius: 50%;
-    background-color: black;
-    top: 0;
-    left: 0;
-    border: 0;
+.render-O::after {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+  background-color: black;
+  top: 0;
+  left: 0;
+  border: 0;
 }
-.cell-active{
-    filter: drop-shadow(0 0 2.75rem crimson);
-    background-color: #ffcccc;
+.cell-active {
+  filter: drop-shadow(0 0 2.75rem crimson);
+  background-color: #ffcccc;
 }
 
-cell-disable{
-    cursor:none;
-    pointer-events: none;
-    opacity: 0.5; 
-    background-color: white; 
+.cell-disable {
+  cursor: none;
+  pointer-events: none;
+  opacity: 0.5;
+  background-color: white;
 }
 
 @keyframes fadeIn {
-    0% {
-        opacity: 0;
-        transform: scale(0);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
-
-
