@@ -1,11 +1,9 @@
-
-import './App.css'
+import "./App.css";
 import {
-  RouterProvider , 
+  RouterProvider,
   createBrowserRouter,
   createRoutesFromElements,
   Route,
-  
 } from "react-router-dom";
 
 //pages
@@ -15,13 +13,15 @@ import HomePage from "./pages/homepage/homepage";
 import CreatePage from "./pages/createRoomPage/createroom.page";
 import JoinPage from "./pages/joinRoomPage/joinroom.page";
 
+// Theme provider
+import { ThemeProvider } from "./context/themeContext";
+
 // DO NOT FORGET TO ADD JOHN MAYERS SONG X 0 TO THE PROJECT
 
 // add protection layout
-//loading 
-//modal 
+//loading
+//modal
 function App() {
-  
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/">
@@ -32,11 +32,7 @@ function App() {
           // action={}
         />
 
-        <Route
-          path="game/:roomId"
-          element={<GamePage />}
-          
-        />
+        <Route path="game/:roomId" element={<GamePage />} />
 
         <Route
           path="create-room"
@@ -56,16 +52,16 @@ function App() {
           <Route path="join/:roomId" action={} element={<JoinPage/>} action/>
           <Route path="game/:roomId" element={<GamePage />} />
         </Route> */}
-
       </Route>
     )
-  )
+  );
   return (
-    <div className='app-container'>
-      <RouterProvider router={router} />
-    </div>
-  )
-  
+    <ThemeProvider>
+      <div className="app-container">
+        <RouterProvider router={router} />
+      </div>
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Copy from "../../components/copy/copy.component";
 import ToastPopups from "../../components/toast/toast.component";
 import Button from "../../components/button/button.component";
+import ThemeButton from "../../components/themeButton/themeButton.component";
 import { useUser } from "../../state/authContext";
 import { createRoom, subscribeToRoom, getRoom } from "../../supabase/gameApi";
 
@@ -33,7 +34,7 @@ const CreateRoom = () => {
     }
     setLoading(true);
     try {
-      const { room, game } = await createRoom(user.userId);
+      const { room } = await createRoom(user.userId);
       setRoomId(room.id);
       const joinUrl = `${window.location.origin}/join-room/${room.id}`;
       setCopiedValue(joinUrl);
@@ -53,7 +54,7 @@ const CreateRoom = () => {
 
   const handleCheckRoom = async () => {
     try {
-      const room = await getRoom(roomId);
+      const room = await getRoom(roomId!);
       console.log("[DEBUG] Manual room check:", room);
       if (room.guest_id) {
         setGuestJoined(true);
@@ -121,6 +122,11 @@ const CreateRoom = () => {
 
   return (
     <div className="createpage-container">
+      {/* Theme Button */}
+      <div className="theme-button-container">
+        <ThemeButton />
+      </div>
+
       <div className="logo-container">
         <img src="./mainLogo.svg" alt="Main Logo" height={150} />
 

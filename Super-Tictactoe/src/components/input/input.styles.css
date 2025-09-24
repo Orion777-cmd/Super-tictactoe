@@ -4,7 +4,11 @@
   width: 100%;
   position: relative;
   height: 60px;
-  background: grey;
+  background: var(--theme-surfaceVariant);
+  border: 2px solid var(--theme-cellBorder);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .input-container input {
@@ -13,16 +17,18 @@
   background: transparent;
   border: none;
   outline: none;
-  font-size: 1.2rem;
-  color: white;
-  font-weight: 300;
+  font-size: 1.1rem;
+  color: var(--theme-onSurface);
+  font-weight: 400;
   padding: 0 1rem;
+  padding-top: 1.5rem;
   z-index: 3;
   position: relative;
+  transition: all 0.3s ease;
 }
 
 .input-container input::placeholder {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--theme-onSurfaceVariant);
   background: transparent;
 }
 
@@ -31,33 +37,45 @@
 }
 
 .input-container::before {
-  width: 100%;
+  width: 0%;
   height: 2px;
   position: absolute;
-  background: transparent;
+  background: var(--theme-turnIndicatorActive);
   bottom: 0;
   left: 0;
   content: "";
   z-index: 4;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+  transition: width 0.3s ease;
 }
 
 .input-container label {
   position: absolute;
-  font-size: 1.3rem;
-  bottom: 0;
-  left: 0;
-  z-index: 1;
+  font-size: 1.1rem;
+  bottom: 1.5rem;
+  left: 1rem;
+  z-index: 2;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  color: white;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--theme-onSurfaceVariant);
   pointer-events: none;
+  background: var(--theme-surfaceVariant);
+  padding: 0 0.5rem;
+  border-radius: 4px;
+  white-space: nowrap;
 }
 
 .label-focused {
-  font-size: 1rem;
-  transition: all 1s ease;
-  top: 0;
+  font-size: 0.85rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  top: -0.3rem;
+  left: 0.8rem;
+  color: var(--theme-turnIndicatorActive);
+  background: var(--theme-surfaceVariant);
+  padding: 0 0.5rem;
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px var(--theme-surfaceVariant);
+  font-weight: 500;
+  transform: scale(0.9);
 }
 
 .input-focused {
@@ -66,16 +84,67 @@
   background-color: transparent;
 }
 
-.container-focused::before {
-  border-bottom: 2px solid crimson;
-  animation: focus 1s;
+.container-focused {
+  border-color: var(--theme-turnIndicatorActive);
+  box-shadow: 0 0 0 2px var(--theme-turnIndicatorActive),
+    0 8px 25px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
 }
 
-@keyframes focus {
-  0% {
-    width: 0;
+.container-focused::before {
+  width: 100%;
+  background: var(--theme-turnIndicatorActive);
+}
+
+/* Enhanced futuristic styling */
+.input-container:hover {
+  border-color: var(--theme-cellHover);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.input-container:focus-within {
+  border-color: var(--theme-turnIndicatorActive);
+  box-shadow: 0 0 0 2px var(--theme-turnIndicatorActive),
+    0 8px 25px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Smooth label animation without overlapping */
+.input-container label {
+  transform-origin: left center;
+}
+
+/* Enhanced input styling */
+.input-container input:focus {
+  color: var(--theme-onSurface);
+}
+
+/* Ensure inputs span full width in containers */
+.login-container .input-container,
+.signup-container .input-container {
+  width: 100%;
+  max-width: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .input-container {
+    height: 60px;
   }
-  100% {
-    width: 100%;
+
+  .input-container input {
+    font-size: 1rem;
+    padding-top: 1.3rem;
+  }
+
+  .input-container label {
+    font-size: 1rem;
+    bottom: 1.3rem;
+  }
+
+  .label-focused {
+    font-size: 0.8rem;
+    top: -0.2rem;
+    transform: scale(0.9);
   }
 }

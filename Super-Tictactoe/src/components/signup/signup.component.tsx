@@ -48,28 +48,30 @@ const SignupComponent: React.FC<SignupComponentProps> = ({
   return (
     <div className="signup-container">
       <img src="./mainLogo.svg" alt="Main Logo" height={150} />
-      <h2>Create your Account</h2>
-      <Input
-        label="Name"
-        type="text"
-        name="userName"
-        value={username}
-        onChange={handleUsername}
-      />
-      <Input
-        label="Email"
-        type="email"
-        name="email"
-        value={email}
-        onChange={handleEmail}
-      />
-      <Input
-        label="Password"
-        type="password"
-        name="password"
-        value={password}
-        onChange={handlePassword}
-      />
+      <div className="input-outer-container">
+        
+        <Input
+          label="Name"
+          type="text"
+          name="userName"
+          value={username}
+          onChange={handleUsername}
+        />
+        <Input
+          label="Email"
+          type="email"
+          name="email"
+          value={email}
+          onChange={handleEmail}
+        />
+        <Input
+          label="Password"
+          type="password"
+          name="password"
+          value={password}
+          onChange={handlePassword}
+        />
+      </div>
       <div className="button-container">
         <Button
           label={loading ? "Signing up..." : "Sign Up"}

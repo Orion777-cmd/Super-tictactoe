@@ -1,27 +1,69 @@
-:root{
-    --strong-red-color: #380f17;
-    --medium-red-color: #8f0b13;
-    --light-red-color: #dc2011;
-    --white-color: #efdfc5;
-    --light-dark-color: #4c4f54;
-    --strong-dark-color: #252b2b;
+:root {
+  --strong-red-color: #380f17;
+  --medium-red-color: #8f0b13;
+  --light-red-color: #dc2011;
+  --white-color: #efdfc5;
+  --light-dark-color: #4c4f54;
+  --strong-dark-color: #252b2b;
+
+  /* Default theme colors - will be overridden by theme context */
+  --theme-primary: #1a1a2e;
+  --theme-secondary: #16213e;
+  --theme-surface: #0f3460;
+  --theme-surfaceVariant: rgba(255, 255, 255, 0.1);
+  --theme-onPrimary: #ffffff;
+  --theme-onSecondary: #ffffff;
+  --theme-onSurface: #ffffff;
+  --theme-onSurfaceVariant: rgba(255, 255, 255, 0.7);
+  --theme-boardBackground: rgba(0, 0, 0, 0.05);
+  --theme-boardBorder: rgba(255, 255, 255, 0.2);
+  --theme-cellBackground: black;
+  --theme-cellBorder: rgba(255, 255, 255, 0.1);
+  --theme-cellHover: #667eea;
+  --theme-playerX: white;
+  --theme-playerO: white;
+  --theme-playerXHover: #667eea;
+  --theme-playerOHover: #764ba2;
+  --theme-turnIndicator: #6c757d;
+  --theme-turnIndicatorActive: #667eea;
+  --theme-winningLine: #667eea;
+  --theme-winningLineGlow: #764ba2;
+  --theme-buttonPrimary: #667eea;
+  --theme-buttonSecondary: #764ba2;
+  --theme-buttonText: #ffffff;
+  --theme-buttonHover: #5a6fd8;
+  --theme-success: #28a745;
+  --theme-warning: #ffc107;
+  --theme-error: #dc3545;
+  --theme-info: #17a2b8;
+  --theme-avatarBackground: rgba(255, 255, 255, 0.9);
+  --theme-avatarBorder: #667eea;
+  --theme-scoreBackground: rgba(102, 126, 234, 0.1);
+  --theme-scoreText: #667eea;
+  --theme-scoreBorder: rgba(102, 126, 234, 0.3);
 }
 
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    --toast-background: #ECFDF5;
-    --progress-color: #34D399; 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  --toast-background: #ecfdf5;
+  --progress-color: #34d399;
 }
 
-body{
-    
-    font-family: "IBM Plex Mono", monospace;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100vw;
-    background:  rgba(0,0,0,0.8);
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: var(--theme-primary);
+  color: var(--theme-onSurface);
+  min-height: 100vh;
+  width: 100vw;
+  transition: all 0.5s ease;
+}
+
+#root {
+  min-height: 100vh;
+  width: 100vw;
+  background: var(--theme-primary);
+  transition: all 0.5s ease;
 }

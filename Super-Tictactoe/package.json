@@ -11,6 +11,8 @@
     "build:styles": "tailwindcss build -i ./src/index.css -o ./src/tailwind.css"
   },
   "dependencies": {
+    "@dicebear/collection": "^9.2.4",
+    "@dicebear/core": "^9.2.4",
     "@supabase/supabase-js": "^2.50.0",
     "firebase": "^10.8.1",
     "react": "^18.2.0",

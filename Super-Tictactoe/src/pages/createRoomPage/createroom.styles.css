@@ -5,12 +5,21 @@
   justify-content: center;
   width: 80%;
   gap: 1rem;
-  background: grey;
+  background: var(--theme-surface);
   border-radius: 20px;
   overflow: hidden;
   height: 550px;
-  box-shadow: 0 0 2rem crimson;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), 0 0 0 1px var(--theme-boardBorder);
   position: relative;
+  transition: all 0.5s ease;
+}
+
+/* Theme Button Container */
+.theme-button-container {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 1000;
 }
 
 .text-desc {
@@ -31,8 +40,8 @@
 
 .container-copy p {
   width: 80%;
-  border-bottom: 2px solid white;
-  color: white;
+  border-bottom: 2px solid var(--theme-onSurface);
+  color: var(--theme-onSurface);
 }
 
 .container-button {
@@ -50,18 +59,18 @@
 }
 
 .optional-container p {
-  color: black;
+  color: var(--theme-onSurfaceVariant);
   font-weight: 600;
 }
 
 .optional-container span {
-  color: white;
+  color: var(--theme-onSurface);
 }
 
 .join-link a {
   text-decoration: none;
   cursor: pointer;
-  color: white;
+  color: var(--theme-onSurface);
 }
 
 .join-link a:hover {
@@ -71,13 +80,13 @@
 .room-status {
   margin-top: 1rem;
   padding: 0.5rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--theme-surfaceVariant);
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--theme-boardBorder);
 }
 
 .status-text {
-  color: white;
+  color: var(--theme-onSurface);
   font-weight: 600;
   margin: 0;
   text-align: center;

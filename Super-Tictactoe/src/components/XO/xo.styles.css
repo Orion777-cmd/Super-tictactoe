@@ -5,6 +5,11 @@
   grid-template-rows: repeat(3, 50px);
   gap: 5px;
   place-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 5px;
+  transition: all 0.3s ease;
 }
 
 .winner-X {
@@ -89,6 +94,98 @@
   pointer-events: none;
   cursor: none;
   opacity: 0.5;
+}
+
+.board-winner-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.winning-line {
+  position: absolute;
+  background-color: crimson;
+  z-index: 10;
+  animation: drawLine 0.8s ease-in-out forwards;
+  opacity: 0;
+}
+
+/* Row winning lines */
+.winning-line-row-0 {
+  top: 8.33%;
+  left: 0;
+  width: 100%;
+  height: 3px;
+}
+
+.winning-line-row-1 {
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 3px;
+}
+
+.winning-line-row-2 {
+  top: 91.67%;
+  left: 0;
+  width: 100%;
+  height: 3px;
+}
+
+/* Column winning lines */
+.winning-line-column-0 {
+  top: 0;
+  left: 8.33%;
+  width: 3px;
+  height: 100%;
+}
+
+.winning-line-column-1 {
+  top: 0;
+  left: 50%;
+  width: 3px;
+  height: 100%;
+}
+
+.winning-line-column-2 {
+  top: 0;
+  left: 91.67%;
+  width: 3px;
+  height: 100%;
+}
+
+/* Diagonal winning lines */
+.winning-line-diagonal-0 {
+  top: 50%;
+  left: 50%;
+  width: 120%;
+  height: 3px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  transform-origin: center;
+}
+
+.winning-line-diagonal-1 {
+  top: 50%;
+  left: 50%;
+  width: 120%;
+  height: 3px;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  transform-origin: center;
+}
+
+@keyframes drawLine {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
 }
 
 @keyframes fadeIn {

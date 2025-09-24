@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import { GameStatus } from "../types/gameStatusType";
 import { useNavigate } from "react-router-dom";
 import {
-  createGame,
   updateGameState,
   subscribeToGameState,
   getRoom,
@@ -19,14 +18,14 @@ type Turn = string; // User ID
 
 // Define the shape of the game state stored in Supabase
 interface GameState {
-  bigBoard: GridState[][];
-  winnerBoard: (GridState | "draw")[];
+  bigBoard: (string | null)[][];
+  winnerBoard: (string | "draw" | null)[];
   turn: Turn;
-  gameStatus: GameStatus;
+  gameStatus: string;
   winner: string;
   score: [number, number];
   activeBoard: number; // -1 means any board, 0-8 means specific board
-  wholeGameWinner: GridState | "draw" | null;
+  wholeGameWinner: string | "draw" | null;
 }
 
 interface SupabaseSubscription {
@@ -132,14 +131,16 @@ export default function useGameLogic({
         gameStatus: state.gameStatus,
       });
 
-      setBigBoard(state.bigBoard);
-      setWinnerBoard(state.winnerBoard);
-      setGameStatus(state.gameStatus);
+      setBigBoard(state.bigBoard as GridState[][]);
+      setWinnerBoard(state.winnerBoard as (GridState | "draw")[]);
+      setGameStatus(state.gameStatus as GameStatus);
       setTurn(state.turn);
       setWinner(state.winner);
       setScore(state.score);
       setActiveBoard(state.activeBoard || -1);
-      setWholeGameWinner(state.wholeGameWinner || null);
+      setWholeGameWinner(
+        (state.wholeGameWinner as GridState | "draw" | null) || null
+      );
     });
     subscriptionRef.current = sub as SupabaseSubscription;
 
@@ -286,8 +287,8 @@ export default function useGameLogic({
       // For the first move, allow it even if status is still WAITING
       // This handles the case where the game starts with the first move
       if (
-        gameStatus !== GameStatus.PLAYING &&
-        gameStatus !== GameStatus.WAITING
+        (gameStatus as GameStatus) !== GameStatus.PLAYING &&
+        (gameStatus as GameStatus) !== GameStatus.WAITING
       ) {
         console.log("[DEBUG] Game not in playable state, cell click ignored");
         return;
@@ -341,7 +342,7 @@ export default function useGameLogic({
 
     // Check if this small board has a winner
     const smallBoardWinner = calculateWinner(newBigBoard[boardIdx]);
-    let newWinnerBoard = [...winnerBoard];
+    const newWinnerBoard = [...winnerBoard];
     let newActiveBoard = cellIdx; // Next player must play in the board corresponding to the cell they just played
 
     if (smallBoardWinner) {
@@ -371,13 +372,24 @@ export default function useGameLogic({
 
     // Check if the whole game has a winner
     const wholeGameWinnerResult = calculateWinner(newWinnerBoard);
-    let newGameStatus = gameStatus;
+    let newGameStatus: GameStatus = gameStatus;
     let newWholeGameWinner = wholeGameWinner;
+    const newScore = [...score];
 
     if (wholeGameWinnerResult) {
       console.log("[DEBUG] Whole game won by:", wholeGameWinnerResult);
       newGameStatus = GameStatus.WIN;
       newWholeGameWinner = wholeGameWinnerResult;
+
+      // Update score based on winner
+      if (wholeGameWinnerResult === "X") {
+        // Host (X) won
+        newScore[0] += 1;
+      } else if (wholeGameWinnerResult === "O") {
+        // Guest (O) won
+        newScore[1] += 1;
+      }
+      console.log("[DEBUG] Score updated:", newScore);
     }
 
     // Update the game state - switch to the other player
@@ -417,10 +429,11 @@ export default function useGameLogic({
       activeBoard: newActiveBoard,
       gameStatus: newGameStatus,
       wholeGameWinner: newWholeGameWinner,
+      score: newScore as [number, number],
     });
   };
 
-  // Reset game
+  // Reset game (keep score, reset board)
   const reset = () => {
     updateDB({
       bigBoard: EMPTY_BOARD,
@@ -428,7 +441,9 @@ export default function useGameLogic({
       gameStatus: GameStatus.PLAYING,
       turn: user?.userId || "",
       winner: "",
-      score: [0, 0],
+      score: score, // Keep current score
+      wholeGameWinner: null,
+      activeBoard: -1,
     });
   };
 
