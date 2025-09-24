@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import useGameLogic from "../../hooks/gameHook";
 import BigXO from "../../components/BigXO/bigXo.component";
 import Avatar from "../../components/avatar/avatar.component";
+import ThemeButton from "../../components/themeButton/themeButton.component";
 import { GameStatus } from "../../types/gameStatusType";
 import { useAuth } from "../../state/authContext";
 import { getRoom } from "../../supabase/gameApi";
@@ -165,23 +166,6 @@ const GamePage: React.FC = () => {
           <p className="player-symbol">
             You are: <strong>{gameLogic.playerSymbol}</strong>
           </p>
-          {gameLogic.wholeGameWinner && (
-            <div className="winner-section">
-              <p className="winner-message">
-                🏆{" "}
-                {gameLogic.wholeGameWinner === gameLogic.playerSymbol
-                  ? `${user?.username || "You"} won!`
-                  : `${
-                      gameLogic.wholeGameWinner === "X"
-                        ? room?.host_username || "Host"
-                        : room?.guest_username || "Guest"
-                    } won!`}
-              </p>
-              <button className="reset-game-btn" onClick={gameLogic.reset}>
-                🔄 Play Again
-              </button>
-            </div>
-          )}
         </div>
 
         <div className="player-info player-two">
@@ -215,6 +199,40 @@ const GamePage: React.FC = () => {
           handleCellClick={gameLogic.handleCellClick}
           wholeGameWinner={gameLogic.wholeGameWinner}
         />
+
+        {/* Floating Game Over Overlay */}
+        {gameLogic.wholeGameWinner && (
+          <div className="game-over-overlay">
+            <div className="game-over-content">
+              <div className="winner-celebration">
+                <div className="celebration-icon">🏆</div>
+                <h2 className="winner-title">
+                  {gameLogic.wholeGameWinner === gameLogic.playerSymbol
+                    ? "You Won!"
+                    : "Game Over"}
+                </h2>
+                <p className="winner-message">
+                  {gameLogic.wholeGameWinner === gameLogic.playerSymbol
+                    ? `Congratulations ${user?.username || "Player"}!`
+                    : `${
+                        gameLogic.wholeGameWinner === "X"
+                          ? room?.host_username || "Host"
+                          : room?.guest_username || "Guest"
+                      } won the game!`}
+                </p>
+                <button className="play-again-btn" onClick={gameLogic.reset}>
+                  <span className="btn-icon">🔄</span>
+                  <span className="btn-text">Play Again</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Theme button in bottom right corner */}
+      <div className="theme-button-container">
+        <ThemeButton />
       </div>
     </div>
   );

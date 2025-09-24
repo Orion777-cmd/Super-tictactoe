@@ -5,6 +5,11 @@
   grid-template-rows: repeat(3, 50px);
   gap: 5px;
   place-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 5px;
+  transition: all 0.3s ease;
 }
 
 .winner-X {

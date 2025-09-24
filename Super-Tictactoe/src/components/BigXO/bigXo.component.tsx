@@ -117,9 +117,15 @@ const BigXO: React.FC<BigXOProps> = ({
     );
   };
 
+  // Check if it's not the current player's turn
+  const isDisabled =
+    gameStatus === GameStatus.PLAYING && turn !== currentPlayerTurn;
+
   return (
     <div
-      className={`ultimate-container ${mainWinningLine ? "has-winner" : ""}`}
+      className={`ultimate-container ${mainWinningLine ? "has-winner" : ""} ${
+        isDisabled ? "disabled" : ""
+      }`}
     >
       {bigBoard.map((smallBoard, idx) => (
         <XO
