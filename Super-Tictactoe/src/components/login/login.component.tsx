@@ -37,22 +37,25 @@ const LoginComponent: React.FC<LoginComponentProps> = ({ showToast }) => {
   };
   return (
     <div className="login-container">
+
       <img src="./mainLogo.svg" alt="Main Logo" height={150} />
-      <h2>Are you Read to play game?</h2>
-      <Input
-        label="Email"
-        type="email"
-        name="email"
-        value={email}
-        onChange={handleEmail}
-      />
-      <Input
-        label="Password"
-        type="password"
-        name="password"
-        value={password}
-        onChange={handlePassword}
-      />
+      <div className="input-outer-container">
+
+        <Input
+          label="Email"
+          type="email"
+          name="email"
+          value={email}
+          onChange={handleEmail}
+        />
+        <Input
+          label="Password"
+          type="password"
+          name="password"
+          value={password}
+          onChange={handlePassword}
+        />
+      </div>
 
       <div className="button-container">
         <Button

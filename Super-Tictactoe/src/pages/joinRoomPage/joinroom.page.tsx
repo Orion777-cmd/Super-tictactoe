@@ -1,6 +1,7 @@
 import "./joinroom.styles.css";
 import Input from "../../components/input/input.component";
 import Button from "../../components/button/button.component";
+import ThemeButton from "../../components/themeButton/themeButton.component";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import ToastPopups from "../../components/toast/toast.component";
@@ -59,6 +60,11 @@ const JoinRoom = () => {
 
   return (
     <div className="joinpage-container">
+      {/* Theme Button */}
+      <div className="theme-button-container">
+        <ThemeButton />
+      </div>
+
       <div className="logo-container">
         <img src="./mainLogo.svg" alt="Main Logo" height={150} />
 

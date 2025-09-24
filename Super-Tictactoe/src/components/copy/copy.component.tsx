@@ -1,34 +1,41 @@
 import "./copy.styles.css";
-import {useState} from "react";
-import { FaRegCopy } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { FaRegCopy, FaCheck } from "react-icons/fa";
 
 type CopyPropsTypes = {
-    text : string | null
-    isCopied: boolean
-    setIsCopied: (n: boolean) => void
-}
-const Copy: React.FC<CopyPropsTypes> = ({text , setIsCopied, isCopied}) => {
-
-    const handlecopy = () => {
-        if (text){
-            navigator.clipboard.writeText(text);
-            setIsCopied(true);
-        }
-        
+  text: string | null;
+  isCopied: boolean;
+  setIsCopied: (n: boolean) => void;
+};
+const Copy: React.FC<CopyPropsTypes> = ({ text, setIsCopied, isCopied }) => {
+  const handlecopy = async () => {
+    if (text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        setIsCopied(true);
+      } catch (err) {
+        console.error("Failed to copy text: ", err);
+      }
     }
+  };
 
-    setTimeout(()  => {
+  useEffect(() => {
+    if (isCopied) {
+      const timer = setTimeout(() => {
         setIsCopied(false);
-    }, 2000);
-    return (
-        <div className="copy-container">
-            <button onClick={handlecopy}>
-                <FaRegCopy size={20}/>
-                {'copy'}
-            </button>
-        </div>
-    )
-}
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [isCopied, setIsCopied]);
 
+  return (
+    <div className="copy-container">
+      <button onClick={handlecopy} className={isCopied ? "copied" : ""}>
+        {isCopied ? <FaCheck size={20} /> : <FaRegCopy size={20} />}
+        {isCopied ? "Copied!" : "Copy"}
+      </button>
+    </div>
+  );
+};
 
 export default Copy;

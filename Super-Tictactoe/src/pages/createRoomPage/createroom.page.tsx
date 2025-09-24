@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Copy from "../../components/copy/copy.component";
 import ToastPopups from "../../components/toast/toast.component";
 import Button from "../../components/button/button.component";
+import ThemeButton from "../../components/themeButton/themeButton.component";
 import { useUser } from "../../state/authContext";
 import { createRoom, subscribeToRoom, getRoom } from "../../supabase/gameApi";
 
@@ -121,6 +122,11 @@ const CreateRoom = () => {
 
   return (
     <div className="createpage-container">
+      {/* Theme Button */}
+      <div className="theme-button-container">
+        <ThemeButton />
+      </div>
+
       <div className="logo-container">
         <img src="./mainLogo.svg" alt="Main Logo" height={150} />
 
