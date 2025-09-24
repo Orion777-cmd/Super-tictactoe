@@ -40,6 +40,8 @@ const XO: React.FC<XOProps> = ({
     winner === null &&
     currentPlayerTurn === turn;
 
+  // Note: Individual winning line animation removed - only main board shows winning lines
+
   console.log("[DEBUG] XO Board Playability:", {
     boardIndex,
     gameStatus,

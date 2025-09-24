@@ -1,102 +1,343 @@
-.ultimate-container{
-    display: grid;
-    place-content:center;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    gap: 20px;
-    position: relative;
-    width: 400px;
-    height: 400px;
-  
-    
+.ultimate-container {
+  display: grid;
+  place-content: center;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 20px;
+  position: relative;
+  width: 400px;
+  height: 400px;
+  transition: all 0.3s ease;
 }
-.wrappper-container{
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
+
+.ultimate-container.has-winner {
+  animation: boardGlow 2s ease-in-out infinite;
+}
+
+/* SVG winning line styles */
+.winning-line-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.winning-line-path {
+  animation: drawSVGLine 1.5s ease-in-out forwards,
+    flameFlickerSVG 2s ease-in-out infinite 1.5s;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  filter: drop-shadow(0 0 10px #ff4757) drop-shadow(0 0 20px #ff3742)
+    drop-shadow(0 0 30px #ff2f3a);
+}
+
+/* Main winning line for the overall 3x3 board */
+.main-winning-line {
+  position: absolute;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #ff6b6b 20%,
+    #ff4757 40%,
+    #ff3742 50%,
+    #ff4757 60%,
+    #ff6b6b 80%,
+    transparent 100%
+  );
+  z-index: 100;
+  animation: drawMainLine 1.5s ease-in-out forwards,
+    flameFlicker 2s ease-in-out infinite 1.5s, winningPulse 0.6s ease-out 1.5s;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 0 10px #ff4757, 0 0 20px #ff3742, 0 0 30px #ff2f3a,
+    0 0 40px #ff1e2b;
+  border-radius: 2px;
+}
+
+/* Row winning lines for main board */
+.main-winning-line-row-0 {
+  top: 16.67%;
+  left: 5%;
+  width: 90%;
+  height: 8px;
+  transform: translateY(-50%);
+}
+
+.main-winning-line-row-1 {
+  top: 50%;
+  left: 5%;
+  width: 90%;
+  height: 8px;
+  transform: translateY(-50%);
+}
+
+.main-winning-line-row-2 {
+  top: 83.33%;
+  left: 5%;
+  width: 90%;
+  height: 8px;
+  transform: translateY(-50%);
+}
+
+/* Column winning lines for main board */
+.main-winning-line-column-0 {
+  top: 5%;
+  left: 16.67%;
+  width: 8px;
+  height: 90%;
+  transform: translateX(-50%);
+}
+
+.main-winning-line-column-1 {
+  top: 5%;
+  left: 50%;
+  width: 8px;
+  height: 90%;
+  transform: translateX(-50%);
+}
+
+.main-winning-line-column-2 {
+  top: 5%;
+  left: 83.33%;
+  width: 8px;
+  height: 90%;
+  transform: translateX(-50%);
+}
+
+/* Diagonal winning lines for main board */
+.main-winning-line-diagonal-0 {
+  top: 50%;
+  left: 50%;
+  width: 150%; /* Increased width to ensure full coverage */
+  height: 8px; /* Slightly thicker for better visibility */
+  transform: translate(-50%, -50%) rotate(45deg);
+  transform-origin: center;
+  /* Diagonal from top-left (0) to bottom-right (8) */
+}
+
+.main-winning-line-diagonal-1 {
+  top: 50%;
+  left: 50%;
+  width: 150%; /* Increased width to ensure full coverage */
+  height: 8px; /* Slightly thicker for better visibility */
+  transform: translate(-50%, -50%) rotate(-45deg);
+  transform-origin: center;
+  /* Diagonal from top-right (2) to bottom-left (6) */
+}
+
+@keyframes drawMainLine {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+    filter: blur(5px);
+  }
+  30% {
+    opacity: 0.8;
+    transform: scaleX(0.3);
+    filter: blur(3px);
+  }
+  60% {
+    opacity: 1;
+    transform: scaleX(0.8);
+    filter: blur(1px);
+  }
+  80% {
+    opacity: 1;
+    transform: scaleX(1.1);
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+    filter: blur(0px);
+  }
+}
+
+@keyframes flameFlicker {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scaleX(1) scaleY(1);
+    box-shadow: 0 0 10px #ff4757, 0 0 20px #ff3742, 0 0 30px #ff2f3a,
+      0 0 40px #ff1e2b;
+  }
+  25% {
+    opacity: 0.9;
+    transform: scaleX(1.05) scaleY(0.95);
+    box-shadow: 0 0 15px #ff4757, 0 0 25px #ff3742, 0 0 35px #ff2f3a,
+      0 0 45px #ff1e2b;
+  }
+  50% {
+    opacity: 0.95;
+    transform: scaleX(0.98) scaleY(1.02);
+    box-shadow: 0 0 12px #ff4757, 0 0 22px #ff3742, 0 0 32px #ff2f3a,
+      0 0 42px #ff1e2b;
+  }
+  75% {
+    opacity: 0.92;
+    transform: scaleX(1.02) scaleY(0.98);
+    box-shadow: 0 0 18px #ff4757, 0 0 28px #ff3742, 0 0 38px #ff2f3a,
+      0 0 48px #ff1e2b;
+  }
+}
+
+@keyframes winningPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 10px #ff4757, 0 0 20px #ff3742, 0 0 30px #ff2f3a,
+      0 0 40px #ff1e2b;
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px #ff4757, 0 0 40px #ff3742, 0 0 60px #ff2f3a,
+      0 0 80px #ff1e2b, 0 0 100px #ff0d1a;
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 10px #ff4757, 0 0 20px #ff3742, 0 0 30px #ff2f3a,
+      0 0 40px #ff1e2b;
+  }
+}
+
+@keyframes boardGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(255, 71, 87, 0.3);
+    filter: brightness(1);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 71, 87, 0.6);
+    filter: brightness(1.1);
+  }
+}
+
+@keyframes drawSVGLine {
+  0% {
+    stroke-dashoffset: 1000;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes flameFlickerSVG {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 10px #ff4757) drop-shadow(0 0 20px #ff3742)
+      drop-shadow(0 0 30px #ff2f3a);
+    stroke-width: 8;
+  }
+  25% {
+    filter: drop-shadow(0 0 15px #ff4757) drop-shadow(0 0 25px #ff3742)
+      drop-shadow(0 0 35px #ff2f3a);
+    stroke-width: 9;
+  }
+  50% {
+    filter: drop-shadow(0 0 12px #ff4757) drop-shadow(0 0 22px #ff3742)
+      drop-shadow(0 0 32px #ff2f3a);
+    stroke-width: 7;
+  }
+  75% {
+    filter: drop-shadow(0 0 18px #ff4757) drop-shadow(0 0 28px #ff3742)
+      drop-shadow(0 0 38px #ff2f3a);
+    stroke-width: 9;
+  }
+}
+
+.wrappper-container {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
 
 .winner-X {
-    position: relative;
-    background-color: white;
-    animation: fadeIn 0.5s forwards;   
-    width: 100%;
-    height: 100%;
+  position: relative;
+  background-color: white;
+  animation: fadeIn 0.5s forwards;
+  width: 100%;
+  height: 100%;
 }
 
 .winner-X::before,
 .winner-X::after {
-    content: '';
-    position: absolute;
-    height: 100%;
-    width: 70px;
-    background-color: black;
-    z-index: 1;
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 70px;
+  background-color: black;
+  z-index: 1;
 }
 
 .winner-X::before {
-    transform: rotate(45deg);
+  transform: rotate(45deg);
 }
 
 .winner-X::after {
-    transform: rotate(-45deg);
+  transform: rotate(-45deg);
 }
 
 .winner-O {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    border-radius: 50%;
-    background-color: white;
-    animation: fadeIn 0.5s forwards;
-    overflow: hidden;   
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+  background-color: white;
+  animation: fadeIn 0.5s forwards;
+  overflow: hidden;
 }
 
 .winner-O::before {
-    content: '';
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    border-radius: 50%;
-    background-color:black;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+  background-color: black;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
 }
-.winner-O::after{
-    content : '';
-    position: absolute;
-    height: 50%;
-    width : 50%;
-    border-radius: 50%;
-    background-color: white;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border: 0;
-    z-index: 2
-}
-
-.winner-draw{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    animation: fadeIn 0.5s forwards;
-    background-color: black;
+.winner-O::after {
+  content: "";
+  position: absolute;
+  height: 50%;
+  width: 50%;
+  border-radius: 50%;
+  background-color: white;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 0;
+  z-index: 2;
 }
 
+.winner-draw {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  animation: fadeIn 0.5s forwards;
+  background-color: black;
+}
 
 @keyframes fadeIn {
-    0% {
-        opacity: 0;
-        transform: scale(0);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

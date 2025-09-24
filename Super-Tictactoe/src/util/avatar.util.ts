@@ -3,7 +3,6 @@ export type AvatarStyle =
   | "avataaars"
   | "bottts"
   | "identicon"
-  | "initials"
   | "micah"
   | "pixel-art"
   | "personas"
@@ -21,7 +20,6 @@ export const AVATAR_STYLES: AvatarStyle[] = [
   "avataaars",
   "bottts",
   "identicon",
-  "initials",
   "micah",
   "pixel-art",
   "personas",

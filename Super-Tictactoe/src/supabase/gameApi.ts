@@ -68,7 +68,6 @@ export async function createRoom(host_id: string) {
 
 // Join a room as guest
 export async function joinRoom(room_id: string, guest_id: string) {
-  // Generate avatar for guest
   const guestAvatar = generateUserAvatar(guest_id);
 
   const { data, error } = await supabase
@@ -81,7 +80,7 @@ export async function joinRoom(room_id: string, guest_id: string) {
     .select()
     .single();
   if (error) throw error;
-  return data;
+  return data as RoomData;
 }
 
 // Create a new game for a room

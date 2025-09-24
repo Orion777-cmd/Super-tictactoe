@@ -84,20 +84,20 @@
 }
 
 .game-avatar.current-turn {
-  border-color: #28a745;
-  box-shadow: 0 0 0 2px #28a745, 0 4px 12px rgba(40, 167, 69, 0.3);
+  border-color: crimson;
+  box-shadow: 0 0 0 2px crimson, 0 4px 12px rgba(220, 20, 60, 0.3);
   animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 0 2px #28a745, 0 4px 12px rgba(40, 167, 69, 0.3);
+    box-shadow: 0 0 0 2px crimson, 0 4px 12px rgba(220, 20, 60, 0.3);
   }
   50% {
-    box-shadow: 0 0 0 4px #28a745, 0 4px 12px rgba(40, 167, 69, 0.5);
+    box-shadow: 0 0 0 4px crimson, 0 4px 12px rgba(220, 20, 60, 0.5);
   }
   100% {
-    box-shadow: 0 0 0 2px #28a745, 0 4px 12px rgba(40, 167, 69, 0.3);
+    box-shadow: 0 0 0 2px crimson, 0 4px 12px rgba(220, 20, 60, 0.3);
   }
 }
 

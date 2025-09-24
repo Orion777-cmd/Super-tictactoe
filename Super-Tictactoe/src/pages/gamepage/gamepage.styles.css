@@ -12,12 +12,12 @@
 
 .game-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   width: 100%;
   max-width: 1200px;
   margin-bottom: 30px;
-  padding: 20px;
+  padding: 10px;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 20px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -33,7 +33,6 @@
   width: 100%;
   max-width: 1200px;
   min-height: 0;
-  overflow: hidden;
 }
 
 /* Ensure the game board scales properly */
@@ -106,7 +105,7 @@
 
 .turn-info {
   font-size: 16px;
-  color: #28a745;
+  color: crimson;
   font-weight: 500;
   margin: 0;
 }
@@ -117,12 +116,41 @@
   margin: 0;
 }
 
+.winner-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
 .winner-message {
   font-size: 18px;
   color: #ffd700;
   font-weight: 700;
   margin: 0;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.reset-game-btn {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.reset-game-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.reset-game-btn:active {
+  transform: translateY(0);
 }
 
 /* Responsive design */

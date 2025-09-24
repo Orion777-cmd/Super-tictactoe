@@ -128,6 +128,7 @@ const GamePage: React.FC = () => {
         <div className="player-info player-one">
           <div className="player-info-container">
             <Avatar
+              userId={room?.host_id}
               avatarUrl={room?.host_avatar}
               username={room?.host_username || "Host"}
               size={60}
@@ -165,22 +166,28 @@ const GamePage: React.FC = () => {
             You are: <strong>{gameLogic.playerSymbol}</strong>
           </p>
           {gameLogic.wholeGameWinner && (
-            <p className="winner-message">
-              🏆{" "}
-              {gameLogic.wholeGameWinner === gameLogic.playerSymbol
-                ? `${user?.username || "You"} won!`
-                : `${
-                    gameLogic.wholeGameWinner === "X"
-                      ? room?.host_username || "Host"
-                      : room?.guest_username || "Guest"
-                  } won!`}
-            </p>
+            <div className="winner-section">
+              <p className="winner-message">
+                🏆{" "}
+                {gameLogic.wholeGameWinner === gameLogic.playerSymbol
+                  ? `${user?.username || "You"} won!`
+                  : `${
+                      gameLogic.wholeGameWinner === "X"
+                        ? room?.host_username || "Host"
+                        : room?.guest_username || "Guest"
+                    } won!`}
+              </p>
+              <button className="reset-game-btn" onClick={gameLogic.reset}>
+                🔄 Play Again
+              </button>
+            </div>
           )}
         </div>
 
         <div className="player-info player-two">
           <div className="player-info-container">
             <Avatar
+              userId={room?.guest_id}
               avatarUrl={room?.guest_avatar}
               username={room?.guest_username || "Guest"}
               size={60}
@@ -206,6 +213,7 @@ const GamePage: React.FC = () => {
           activeBoard={gameLogic.activeBoard}
           currentPlayerTurn={gameLogic.currentPlayerTurn}
           handleCellClick={gameLogic.handleCellClick}
+          wholeGameWinner={gameLogic.wholeGameWinner}
         />
       </div>
     </div>
