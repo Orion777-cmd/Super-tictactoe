@@ -2,7 +2,7 @@ import "./button.styles.css";
 
 type ButtonPropType = {
   label: string;
-  onClick: (...args: any[]) => void | Promise<void>;
+  onClick: (...args: unknown[]) => void | Promise<void>;
   disabled?: boolean;
 };
 
@@ -11,7 +11,7 @@ const Button: React.FC<ButtonPropType> = ({
   onClick,
   disabled = false,
 }) => {
-  const handleClick = (...args: any[]) => {
+  const handleClick = (...args: unknown[]) => {
     if (!disabled) {
       onClick(...args);
     }

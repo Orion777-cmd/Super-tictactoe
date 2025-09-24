@@ -29,18 +29,18 @@ const LoginComponent: React.FC<LoginComponentProps> = ({ showToast }) => {
       await login(email, password);
       showToast("Login successful!", "success");
       setTimeout(() => navigate("/"), 1000);
-    } catch (error: any) {
-      showToast(error?.message || "Login failed", "error");
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Login failed";
+      showToast(errorMessage, "error");
     } finally {
       setLoading(false);
     }
   };
   return (
     <div className="login-container">
-
       <img src="./mainLogo.svg" alt="Main Logo" height={150} />
       <div className="input-outer-container">
-
         <Input
           label="Email"
           type="email"

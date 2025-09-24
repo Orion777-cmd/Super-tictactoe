@@ -19,7 +19,7 @@ const CreateRoom = () => {
   const [toastMsg, setToastMsg] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [guestJoined, setGuestJoined] = useState(false);
-  const subscriptionRef = useRef<any>(null);
+  const subscriptionRef = useRef<{ unsubscribe: () => void } | null>(null);
 
   const showToast = (msg: string) => {
     setToastMsg(msg);
@@ -39,8 +39,10 @@ const CreateRoom = () => {
       const joinUrl = `${window.location.origin}/join-room/${room.id}`;
       setCopiedValue(joinUrl);
       showToast("Room and game created! Share the link.");
-    } catch (err: any) {
-      showToast(err?.message || "Failed to create room");
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to create room";
+      showToast(errorMessage);
     } finally {
       setLoading(false);
     }

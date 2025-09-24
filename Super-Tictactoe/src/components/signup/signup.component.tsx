@@ -39,8 +39,9 @@ const SignupComponent: React.FC<SignupComponentProps> = ({
         "success"
       );
       setTimeout(() => toggleForm(), 1200);
-    } catch (err: any) {
-      showToast(err?.message || "Signup failed", "error");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Signup failed";
+      showToast(errorMessage, "error");
     } finally {
       setLoading(false);
     }
@@ -49,7 +50,6 @@ const SignupComponent: React.FC<SignupComponentProps> = ({
     <div className="signup-container">
       <img src="./mainLogo.svg" alt="Main Logo" height={150} />
       <div className="input-outer-container">
-        
         <Input
           label="Name"
           type="text"

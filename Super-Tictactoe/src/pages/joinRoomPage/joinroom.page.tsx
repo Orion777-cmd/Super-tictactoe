@@ -51,8 +51,10 @@ const JoinRoom = () => {
       showToast("Joined room successfully! Redirecting to game...", "success");
       // Give a moment for the room update to propagate
       setTimeout(() => navigate(`/game/${roomId}`), 1500);
-    } catch (err: any) {
-      showToast(err?.message || "Failed to join room", "error");
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to join room";
+      showToast(errorMessage, "error");
     } finally {
       setLoading(false);
     }
