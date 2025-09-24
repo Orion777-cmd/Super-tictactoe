@@ -6,6 +6,7 @@ export type UserDB = {
   userId: string;
   email: string;
   username: string;
+  avatar?: string;
 };
 
 // Auth context type
