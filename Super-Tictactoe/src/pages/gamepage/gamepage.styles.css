@@ -153,29 +153,27 @@
   transform: translateY(0);
 }
 
-/* Responsive design */
+/* Responsive design - Header only */
 @media (max-width: 768px) {
   .game-container {
     padding: 10px;
   }
 
   .game-header {
-    flex-direction: column;
-    gap: 20px;
     padding: 15px;
     margin-bottom: 20px;
   }
 
   .player-info {
-    min-width: 120px;
-  }
-
-  .game-status {
-    min-width: 150px;
+    min-width: 100px;
   }
 
   .player-name {
     font-size: 14px;
+  }
+
+  .player-symbol {
+    font-size: 12px;
   }
 
   .game-status-text {
@@ -186,8 +184,18 @@
     font-size: 14px;
   }
 
-  .game-board-container {
-    padding: 10px 0;
+  /* Hide some elements on mobile to make it lighter */
+  .player-symbol {
+    display: none;
+  }
+
+  .score-label {
+    display: none;
+  }
+
+  .player-score {
+    font-size: 18px;
+    font-weight: bold;
   }
 }
 
@@ -201,7 +209,41 @@
     margin-bottom: 15px;
   }
 
-  .game-board-container {
-    padding: 5px 0;
+  .player-info {
+    min-width: 80px;
+  }
+
+  .player-name {
+    font-size: 12px;
+  }
+
+  .game-status-text {
+    font-size: 14px;
+  }
+
+  .turn-info {
+    font-size: 12px;
+  }
+
+  .player-score {
+    font-size: 16px;
+  }
+
+  /* Hide middle part on small mobile */
+  .game-status {
+    display: none;
+  }
+
+  .winner-section {
+    gap: 10px;
+  }
+
+  .winner-message {
+    font-size: 16px;
+  }
+
+  .reset-game-btn {
+    padding: 8px 16px;
+    font-size: 12px;
   }
 }
