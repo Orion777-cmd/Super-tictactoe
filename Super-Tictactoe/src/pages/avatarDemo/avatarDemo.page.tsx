@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import Avatar from "../../components/avatar/avatar.component";
 import AvatarPreview from "../../components/avatarPreview/avatarPreview.component";
-import {
-  generateUserAvatar,
-  generateAvatarOptions,
-} from "../../util/avatar.util";
+import { generateAvatarOptions } from "../../util/avatar.util";
 import "./avatarDemo.styles.css";
 
 const AvatarDemo: React.FC = () => {

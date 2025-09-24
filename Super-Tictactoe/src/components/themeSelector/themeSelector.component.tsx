@@ -10,7 +10,7 @@ interface ThemeSelectorProps {
 
 const ThemeSelector: React.FC<ThemeSelectorProps> = ({ isOpen, onClose }) => {
   const { currentTheme, setTheme, availableThemes } = useTheme();
-  const [previewTheme, setPreviewTheme] = useState<Theme | null>(null);
+  const [, setPreviewTheme] = useState<Theme | null>(null);
 
   const handleThemeClick = (theme: Theme) => {
     setTheme(theme.id);

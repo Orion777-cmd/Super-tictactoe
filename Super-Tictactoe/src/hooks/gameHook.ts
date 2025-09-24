@@ -18,14 +18,14 @@ type Turn = string; // User ID
 
 // Define the shape of the game state stored in Supabase
 interface GameState {
-  bigBoard: (GridState | null)[][];
-  winnerBoard: (GridState | "draw" | null)[];
+  bigBoard: (string | null)[][];
+  winnerBoard: (string | "draw" | null)[];
   turn: Turn;
-  gameStatus: GameStatus | string;
+  gameStatus: string;
   winner: string;
   score: [number, number];
   activeBoard: number; // -1 means any board, 0-8 means specific board
-  wholeGameWinner: GridState | "draw" | null;
+  wholeGameWinner: string | "draw" | null;
 }
 
 interface SupabaseSubscription {
@@ -131,14 +131,16 @@ export default function useGameLogic({
         gameStatus: state.gameStatus,
       });
 
-      setBigBoard(state.bigBoard);
-      setWinnerBoard(state.winnerBoard);
-      setGameStatus(state.gameStatus);
+      setBigBoard(state.bigBoard as GridState[][]);
+      setWinnerBoard(state.winnerBoard as (GridState | "draw")[]);
+      setGameStatus(state.gameStatus as GameStatus);
       setTurn(state.turn);
       setWinner(state.winner);
       setScore(state.score);
       setActiveBoard(state.activeBoard || -1);
-      setWholeGameWinner(state.wholeGameWinner || null);
+      setWholeGameWinner(
+        (state.wholeGameWinner as GridState | "draw" | null) || null
+      );
     });
     subscriptionRef.current = sub as SupabaseSubscription;
 
@@ -285,8 +287,8 @@ export default function useGameLogic({
       // For the first move, allow it even if status is still WAITING
       // This handles the case where the game starts with the first move
       if (
-        gameStatus !== GameStatus.PLAYING &&
-        gameStatus !== GameStatus.WAITING
+        (gameStatus as GameStatus) !== GameStatus.PLAYING &&
+        (gameStatus as GameStatus) !== GameStatus.WAITING
       ) {
         console.log("[DEBUG] Game not in playable state, cell click ignored");
         return;
@@ -370,7 +372,7 @@ export default function useGameLogic({
 
     // Check if the whole game has a winner
     const wholeGameWinnerResult = calculateWinner(newWinnerBoard);
-    let newGameStatus = gameStatus;
+    let newGameStatus: GameStatus = gameStatus;
     let newWholeGameWinner = wholeGameWinner;
     const newScore = [...score];
 

@@ -5,7 +5,6 @@ import {
   FaGamepad,
   FaTrophy,
   FaUsers,
-  FaCog,
   FaSignOutAlt,
   FaUserEdit,
 } from "react-icons/fa";

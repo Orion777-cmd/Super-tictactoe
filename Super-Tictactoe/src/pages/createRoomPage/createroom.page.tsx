@@ -34,7 +34,7 @@ const CreateRoom = () => {
     }
     setLoading(true);
     try {
-      const { room, game } = await createRoom(user.userId);
+      const { room } = await createRoom(user.userId);
       setRoomId(room.id);
       const joinUrl = `${window.location.origin}/join-room/${room.id}`;
       setCopiedValue(joinUrl);
@@ -54,7 +54,7 @@ const CreateRoom = () => {
 
   const handleCheckRoom = async () => {
     try {
-      const room = await getRoom(roomId);
+      const room = await getRoom(roomId!);
       console.log("[DEBUG] Manual room check:", room);
       if (room.guest_id) {
         setGuestJoined(true);

@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import { useTheme } from "../../context/themeContext";
 import ThemeSelector from "../themeSelector/themeSelector.component";
 import "./themeButton.styles.css";
 
 const ThemeButton: React.FC = () => {
-  const { currentTheme } = useTheme();
   const [isSelectorOpen, setIsSelectorOpen] = useState(false);
 
   const handleThemeButtonClick = () => {

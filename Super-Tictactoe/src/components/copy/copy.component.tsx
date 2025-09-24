@@ -1,5 +1,5 @@
 import "./copy.styles.css";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { FaRegCopy, FaCheck } from "react-icons/fa";
 
 type CopyPropsTypes = {
