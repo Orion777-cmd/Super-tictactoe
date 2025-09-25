@@ -89,11 +89,8 @@ export default function useGameLogic({
     async function setupGame() {
       if (!supabaseGameId) {
         try {
-          console.log("[DEBUG] 🎮 Fetching existing game for room:", roomId);
-
           // Get the existing game for this room
           const game = await getGameForRoom(roomId);
-          console.log("[DEBUG] 🎮 Found existing game:", game.id);
 
           if (isMounted) {
             setSupabaseGameId(game.id);
@@ -111,7 +108,6 @@ export default function useGameLogic({
         }
       } else {
         // Game already exists, will start when first cell is clicked
-        console.log("[DEBUG] 🎮 Game already exists, ready to play");
       }
     }
     setupGame();
@@ -125,12 +121,7 @@ export default function useGameLogic({
   useEffect(() => {
     if (!supabaseGameId) return;
     const sub = subscribeToGameState(supabaseGameId, (state: GameState) => {
-      console.log("[DEBUG] 🔄 Real-time update received:", {
-        turn: state.turn,
-        activeBoard: state.activeBoard,
-        gameStatus: state.gameStatus,
-      });
-
+      
       setBigBoard(state.bigBoard as GridState[][]);
       setWinnerBoard(state.winnerBoard as (GridState | "draw")[]);
       setGameStatus(state.gameStatus as GameStatus);
@@ -166,11 +157,6 @@ export default function useGameLogic({
             data.state.winnerBoard &&
             data.state.turn !== undefined
           ) {
-            console.log("[DEBUG] 🔄 Polling update received:", {
-              turn: data.state.turn,
-              activeBoard: data.state.activeBoard,
-              gameStatus: data.state.gameStatus,
-            });
 
             setBigBoard(data.state.bigBoard);
             setWinnerBoard(data.state.winnerBoard);
@@ -228,26 +214,8 @@ export default function useGameLogic({
   };
 
   // Handle a cell click in the full board
-  const handleCellClick = async (boardIdx: number, cellIdx: number) => {
-    console.log(
-      "[DEBUG] Cell clicked:",
-      "Board:",
-      boardIdx,
-      "Cell:",
-      cellIdx,
-      "Game status:",
-      gameStatus,
-      "Turn:",
-      turn,
-      "Active board:",
-      activeBoard,
-      "User:",
-      user?.userId
-    );
-
-    // Check if it's the user's turn
+  const handleCellClick = async (boardIdx: number, cellIdx: number) => {    // Check if it's the user's turn
     if (!user) {
-      console.log("[DEBUG] No user logged in");
       return;
     }
 
@@ -256,32 +224,15 @@ export default function useGameLogic({
     const isGuest = room.guest_id === user.userId;
 
     if (!isHost && !isGuest) {
-      console.log("[DEBUG] User not in this room");
       return;
     }
 
-    console.log(
-      "[DEBUG] Turn validation - User ID:",
-      user.userId,
-      "Current turn:",
-      turn
-    );
-
     if (user.userId !== turn) {
-      console.log(
-        "[DEBUG] Not your turn! Your turn:",
-        user.userId,
-        "Current turn:",
-        turn
-      );
       return;
     }
 
     // If game is not playing, try to start it first
     if (gameStatus !== GameStatus.PLAYING) {
-      console.log(
-        "[DEBUG] Game not in playing state, checking if should start..."
-      );
       await checkAndStartGame();
 
       // For the first move, allow it even if status is still WAITING
@@ -290,7 +241,6 @@ export default function useGameLogic({
         (gameStatus as GameStatus) !== GameStatus.PLAYING &&
         (gameStatus as GameStatus) !== GameStatus.WAITING
       ) {
-        console.log("[DEBUG] Game not in playable state, cell click ignored");
         return;
       }
     }
@@ -331,13 +281,6 @@ export default function useGameLogic({
       i === boardIdx
         ? row.map((cell, j) => (j === cellIdx ? playerSymbol : cell))
         : row
-    );
-
-    console.log("[DEBUG] Making move:", playerSymbol);
-    console.log("[DEBUG] New bigBoard after move:", newBigBoard);
-    console.log(
-      "[DEBUG] Specific cell updated:",
-      newBigBoard[boardIdx][cellIdx]
     );
 
     // Check if this small board has a winner

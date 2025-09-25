@@ -20,6 +20,7 @@ const CreateRoom = () => {
   const [loading, setLoading] = useState(false);
   const [guestJoined, setGuestJoined] = useState(false);
   const subscriptionRef = useRef<{ unsubscribe: () => void } | null>(null);
+  const navigatedRef = useRef<boolean>(false);
 
   const showToast = (msg: string) => {
     setToastMsg(msg);
@@ -54,23 +55,7 @@ const CreateRoom = () => {
     }
   };
 
-  const handleCheckRoom = async () => {
-    try {
-      const room = await getRoom(roomId!);
-      console.log("[DEBUG] Manual room check:", room);
-      if (room.guest_id) {
-        setGuestJoined(true);
-        showToast("Guest found! Redirecting to game...");
-        setTimeout(() => {
-          navigate(`/game/${roomId}`);
-        }, 1000);
-      } else {
-        showToast("No guest yet...");
-      }
-    } catch (error) {
-      console.error("Error checking room:", error);
-    }
-  };
+  // Removed manual polling method in favor of realtime subscription
 
   // Subscribe to room changes when room is created
   useEffect(() => {
@@ -80,10 +65,8 @@ const CreateRoom = () => {
     const checkRoomState = async () => {
       try {
         const room = await getRoom(roomId);
-        console.log("[DEBUG] Initial room state:", room);
-        console.log("[DEBUG] Room has guest_id:", !!room.guest_id);
+
         if (room.guest_id) {
-          console.log("[DEBUG] Guest already joined, setting state...");
           setGuestJoined(true);
           showToast("Guest joined! You can now start the game.");
         } else {
@@ -98,18 +81,9 @@ const CreateRoom = () => {
 
     // Subscribe to room updates
     const sub = subscribeToRoom(roomId, (room) => {
-      console.log("[DEBUG] Room subscription fired:", room);
-      console.log("[DEBUG] Guest joined state:", guestJoined);
-      console.log("[DEBUG] Room has guest_id:", !!room.guest_id);
-      if (room.guest_id && !guestJoined) {
-        console.log("[DEBUG] Guest joined! Setting state and redirecting...");
+      if (room.guest_id) {
         setGuestJoined(true);
         showToast("Guest joined! Redirecting to game...");
-        // Automatically navigate to the game when guest joins
-        setTimeout(() => {
-          console.log("[DEBUG] Navigating to game:", `/game/${roomId}`);
-          navigate(`/game/${roomId}`);
-        }, 1500);
       }
     });
 
@@ -120,7 +94,16 @@ const CreateRoom = () => {
         subscriptionRef.current.unsubscribe();
       }
     };
-  }, [roomId]); // Removed guestJoined from dependencies to prevent re-subscription
+  }, [roomId]); // subscribe once per roomId
+
+  // Auto-redirect creator when guestJoined becomes true
+  useEffect(() => {
+    if (!roomId) return;
+    if (guestJoined && !navigatedRef.current) {
+      navigatedRef.current = true;
+      navigate(`/game/${roomId}`);
+    }
+  }, [guestJoined, roomId, navigate]);
 
   return (
     <div className="page-center">
@@ -141,15 +124,6 @@ const CreateRoom = () => {
             Copy The Generated URL and send it to your opponent via appropriate
             platform. When a guest joins, you can start the game.
           </p>
-          {roomId && (
-            <div className="room-status">
-              <p className="status-text">
-                {guestJoined
-                  ? "✅ Guest has joined! You can now start the game."
-                  : "⏳ Waiting for a guest to join..."}
-              </p>
-            </div>
-          )}
         </div>
 
         <div className="container-copy">
@@ -183,19 +157,8 @@ const CreateRoom = () => {
               disabled={false}
             />
           ) : (
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "10px" }}
-            >
-              <Button
-                label="Waiting for guest..."
-                onClick={() => {}}
-                disabled={true}
-              />
-              <Button
-                label="Check Room Status (Debug)"
-                onClick={handleCheckRoom}
-                disabled={false}
-              />
+            <div style={{ color: "var(--theme-onSurfaceVariant)" }}>
+              ⏳ Waiting for a guest to join...
             </div>
           )}
         </div>

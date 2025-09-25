@@ -75,7 +75,7 @@ const GamePage: React.FC = () => {
     // Subscribe to room updates for avatar changes
     if (roomId) {
       const channel = supabase
-        .channel(`room-${roomId}`)
+        .channel(`room:${roomId}`)
         .on(
           "postgres_changes",
           {
@@ -116,6 +116,10 @@ const GamePage: React.FC = () => {
           }
         )
         .subscribe();
+
+      // Log channel lifecycle for debugging realtime connection issues
+      // eslint-disable-next-line no-console
+      console.log(`Subscribed to room channel for ${roomId}`, channel);
 
       return () => {
         supabase.removeChannel(channel);

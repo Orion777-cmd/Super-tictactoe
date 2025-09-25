@@ -111,7 +111,7 @@ export function subscribeToGameState(
   game_id: string,
   callback: (state: GameState) => void
 ) {
-  return supabase
+  const channel = supabase
     .channel("games")
     .on(
       "postgres_changes",
@@ -126,6 +126,10 @@ export function subscribeToGameState(
       }
     )
     .subscribe();
+
+  // eslint-disable-next-line no-console
+  console.log(`Subscribed to games channel for game ${game_id}`, channel);
+  return channel;
 }
 
 // Subscribe to real-time room updates
@@ -133,21 +137,30 @@ export function subscribeToRoom(
   room_id: string,
   callback: (room: RoomData) => void
 ) {
-  return supabase
-    .channel("rooms")
+  // Use a unique channel per room and listen to all row changes for robustness
+  const channel = supabase
+    .channel(`room:${room_id}`)
     .on(
       "postgres_changes",
       {
-        event: "UPDATE",
+        event: "*",
         schema: "public",
         table: "rooms",
         filter: `id=eq.${room_id}`,
       },
       (payload) => {
-        callback(payload.new as RoomData);
+        // Some providers send OLD on DELETE; guard for NEW payloads
+        const next = (payload.new as RoomData) as RoomData | undefined;
+        if (next) {
+          callback(next);
+        }
       }
     )
     .subscribe();
+
+  // eslint-disable-next-line no-console
+  console.log(`Subscribed to room channel for ${room_id}`, channel);
+  return channel;
 }
 
 // Get room data
