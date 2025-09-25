@@ -52,6 +52,21 @@ const LoginSignupForm = () => {
           </div>
         </div>
       </div>
+      <div className="mobile-auth">
+        {isSignUp ? (
+          <SignupComponent toggleForm={toggleForm} showToast={showToast} />
+        ) : (
+          <LoginComponent showToast={showToast} />
+        )}
+        <div
+          className="button-container"
+          style={{ width: "100%", textAlign: "center" }}
+        >
+          <button className="buttton" onClick={toggleForm}>
+            {isSignUp ? "Have an account? Login" : "Need an account? Sign Up"}
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
