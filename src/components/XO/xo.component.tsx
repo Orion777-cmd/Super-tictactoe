@@ -34,6 +34,18 @@ const XO: React.FC<XOProps> = ({
     winner === null &&
     currentPlayerTurn === turn;
 
+  // Debug logging
+  console.log(`[DEBUG] XO Board ${boardIndex} Playability:`, {
+    gameStatus,
+    activeBoard,
+    boardIndex,
+    winner,
+    currentPlayerTurn,
+    turn,
+    isBoardPlayable,
+    activeBoardCheck: activeBoard === -1 || activeBoard === boardIndex,
+  });
+
   return (
     <div
       className={`grid-container ${

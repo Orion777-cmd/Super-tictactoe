@@ -10,7 +10,6 @@ import {
 import { GridState } from "../types/gridStateType";
 import { calculateWinner } from "../util/findWinner.util";
 import { useUser } from "../state/authContext";
-import { supabase } from "../supabase/supabaseClient";
 
 // Types
 
@@ -121,14 +120,19 @@ export default function useGameLogic({
   useEffect(() => {
     if (!supabaseGameId) return;
     const sub = subscribeToGameState(supabaseGameId, (state: GameState) => {
-      
+      console.log("[DEBUG] 🔄 WebSocket update received:", {
+        activeBoard: state.activeBoard,
+        turn: state.turn,
+        gameStatus: state.gameStatus,
+      });
+
       setBigBoard(state.bigBoard as GridState[][]);
       setWinnerBoard(state.winnerBoard as (GridState | "draw")[]);
       setGameStatus(state.gameStatus as GameStatus);
       setTurn(state.turn);
       setWinner(state.winner);
       setScore(state.score);
-      setActiveBoard(state.activeBoard || -1);
+      setActiveBoard(state.activeBoard !== undefined ? state.activeBoard : -1);
       setWholeGameWinner(
         (state.wholeGameWinner as GridState | "draw" | null) || null
       );
@@ -136,52 +140,50 @@ export default function useGameLogic({
     subscriptionRef.current = sub as SupabaseSubscription;
 
     // Fallback: Poll for updates every 2 seconds if real-time fails
-    const pollInterval = setInterval(async () => {
-      try {
-        const { data, error } = await supabase
-          .from("games")
-          .select("*")
-          .eq("id", supabaseGameId)
-          .order("updated_at", { ascending: false })
-          .single();
+    // const pollInterval = setInterval(async () => {
+    //   try {
+    //     const { data, error } = await supabase
+    //       .from("games")
+    //       .select("*")
+    //       .eq("id", supabaseGameId)
+    //       .order("updated_at", { ascending: false })
+    //       .single();
 
-        if (error) {
-          console.error("Polling error:", error);
-          return;
-        }
+    //     if (error) {
+    //       console.error("Polling error:", error);
+    //       return;
+    //     }
 
-        if (data && data.state) {
-          // Only update if we have complete state data
-          if (
-            data.state.bigBoard &&
-            data.state.winnerBoard &&
-            data.state.turn !== undefined
-          ) {
-
-            setBigBoard(data.state.bigBoard);
-            setWinnerBoard(data.state.winnerBoard);
-            setGameStatus(data.state.gameStatus);
-            setTurn(data.state.turn);
-            setWinner(data.state.winner);
-            setScore(data.state.score);
-            setActiveBoard(data.state.activeBoard || -1);
-            setWholeGameWinner(data.state.wholeGameWinner || null);
-          } else {
-            console.log(
-              "[DEBUG] 🔄 Incomplete state received, skipping update"
-            );
-          }
-        }
-      } catch (error) {
-        console.error("Polling error:", error);
-      }
-    }, 2000);
+    //     if (data && data.state) {
+    //       // Only update if we have complete state data
+    //       if (
+    //         data.state.bigBoard &&
+    //         data.state.winnerBoard &&
+    //         data.state.turn !== undefined
+    //       ) {
+    //         setBigBoard(data.state.bigBoard);
+    //         setWinnerBoard(data.state.winnerBoard);
+    //         setGameStatus(data.state.gameStatus);
+    //         setTurn(data.state.turn);
+    //         setWinner(data.state.winner);
+    //         setScore(data.state.score);
+    //         setActiveBoard(data.state.activeBoard || -1);
+    //         setWholeGameWinner(data.state.wholeGameWinner || null);
+    //       } else {
+    //         console.log(
+    //           "[DEBUG] 🔄 Incomplete state received, skipping update"
+    //         );
+    //       }
+    //     }
+    //   } catch (error) {
+    //     console.error("Polling error:", error);
+    //   }
+    // }, 2000);
 
     return () => {
       if (subscriptionRef.current) {
         subscriptionRef.current.unsubscribe();
       }
-      clearInterval(pollInterval);
     };
   }, [supabaseGameId]);
 
@@ -190,6 +192,13 @@ export default function useGameLogic({
   // Update game state in Supabase
   const updateDB = async (data: Partial<GameState>) => {
     if (!supabaseGameId) return;
+
+    console.log("[DEBUG] 🔄 updateDB called with:", {
+      activeBoard: data.activeBoard,
+      currentActiveBoard: activeBoard,
+      willUse: data.activeBoard !== undefined ? data.activeBoard : activeBoard,
+    });
+
     // Always send complete state to avoid partial updates
     const completeState = {
       bigBoard: data.bigBoard || bigBoard,
@@ -206,6 +215,8 @@ export default function useGameLogic({
           : wholeGameWinner,
     };
 
+    console.log("[DEBUG] 🔄 completeState being sent:", completeState);
+
     try {
       await updateGameState(supabaseGameId, completeState);
     } catch (error) {
@@ -214,7 +225,8 @@ export default function useGameLogic({
   };
 
   // Handle a cell click in the full board
-  const handleCellClick = async (boardIdx: number, cellIdx: number) => {    // Check if it's the user's turn
+  const handleCellClick = async (boardIdx: number, cellIdx: number) => {
+    // Check if it's the user's turn
     if (!user) {
       return;
     }
@@ -287,6 +299,15 @@ export default function useGameLogic({
     const smallBoardWinner = calculateWinner(newBigBoard[boardIdx]);
     const newWinnerBoard = [...winnerBoard];
     let newActiveBoard = cellIdx; // Next player must play in the board corresponding to the cell they just played
+
+    console.log(
+      "[DEBUG] Move made in board",
+      boardIdx,
+      "cell",
+      cellIdx,
+      "-> next player must play in board",
+      newActiveBoard
+    );
 
     if (smallBoardWinner) {
       console.log("[DEBUG] Small board", boardIdx, "won by:", smallBoardWinner);
@@ -362,8 +383,20 @@ export default function useGameLogic({
     });
     console.log(
       "[DEBUG] 🔄 Active board update - New active board:",
-      newActiveBoard
+      newActiveBoard,
+      "Current activeBoard state:",
+      activeBoard
     );
+
+    // Update local state immediately for better UX
+    setBigBoard(newBigBoard);
+    setWinnerBoard(newWinnerBoard);
+    setTurn(otherPlayerId);
+    setActiveBoard(newActiveBoard);
+    setGameStatus(newGameStatus);
+    setWinner(winner);
+    setScore(newScore as [number, number]);
+    setWholeGameWinner(newWholeGameWinner);
 
     await updateDB({
       bigBoard: newBigBoard,
