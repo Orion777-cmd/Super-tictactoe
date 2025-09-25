@@ -123,81 +123,87 @@ const CreateRoom = () => {
   }, [roomId]); // Removed guestJoined from dependencies to prevent re-subscription
 
   return (
-    <div className="createpage-container">
-      {/* Theme Button */}
-      <div className="theme-button-container">
-        <ThemeButton />
-      </div>
+    <div className="page-center">
+      <div className="createpage-container">
+        {/* Theme Button */}
+        <div className="theme-button-container">
+          <ThemeButton />
+        </div>
 
-      <div className="logo-container">
-        <img src="./mainLogo.svg" alt="Main Logo" height={150} />
+        <div className="logo-container">
+          <img src="./mainLogo.svg" alt="Main Logo" height={150} />
 
-        <h1 className="title">Create Room</h1>
-      </div>
+          <h1 className="title">Create Room</h1>
+        </div>
 
-      <div className="text-desc">
-        <p className="text">
-          Copy The Generated URL and send it to your opponent via appropriate
-          platform. When a guest joins, you can start the game.
-        </p>
-        {roomId && (
-          <div className="room-status">
-            <p className="status-text">
-              {guestJoined
-                ? "✅ Guest has joined! You can now start the game."
-                : "⏳ Waiting for a guest to join..."}
-            </p>
-          </div>
-        )}
-      </div>
+        <div className="text-desc">
+          <p className="text">
+            Copy The Generated URL and send it to your opponent via appropriate
+            platform. When a guest joins, you can start the game.
+          </p>
+          {roomId && (
+            <div className="room-status">
+              <p className="status-text">
+                {guestJoined
+                  ? "✅ Guest has joined! You can now start the game."
+                  : "⏳ Waiting for a guest to join..."}
+              </p>
+            </div>
+          )}
+        </div>
 
-      <div className="container-copy">
-        <p className="room-link">{copiedValue}</p>
-        <Copy
-          text={copiedValue || ""}
-          isCopied={isCopied}
-          setIsCopied={setIsCopied}
-        />
-      </div>
-
-      <div className="optional-cotnainer">
-        <p>
-          Is there a room?{" "}
-          <span className="join-link">
-            <Link to="/join-room">Join Here!</Link>
-          </span>
-        </p>
-      </div>
-      <div className="container-button">
-        {!roomId ? (
-          <Button
-            label={loading ? "Creating..." : "Create Room"}
-            onClick={handleCreateRoom}
-            disabled={loading}
+        <div className="container-copy">
+          <p className="room-link">{copiedValue}</p>
+          <Copy
+            text={copiedValue || ""}
+            isCopied={isCopied}
+            setIsCopied={setIsCopied}
           />
-        ) : guestJoined ? (
-          <Button label="Play Game" onClick={handlePlayGame} disabled={false} />
-        ) : (
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "10px" }}
-          >
+        </div>
+
+        <div className="optional-cotnainer">
+          <p>
+            Is there a room?{" "}
+            <span className="join-link">
+              <Link to="/join-room">Join Here!</Link>
+            </span>
+          </p>
+        </div>
+        <div className="container-button">
+          {!roomId ? (
             <Button
-              label="Waiting for guest..."
-              onClick={() => {}}
-              disabled={true}
+              label={loading ? "Creating..." : "Create Room"}
+              onClick={handleCreateRoom}
+              disabled={loading}
             />
+          ) : guestJoined ? (
             <Button
-              label="Check Room Status (Debug)"
-              onClick={handleCheckRoom}
+              label="Play Game"
+              onClick={handlePlayGame}
               disabled={false}
             />
-          </div>
-        )}
-      </div>
+          ) : (
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+            >
+              <Button
+                label="Waiting for guest..."
+                onClick={() => {}}
+                disabled={true}
+              />
+              <Button
+                label="Check Room Status (Debug)"
+                onClick={handleCheckRoom}
+                disabled={false}
+              />
+            </div>
+          )}
+        </div>
 
-      <ToastPopups status="success" toast={toast}>
-        {toastMsg}
-      </ToastPopups>
+        <ToastPopups status="success" toast={toast}>
+          {toastMsg}
+        </ToastPopups>
+      </div>
     </div>
   );
 };

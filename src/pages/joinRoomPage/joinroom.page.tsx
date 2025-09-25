@@ -61,55 +61,57 @@ const JoinRoom = () => {
   };
 
   return (
-    <div className="joinpage-container">
-      {/* Theme Button */}
-      <div className="theme-button-container">
-        <ThemeButton />
-      </div>
+    <div className="page-center">
+      <div className="joinpage-container">
+        {/* Theme Button */}
+        <div className="theme-button-container">
+          <ThemeButton />
+        </div>
 
-      <div className="logo-container">
-        <img src="./mainLogo.svg" alt="Main Logo" height={150} />
+        <div className="logo-container">
+          <img src="./mainLogo.svg" alt="Main Logo" height={150} />
 
-        <h1 className="title">Join Room</h1>
-      </div>
+          <h1 className="title">Join Room</h1>
+        </div>
 
-      <div className="text-desc">
-        <p className="text">
-          Paste the generated URL or room ID from your opponent. When the Join
-          Game button is active, you'll be redirected to the game.
-        </p>
-      </div>
+        <div className="text-desc">
+          <p className="text">
+            Paste the generated URL or room ID from your opponent. When the Join
+            Game button is active, you'll be redirected to the game.
+          </p>
+        </div>
 
-      <div className="input-container">
-        <Input
-          label="Paste URL or Room ID"
-          type="text"
-          name="roomId"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-        />
-      </div>
-
-      <div className="optional-cotnainer">
-        <p>
-          Want to create a room?{" "}
-          <span className="create-link">
-            <Link to="/create-room">Create Here!</Link>
-          </span>
-        </p>
-      </div>
-      <div className="container-button">
-        {
-          <Button
-            label={loading ? "Joining..." : "Join Game"}
-            onClick={handleJoin}
-            disabled={loading}
+        <div className="input-outer-container">
+          <Input
+            label="Paste URL or Room ID"
+            type="text"
+            name="roomId"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
           />
-        }
+        </div>
+
+        <div className="optional-cotnainer">
+          <p>
+            Want to create a room?{" "}
+            <span className="create-link">
+              <Link to="/create-room">Create Here!</Link>
+            </span>
+          </p>
+        </div>
+        <div className="container-button">
+          {
+            <Button
+              label={loading ? "Joining..." : "Join Game"}
+              onClick={handleJoin}
+              disabled={loading}
+            />
+          }
+        </div>
+        <ToastPopups status={toastStatus} toast={toast}>
+          {toastMsg}
+        </ToastPopups>
       </div>
-      <ToastPopups status={toastStatus} toast={toast}>
-        {toastMsg}
-      </ToastPopups>
     </div>
   );
 };

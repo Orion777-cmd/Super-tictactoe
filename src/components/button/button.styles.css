@@ -1,9 +1,9 @@
 .buttton {
-  width: 60%;
-  max-width: 200px;
+  width: 100%;
+  max-width: 320px;
   border: 2px solid var(--theme-buttonPrimary);
-  font-size: 1.1rem;
-  padding: 0.8rem 1.5rem;
+  font-size: 1.05rem;
+  padding: 0.9rem 1rem;
   font-weight: 500;
   background: var(--theme-buttonPrimary);
   color: var(--theme-buttonText);
@@ -12,6 +12,9 @@
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   margin: 0 auto;
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.2;
 }
 
 .buttton:hover {
@@ -35,4 +38,12 @@
   color: var(--theme-onSurface);
   transform: none;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 480px) {
+  .buttton {
+    max-width: 100%;
+    font-size: 1rem;
+    padding: 0.85rem 0.9rem;
+  }
 }

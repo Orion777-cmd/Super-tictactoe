@@ -22,7 +22,7 @@ const LoginSignupForm = () => {
   };
 
   return (
-    <div>
+    <div className="auth-page">
       <ToastPopups status={toastStatus} toast={toast}>
         {toastMsg}
       </ToastPopups>

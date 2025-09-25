@@ -13,35 +13,34 @@
 }
 
 .winner-X {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   height: 100%;
   width: 100%;
-  background-color: white;
+  background: transparent;
   animation: fadeIn 0.5s forwards;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 .winner-X::before,
 .winner-X::after {
   content: "";
   position: absolute;
-  height: 170px;
+  top: 50%;
+  left: 50%;
+  height: 120%;
   width: 50px;
-  top: -60%;
-  left: 65%;
-  transform: translate(-50%, -50%);
+  transform-origin: center;
   background-color: black;
   z-index: 1;
 }
 
 .winner-X::before {
-  transform: rotate(45deg);
+  transform: translate(-50%, -50%) rotate(45deg);
 }
 
 .winner-X::after {
-  transform: rotate(-45deg);
+  transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 .winner-O {
