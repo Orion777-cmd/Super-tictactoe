@@ -1,0 +1,14 @@
+.game-loading {
+  min-height: 100vh;
+  background: var(--theme-primary);
+  display: flex;
+  flex-direction: column;
+}
+
+.game-loading-simple {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--theme-primary);
+}

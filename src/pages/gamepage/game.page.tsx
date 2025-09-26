@@ -6,8 +6,14 @@ import Avatar from "../../components/avatar/avatar.component";
 import ThemeButton from "../../components/themeButton/themeButton.component";
 import { GameStatus } from "../../types/gameStatusType";
 import { useAuth } from "../../state/authContext";
-import { getRoom } from "../../supabase/gameApi";
+import { getRoom, getGameForRoom } from "../../supabase/gameApi";
 import { supabase } from "../../supabase/supabaseClient";
+import ErrorBoundary from "../../components/ErrorBoundary/ErrorBoundary";
+import GameLoading from "../../components/GameLoading/GameLoading";
+import SoundSettings from "../../components/SoundSettings/SoundSettings";
+import RematchButton from "../../components/RematchButton/RematchButton";
+import GameChat from "../../components/GameChat/GameChat";
+import GameTimeout from "../../components/GameTimeout/GameTimeout";
 import "./gamepage.styles.css";
 
 // Helper function to fetch username by user ID
@@ -42,14 +48,23 @@ const GamePage: React.FC = () => {
     host_username?: string;
     guest_username?: string;
   } | null>(null);
+  const [gameId, setGameId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadingMessage, setLoadingMessage] = useState("Loading game...");
 
   // Fetch room data and subscribe to updates
   useEffect(() => {
     const fetchRoom = async () => {
       if (roomId) {
         try {
+          setLoadingMessage("Loading room data...");
           const roomData = await getRoom(roomId);
 
+          setLoadingMessage("Loading game data...");
+          const gameData = await getGameForRoom(roomId);
+          setGameId(gameData.id);
+
+          setLoadingMessage("Loading player information...");
           // Fetch usernames for both players
           const [hostUsername, guestUsername] = await Promise.all([
             roomData.host_id
@@ -65,8 +80,15 @@ const GamePage: React.FC = () => {
             host_username: hostUsername,
             guest_username: guestUsername,
           });
+
+          setLoadingMessage("Initializing game...");
+          // Small delay to show loading state
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 500);
         } catch (error) {
           console.error("Error fetching room:", error);
+          setIsLoading(false);
         }
       }
     };
@@ -126,6 +148,11 @@ const GamePage: React.FC = () => {
       };
     }
   }, [roomId]);
+
+  // Show loading state while initializing
+  if (isLoading) {
+    return <GameLoading message={loadingMessage} showSkeleton={true} />;
+  }
 
   return (
     <div className="game-container">
@@ -193,16 +220,28 @@ const GamePage: React.FC = () => {
       </div>
 
       <div className="game-board-container">
-        <BigXO
-          bigBoard={gameLogic.bigBoard}
-          winnerBoard={gameLogic.winnerBoard}
-          turn={gameLogic.turn}
-          gameStatus={gameLogic.gameStatus}
-          activeBoard={gameLogic.activeBoard}
-          currentPlayerTurn={gameLogic.currentPlayerTurn}
-          handleCellClick={gameLogic.handleCellClick}
-          wholeGameWinner={gameLogic.wholeGameWinner}
-        />
+        <ErrorBoundary
+          fallback={
+            <div className="game-board-error">
+              <h3>Game Board Error</h3>
+              <p>
+                There was an error loading the game board. Please try refreshing
+                the page.
+              </p>
+            </div>
+          }
+        >
+          <BigXO
+            bigBoard={gameLogic.bigBoard}
+            winnerBoard={gameLogic.winnerBoard}
+            turn={gameLogic.turn}
+            gameStatus={gameLogic.gameStatus}
+            activeBoard={gameLogic.activeBoard}
+            currentPlayerTurn={gameLogic.currentPlayerTurn}
+            handleCellClick={gameLogic.handleCellClick}
+            wholeGameWinner={gameLogic.wholeGameWinner}
+          />
+        </ErrorBoundary>
 
         {/* Floating Game Over Overlay */}
         {gameLogic.wholeGameWinner && (
@@ -224,10 +263,16 @@ const GamePage: React.FC = () => {
                           : room?.guest_username || "Guest"
                       } won the game!`}
                 </p>
-                <button className="play-again-btn" onClick={gameLogic.reset}>
-                  <span className="btn-icon">🔄</span>
-                  <span className="btn-text">Play Again</span>
-                </button>
+                <div className="game-over-actions">
+                  <button className="play-again-btn" onClick={gameLogic.reset}>
+                    <span className="btn-icon">🔄</span>
+                    <span className="btn-text">Play Again</span>
+                  </button>
+                  <RematchButton
+                    onRematch={gameLogic.requestRematch}
+                    disabled={!room?.guest_id}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -238,6 +283,25 @@ const GamePage: React.FC = () => {
       <div className="theme-button-container">
         <ThemeButton />
       </div>
+
+      {/* Sound settings in bottom left corner */}
+      <div className="sound-settings-container">
+        <SoundSettings />
+      </div>
+
+      {/* Game Timeout */}
+      {gameId && (
+        <GameTimeout
+          gameId={gameId}
+          roomId={roomId!}
+          isPlayerTurn={gameLogic.turn === room?.host_id}
+          moveTimeout={300}
+          warningTime={60}
+        />
+      )}
+
+      {/* Game chat */}
+      {roomId && <GameChat roomId={roomId} />}
     </div>
   );
 };

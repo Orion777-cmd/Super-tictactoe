@@ -1,27 +1,7 @@
 import { supabase } from "./supabaseClient";
 import { generateUserAvatar } from "../util/avatar.util";
-
-// Define types for better type safety
-interface GameState {
-  bigBoard: (string | null)[][];
-  winnerBoard: (string | null)[];
-  turn: string;
-  gameStatus: string;
-  winner: string;
-  score: [number, number];
-  activeBoard: number;
-  wholeGameWinner: string | null;
-}
-
-interface RoomData {
-  id: string;
-  host_id: string;
-  guest_id?: string;
-  host_avatar?: string;
-  guest_avatar?: string;
-  created_at: string;
-  updated_at: string;
-}
+import { GameState } from "../types/gameState.type";
+import { RoomData } from "../types/room.type";
 
 // Create a new room and game
 export async function createRoom(host_id: string) {
@@ -150,7 +130,7 @@ export function subscribeToRoom(
       },
       (payload) => {
         // Some providers send OLD on DELETE; guard for NEW payloads
-        const next = (payload.new as RoomData) as RoomData | undefined;
+        const next = payload.new as RoomData as RoomData | undefined;
         if (next) {
           callback(next);
         }

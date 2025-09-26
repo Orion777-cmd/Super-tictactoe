@@ -1,0 +1,130 @@
+.rematch-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    var(--theme-primary),
+    var(--theme-primaryVariant)
+  );
+  color: var(--theme-onPrimary);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.rematch-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.rematch-button:hover::before {
+  left: 100%;
+}
+
+.rematch-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(
+    135deg,
+    var(--theme-primaryVariant),
+    var(--theme-primary)
+  );
+}
+
+.rematch-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.rematch-button.disabled {
+  background: var(--theme-cellBackground);
+  color: var(--theme-onSurfaceVariant);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.rematch-button.disabled:hover {
+  transform: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.rematch-button.requesting {
+  background: linear-gradient(
+    135deg,
+    var(--theme-primaryVariant),
+    var(--theme-primary)
+  );
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.rematch-icon {
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.rematch-button:hover .rematch-icon {
+  transform: rotate(180deg);
+}
+
+.rematch-button.requesting .rematch-icon {
+  animation: spin 1s linear infinite;
+}
+
+.rematch-text {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .rematch-button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+    gap: 0.4rem;
+  }
+
+  .rematch-icon {
+    font-size: 0.9rem;
+  }
+}

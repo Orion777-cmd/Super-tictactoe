@@ -150,6 +150,14 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
+.game-over-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
 .btn-icon {
   font-size: 18px;
 }
@@ -202,6 +210,15 @@
   z-index: 1000;
 }
 
+/* Sound settings positioning */
+.sound-settings-container {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+  max-width: 300px;
+}
+
 /* Ensure the game board scales properly */
 .game-board-container > * {
   max-width: 100%;
@@ -231,9 +248,9 @@
 
 .player-info-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .player-name {
@@ -248,9 +265,9 @@
 
 .player-score {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 3px;
+  gap: 6px;
   padding: 8px 12px;
   background: var(--theme-scoreBackground);
   border-radius: 8px;
@@ -413,4 +430,29 @@
     bottom: 15px;
     right: 15px;
   }
+}
+
+/* Game board error styles */
+.game-board-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 2rem;
+  background: var(--theme-surface);
+  border-radius: 12px;
+  border: 1px solid var(--theme-boardBorder);
+  text-align: center;
+}
+
+.game-board-error h3 {
+  color: var(--theme-onSurface);
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+
+.game-board-error p {
+  color: var(--theme-onSurfaceVariant);
+  line-height: 1.5;
 }

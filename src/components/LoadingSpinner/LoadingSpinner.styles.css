@@ -1,0 +1,120 @@
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.spinner {
+  position: relative;
+  display: inline-block;
+}
+
+.spinner-ring {
+  position: absolute;
+  border: 3px solid transparent;
+  border-top: 3px solid var(--theme-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.spinner-ring:nth-child(1) {
+  width: 40px;
+  height: 40px;
+  animation-duration: 1s;
+}
+
+.spinner-ring:nth-child(2) {
+  width: 30px;
+  height: 30px;
+  top: 5px;
+  left: 5px;
+  animation-duration: 1.2s;
+  animation-direction: reverse;
+  border-top-color: var(--theme-primaryVariant);
+}
+
+.spinner-ring:nth-child(3) {
+  width: 20px;
+  height: 20px;
+  top: 10px;
+  left: 10px;
+  animation-duration: 0.8s;
+  border-top-color: var(--theme-onPrimary);
+}
+
+.loading-message {
+  font-size: 0.9rem;
+  color: var(--theme-onSurfaceVariant);
+  margin: 0;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Size variants */
+.loading-spinner.small .spinner-ring:nth-child(1) {
+  width: 24px;
+  height: 24px;
+}
+
+.loading-spinner.small .spinner-ring:nth-child(2) {
+  width: 18px;
+  height: 18px;
+  top: 3px;
+  left: 3px;
+}
+
+.loading-spinner.small .spinner-ring:nth-child(3) {
+  width: 12px;
+  height: 12px;
+  top: 6px;
+  left: 6px;
+}
+
+.loading-spinner.small .loading-message {
+  font-size: 0.8rem;
+}
+
+.loading-spinner.large .spinner-ring:nth-child(1) {
+  width: 60px;
+  height: 60px;
+}
+
+.loading-spinner.large .spinner-ring:nth-child(2) {
+  width: 45px;
+  height: 45px;
+  top: 7.5px;
+  left: 7.5px;
+}
+
+.loading-spinner.large .spinner-ring:nth-child(3) {
+  width: 30px;
+  height: 30px;
+  top: 15px;
+  left: 15px;
+}
+
+.loading-spinner.large .loading-message {
+  font-size: 1.1rem;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .loading-spinner {
+    gap: 0.75rem;
+  }
+
+  .loading-message {
+    font-size: 0.85rem;
+  }
+}

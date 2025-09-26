@@ -1,0 +1,353 @@
+.tutorial-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: tutorialFadeIn 0.3s ease-out;
+}
+
+@keyframes tutorialFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+}
+
+.tutorial-step {
+  background: var(--theme-surface);
+  border: 2px solid var(--theme-primary);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 90vw;
+  max-height: 80vh;
+  overflow: hidden;
+  position: relative;
+  animation: tutorialSlideIn 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tutorial-step.animating {
+  animation: tutorialSlideOut 0.3s ease-in;
+}
+
+@keyframes tutorialSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes tutorialSlideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+}
+
+.tutorial-step.top {
+  margin-bottom: 2rem;
+}
+
+.tutorial-step.bottom {
+  margin-top: 2rem;
+}
+
+.tutorial-step.left {
+  margin-right: 2rem;
+}
+
+.tutorial-step.right {
+  margin-left: 2rem;
+}
+
+.tutorial-step.center {
+  margin: 0;
+}
+
+.tutorial-content {
+  padding: 2rem;
+  position: relative;
+}
+
+.tutorial-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+.tutorial-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--theme-onSurface);
+  line-height: 1.3;
+  flex: 1;
+}
+
+.tutorial-progress {
+  background: var(--theme-primary);
+  color: var(--theme-onPrimary);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.tutorial-body {
+  margin-bottom: 2rem;
+}
+
+.tutorial-text {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--theme-onSurface);
+  white-space: pre-line;
+}
+
+.tutorial-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.tutorial-actions-main {
+  display: flex;
+  gap: 1rem;
+  margin-left: auto;
+}
+
+.tutorial-btn {
+  padding: 0.75rem 1.5rem;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.tutorial-btn-primary {
+  background: var(--theme-primary);
+  color: var(--theme-onPrimary);
+  border-color: var(--theme-primary);
+}
+
+.tutorial-btn-primary:hover {
+  background: var(--theme-primary);
+  color: var(--theme-onPrimary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(var(--theme-primary-rgb), 0.3);
+}
+
+.tutorial-btn-primary:active {
+  transform: translateY(0);
+}
+
+.tutorial-btn-secondary {
+  background: transparent;
+  color: var(--theme-onSurface);
+  border-color: var(--theme-outline);
+}
+
+.tutorial-btn-secondary:hover {
+  background: var(--theme-surfaceVariant);
+  border-color: var(--theme-primary);
+  color: var(--theme-primary);
+}
+
+.tutorial-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: var(--theme-surfaceVariant);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.tutorial-progress-fill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--theme-primary),
+    var(--theme-secondary)
+  );
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.tutorial-hints {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 1rem;
+  opacity: 0.7;
+}
+
+.tutorial-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--theme-onSurfaceVariant);
+}
+
+.tutorial-hint kbd {
+  background: var(--theme-surfaceVariant);
+  border: 1px solid var(--theme-outline);
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-family: monospace;
+  color: var(--theme-onSurface);
+}
+
+/* Highlighted elements */
+.tutorial-highlight {
+  position: absolute;
+  background: rgba(var(--theme-primary-rgb), 0.2);
+  border: 2px solid var(--theme-primary);
+  border-radius: 8px;
+  pointer-events: none;
+  animation: tutorialPulse 2s infinite;
+  z-index: 10001;
+}
+
+@keyframes tutorialPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--theme-primary-rgb), 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(var(--theme-primary-rgb), 0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .tutorial-step {
+    width: 95vw;
+    max-height: 85vh;
+  }
+
+  .tutorial-content {
+    padding: 1.5rem;
+  }
+
+  .tutorial-title {
+    font-size: 1.3rem;
+  }
+
+  .tutorial-text {
+    font-size: 1rem;
+  }
+
+  .tutorial-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .tutorial-actions-main {
+    margin-left: 0;
+    flex-direction: column;
+  }
+
+  .tutorial-btn {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .tutorial-hints {
+    position: static;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .tutorial-step {
+    width: 98vw;
+    max-height: 90vh;
+  }
+
+  .tutorial-content {
+    padding: 1rem;
+  }
+
+  .tutorial-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .tutorial-title {
+    font-size: 1.2rem;
+  }
+
+  .tutorial-progress {
+    align-self: flex-end;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .tutorial-text {
+    font-size: 0.95rem;
+  }
+
+  .tutorial-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .tutorial-overlay {
+    background: rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* Animation for step transitions */
+.tutorial-step.animating .tutorial-content {
+  animation: tutorialContentFade 0.3s ease-in-out;
+}
+
+@keyframes tutorialContentFade {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}

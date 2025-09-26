@@ -1,14 +1,13 @@
 import Cell from "../cell/cell.component";
 import "./xo.styles.css";
 import { GridState } from "../../types/gridStateType";
-import { GameStatus } from "../../types/gameStatusType";
 
 interface XOProps {
   board: (GridState | null)[];
   winner: GridState | "draw" | null;
   boardIndex: number;
   turn: string; // User ID
-  gameStatus: GameStatus;
+  gameStatus: string;
   activeBoard: number;
   currentPlayerTurn: string; // User ID
   handleCellClick: (boardIdx: number, cellIdx: number) => void;
@@ -28,8 +27,8 @@ const XO: React.FC<XOProps> = ({
     handleCellClick(boardIndex, cellIdx);
   };
 
-  const isBoardPlayable =
-    (gameStatus === GameStatus.PLAYING || gameStatus === GameStatus.WAITING) &&
+  const playable =
+    (gameStatus === "playing" || gameStatus === "waiting") &&
     (activeBoard === -1 || activeBoard === boardIndex) &&
     winner === null &&
     currentPlayerTurn === turn;
@@ -42,7 +41,7 @@ const XO: React.FC<XOProps> = ({
     winner,
     currentPlayerTurn,
     turn,
-    isBoardPlayable,
+    playable,
     activeBoardCheck: activeBoard === -1 || activeBoard === boardIndex,
   });
 
@@ -50,7 +49,7 @@ const XO: React.FC<XOProps> = ({
     <div
       className={`grid-container ${
         winner === null
-          ? isBoardPlayable
+          ? playable
             ? "board-active"
             : "board-inactive"
           : "board-disable"
@@ -64,7 +63,7 @@ const XO: React.FC<XOProps> = ({
             key={index}
             value={cell}
             onClick={() => handleCellClickWrapper(index)}
-            disabled={!!cell || !isBoardPlayable}
+            disabled={!!cell || !playable}
           />
         ))
       )}

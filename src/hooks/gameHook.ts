@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { GameStatus } from "../types/gameStatusType";
 import { useNavigate } from "react-router-dom";
 import {
@@ -10,6 +10,16 @@ import {
 import { GridState } from "../types/gridStateType";
 import { calculateWinner } from "../util/findWinner.util";
 import { useUser } from "../state/authContext";
+import { useSound } from "./useSound";
+import { useNotificationContext } from "../context/NotificationContext";
+import { useTimeoutContext } from "../context/TimeoutContext";
+import { useErrorRecovery } from "./useErrorRecovery";
+import {
+  validateGameState,
+  validateMove,
+  detectSuspiciousActivity,
+  sanitizeGameState,
+} from "../utils/gameValidation";
 
 // Types
 
@@ -62,9 +72,64 @@ export default function useGameLogic({
     gameId
   );
   const subscriptionRef = useRef<SupabaseSubscription | null>(null);
+  const sound = useSound();
+  const notifications = useNotificationContext();
+  const { resetTimeout } = useTimeoutContext();
+  const { handleError, attemptRecovery, hasError, isRecovering } =
+    useErrorRecovery(gameId, roomId);
+
+  // Update game state in Supabase
+  const updateDB = useCallback(
+    async (data: Partial<GameState>) => {
+      if (!supabaseGameId) return;
+
+      console.log("[DEBUG] 🔄 updateDB called with:", {
+        activeBoard: data.activeBoard,
+        currentActiveBoard: activeBoard,
+        willUse:
+          data.activeBoard !== undefined ? data.activeBoard : activeBoard,
+      });
+
+      // Always send complete state to avoid partial updates
+      const completeState = {
+        bigBoard: data.bigBoard || bigBoard,
+        winnerBoard: data.winnerBoard || winnerBoard,
+        turn: data.turn !== undefined ? data.turn : turn,
+        gameStatus: data.gameStatus || gameStatus,
+        winner: data.winner !== undefined ? data.winner : winner,
+        score: data.score || score,
+        activeBoard:
+          data.activeBoard !== undefined ? data.activeBoard : activeBoard,
+        wholeGameWinner:
+          data.wholeGameWinner !== undefined
+            ? data.wholeGameWinner
+            : wholeGameWinner,
+      };
+
+      console.log("[DEBUG] 🔄 completeState being sent:", completeState);
+
+      try {
+        await updateGameState(supabaseGameId, completeState);
+      } catch (error) {
+        console.error("Database update error:", error);
+        handleError(error as Error, "updateDB");
+      }
+    },
+    [
+      supabaseGameId,
+      activeBoard,
+      bigBoard,
+      winnerBoard,
+      turn,
+      gameStatus,
+      winner,
+      score,
+      wholeGameWinner,
+    ]
+  );
 
   // Check if both players are in the room and start the game
-  const checkAndStartGame = async () => {
+  const checkAndStartGame = useCallback(async () => {
     try {
       const room = await getRoom(roomId);
       if (room.host_id && room.guest_id) {
@@ -80,7 +145,7 @@ export default function useGameLogic({
     } catch (error) {
       console.error("Error checking room state:", error);
     }
-  };
+  }, [roomId, gameStatus, updateDB, setGameStatus]);
 
   // Fetch existing game on mount
   useEffect(() => {
@@ -99,7 +164,9 @@ export default function useGameLogic({
             setTurn(game.state.turn);
             setWinner(game.state.winner);
             setScore(game.state.score);
-            setActiveBoard(game.state.activeBoard || -1);
+            setActiveBoard(
+              game.state.activeBoard !== undefined ? game.state.activeBoard : -1
+            );
             setWholeGameWinner(game.state.wholeGameWinner || null);
           }
         } catch (error) {
@@ -126,15 +193,53 @@ export default function useGameLogic({
         gameStatus: state.gameStatus,
       });
 
-      setBigBoard(state.bigBoard as GridState[][]);
-      setWinnerBoard(state.winnerBoard as (GridState | "draw")[]);
-      setGameStatus(state.gameStatus as GameStatus);
-      setTurn(state.turn);
-      setWinner(state.winner);
-      setScore(state.score);
-      setActiveBoard(state.activeBoard !== undefined ? state.activeBoard : -1);
+      // Validate the received game state
+      const validation = validateGameState(state);
+      if (!validation.isValid) {
+        console.error("Invalid game state received:", validation.errors);
+        handleError(
+          new Error(`Invalid game state: ${validation.errors.join(", ")}`),
+          "gameStateUpdate"
+        );
+        return;
+      }
+
+      // Sanitize the game state before applying
+      const sanitizedState = sanitizeGameState(state);
+
+      // Play sound for opponent's move (only if it's not our turn)
+      if (sanitizedState.turn !== user?.userId) {
+        sound.playMove();
+      }
+
+      // Play sound for game ending
+      if (
+        sanitizedState.gameStatus === GameStatus.WIN &&
+        sanitizedState.wholeGameWinner
+      ) {
+        if (
+          sanitizedState.wholeGameWinner ===
+          (user?.userId === room?.host_id ? "X" : "O")
+        ) {
+          sound.playWin();
+        } else {
+          sound.playLose();
+        }
+      }
+
+      setBigBoard(sanitizedState.bigBoard as GridState[][]);
+      setWinnerBoard(sanitizedState.winnerBoard as (GridState | "draw")[]);
+      setGameStatus(sanitizedState.gameStatus as GameStatus);
+      setTurn(sanitizedState.turn);
+      setWinner(sanitizedState.winner);
+      setScore(sanitizedState.score);
+      setActiveBoard(
+        sanitizedState.activeBoard !== undefined
+          ? sanitizedState.activeBoard
+          : -1
+      );
       setWholeGameWinner(
-        (state.wholeGameWinner as GridState | "draw" | null) || null
+        (sanitizedState.wholeGameWinner as GridState | "draw" | null) || null
       );
     });
     subscriptionRef.current = sub as SupabaseSubscription;
@@ -189,41 +294,6 @@ export default function useGameLogic({
 
   // Remove periodic polling - only check when needed
 
-  // Update game state in Supabase
-  const updateDB = async (data: Partial<GameState>) => {
-    if (!supabaseGameId) return;
-
-    console.log("[DEBUG] 🔄 updateDB called with:", {
-      activeBoard: data.activeBoard,
-      currentActiveBoard: activeBoard,
-      willUse: data.activeBoard !== undefined ? data.activeBoard : activeBoard,
-    });
-
-    // Always send complete state to avoid partial updates
-    const completeState = {
-      bigBoard: data.bigBoard || bigBoard,
-      winnerBoard: data.winnerBoard || winnerBoard,
-      turn: data.turn !== undefined ? data.turn : turn,
-      gameStatus: data.gameStatus || gameStatus,
-      winner: data.winner !== undefined ? data.winner : winner,
-      score: data.score || score,
-      activeBoard:
-        data.activeBoard !== undefined ? data.activeBoard : activeBoard,
-      wholeGameWinner:
-        data.wholeGameWinner !== undefined
-          ? data.wholeGameWinner
-          : wholeGameWinner,
-    };
-
-    console.log("[DEBUG] 🔄 completeState being sent:", completeState);
-
-    try {
-      await updateGameState(supabaseGameId, completeState);
-    } catch (error) {
-      console.error("Database update error:", error);
-    }
-  };
-
   // Handle a cell click in the full board
   const handleCellClick = async (boardIdx: number, cellIdx: number) => {
     // Check if it's the user's turn
@@ -241,6 +311,46 @@ export default function useGameLogic({
 
     if (user.userId !== turn) {
       return;
+    }
+
+    // Validate the move
+    const currentGameState = {
+      bigBoard,
+      winnerBoard,
+      turn,
+      gameStatus,
+      activeBoard,
+      score,
+      wholeGameWinner,
+    };
+
+    const moveValidation = validateMove(
+      currentGameState,
+      user.userId,
+      boardIdx,
+      cellIdx
+    );
+    if (!moveValidation.isValid) {
+      console.warn("Invalid move:", moveValidation.errors);
+      notifications.showGameNotification(
+        "Invalid Move",
+        moveValidation.errors[0] || "Move not allowed",
+        "warning",
+        { duration: 3000 }
+      );
+      return;
+    }
+
+    // Check for suspicious activity
+    const suspicious = detectSuspiciousActivity(currentGameState, user.userId);
+    if (suspicious.length > 0) {
+      console.warn("Suspicious activity detected:", suspicious);
+      notifications.showGameNotification(
+        "Suspicious Activity",
+        "Unusual game patterns detected",
+        "warning",
+        { duration: 5000 }
+      );
     }
 
     // If game is not playing, try to start it first
@@ -345,6 +455,25 @@ export default function useGameLogic({
       newGameStatus = GameStatus.WIN;
       newWholeGameWinner = wholeGameWinnerResult;
 
+      // Play win/lose sound based on who won
+      if (wholeGameWinnerResult === playerSymbol) {
+        sound.playWin();
+        notifications.showGameNotification(
+          "success",
+          "🎉 Victory!",
+          "Congratulations! You won the game!",
+          { duration: 8000 }
+        );
+      } else {
+        sound.playLose();
+        notifications.showGameNotification(
+          "warning",
+          "😔 Game Over",
+          "Better luck next time!",
+          { duration: 6000 }
+        );
+      }
+
       // Update score based on winner
       if (wholeGameWinnerResult === "X") {
         // Host (X) won
@@ -388,6 +517,12 @@ export default function useGameLogic({
       activeBoard
     );
 
+    // Play move sound
+    sound.playMove();
+
+    // Reset timeout for the next player
+    resetTimeout();
+
     // Update local state immediately for better UX
     setBigBoard(newBigBoard);
     setWinnerBoard(newWinnerBoard);
@@ -421,6 +556,48 @@ export default function useGameLogic({
       wholeGameWinner: null,
       activeBoard: -1,
     });
+  };
+
+  // Rematch functionality
+  const requestRematch = async () => {
+    if (!room?.host_id || !room?.guest_id) {
+      console.error("Cannot request rematch: missing players");
+      return;
+    }
+
+    try {
+      // Reset the game state for a new game
+      await updateDB({
+        bigBoard: EMPTY_BOARD,
+        winnerBoard: EMPTY_WINNER_BOARD,
+        turn: room.host_id, // Host starts the rematch
+        gameStatus: GameStatus.PLAYING,
+        winner: "",
+        score: [0, 0], // Reset scores for rematch
+        activeBoard: -1,
+        wholeGameWinner: null,
+      });
+
+      // Play notification sound
+      sound.playNotification();
+
+      // Show rematch notification
+      notifications.showGameNotification(
+        "info",
+        "🔄 Rematch Started",
+        "A new game has begun! Good luck!",
+        { duration: 5000 }
+      );
+    } catch (error) {
+      console.error("Rematch error:", error);
+      sound.playError();
+      notifications.showGameNotification(
+        "error",
+        "❌ Rematch Failed",
+        "Could not start rematch. Please try again.",
+        { duration: 5000 }
+      );
+    }
   };
 
   // Handle leave (optional: implement room cleanup logic if needed)
@@ -491,7 +668,7 @@ export default function useGameLogic({
     };
 
     autoStartGame();
-  }, [supabaseGameId, gameStatus, roomId]);
+  }, [supabaseGameId, gameStatus, roomId, checkAndStartGame]);
 
   return {
     bigBoard,
@@ -507,6 +684,7 @@ export default function useGameLogic({
     playerSymbol,
     handleCellClick,
     reset,
+    requestRematch,
     handleLeave,
   };
 }
