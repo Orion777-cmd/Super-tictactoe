@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useSound } from "../../hooks/useSound";
 import "./MusicPlayer.styles.css";
 
 interface MusicPlayerProps {
@@ -23,40 +22,46 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ className = "" }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const { sound } = useSound();
 
-  // 5 different songs - using royalty-free music
+  // 6 different songs - including your custom track
   const songs: Song[] = [
     {
       id: "1",
+      title: "Blue Mood",
+      artist: "Robert Munzinger",
+      url: "/music/blue_mood.mp3",
+      duration: 362, // 6:02 in seconds
+    },
+    {
+      id: "2",
       title: "Epic Battle",
       artist: "Game Music",
       url: "https://www.bensound.com/bensound-music/bensound-epic.mp3",
       duration: 180,
     },
     {
-      id: "2",
+      id: "3",
       title: "Victory Theme",
       artist: "Game Music",
       url: "https://www.bensound.com/bensound-music/bensound-sunny.mp3",
       duration: 120,
     },
     {
-      id: "3",
+      id: "4",
       title: "Strategic Thinking",
       artist: "Game Music",
       url: "https://www.bensound.com/bensound-music/bensound-creativeminds.mp3",
       duration: 200,
     },
     {
-      id: "4",
+      id: "5",
       title: "Tension Build",
       artist: "Game Music",
       url: "https://www.bensound.com/bensound-music/bensound-tenderness.mp3",
       duration: 160,
     },
     {
-      id: "5",
+      id: "6",
       title: "Final Showdown",
       artist: "Game Music",
       url: "https://www.bensound.com/bensound-music/bensound-ukulele.mp3",
@@ -72,6 +77,33 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ className = "" }) => {
       audioRef.current = new Audio();
       audioRef.current.volume = volume;
       audioRef.current.loop = true;
+
+      // Add persistent event listeners
+      const audio = audioRef.current;
+
+      const handleTimeUpdate = () => {
+        if (audioRef.current) {
+          setCurrentTime(audioRef.current.currentTime);
+        }
+      };
+
+      const handleEnded = () => {
+        handleNext();
+      };
+
+      const handleCanPlayThrough = () => {
+        setIsLoading(false);
+      };
+
+      const handleError = (e: Event) => {
+        console.error("Error loading song:", e);
+        setIsLoading(false);
+      };
+
+      audio.addEventListener("timeupdate", handleTimeUpdate);
+      audio.addEventListener("ended", handleEnded);
+      audio.addEventListener("canplaythrough", handleCanPlayThrough);
+      audio.addEventListener("error", handleError);
     }
 
     return () => {
@@ -92,25 +124,19 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ className = "" }) => {
   // Load new song
   useEffect(() => {
     if (audioRef.current && currentSong) {
+      console.log(
+        "Loading new song:",
+        currentSong.title,
+        "URL:",
+        currentSong.url
+      );
       setIsLoading(true);
+
+      // Set source and load
       audioRef.current.src = currentSong.url;
       audioRef.current.load();
-
-      audioRef.current.addEventListener("canplaythrough", () => {
-        setIsLoading(false);
-      });
-
-      audioRef.current.addEventListener("timeupdate", () => {
-        if (audioRef.current) {
-          setCurrentTime(audioRef.current.currentTime);
-        }
-      });
-
-      audioRef.current.addEventListener("ended", () => {
-        handleNext();
-      });
     }
-  }, [currentSong]);
+  }, [currentSongIndex]); // Use currentSongIndex instead of currentSong
 
   const handlePlayPause = async () => {
     if (!audioRef.current || !currentSong) return;
@@ -150,11 +176,26 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ className = "" }) => {
   };
 
   const handleSongSelect = (index: number) => {
+    const wasPlaying = isPlaying;
     setCurrentSongIndex(index);
-    if (isPlaying) {
-      setTimeout(() => {
-        handlePlayPause();
-      }, 100);
+
+    // If music was playing, continue playing the new song after it loads
+    if (wasPlaying && audioRef.current) {
+      // Pause current song first
+      audioRef.current.pause();
+
+      // Auto-play the new song once it loads
+      const handleAutoPlay = () => {
+        if (audioRef.current) {
+          audioRef.current.play().catch(console.error);
+          audioRef.current.removeEventListener(
+            "canplaythrough",
+            handleAutoPlay
+          );
+        }
+      };
+
+      audioRef.current.addEventListener("canplaythrough", handleAutoPlay);
     }
   };
 

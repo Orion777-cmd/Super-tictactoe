@@ -226,9 +226,7 @@ const HomePage = () => {
               </div>
             </div>
             <div className="footer-built-by">
-              <p>
-                Built with ❤️ by Orion
-              </p>
+              <p>Built by Orion</p>
               <div className="footer-social">
                 <a
                   href="https://github.com/orion777-cmd"
@@ -239,7 +237,7 @@ const HomePage = () => {
                   <span>🐙</span> GitHub
                 </a>
                 <a
-                  href="https://linkedin.com/in/yourusername"
+                  href="https://www.linkedin.com/in/abiy-biru-aa2ba3227/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-link"

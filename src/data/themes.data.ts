@@ -14,7 +14,7 @@ export const themes: Record<string, Theme> = {
       onPrimary: "#FFFFFF",
       onSecondary: "#FFFFFF",
       onSurface: "#FFFFFF",
-      onSurfaceVariant: "#161E2F",
+      onSurfaceVariant: "#FFF",
 
       boardBackground: "rgba(0, 0, 0, 0.1)",
       boardBorder: "rgba(22, 30, 47, 0.3)",
