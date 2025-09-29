@@ -48,6 +48,47 @@ export async function createRoom(host_id: string) {
 
 // Join a room as guest
 export async function joinRoom(room_id: string, guest_id: string) {
+  // First, check if the room exists and get its current state
+  const { data: roomData, error: roomError } = await supabase
+    .from("rooms")
+    .select("host_id, guest_id")
+    .eq("id", room_id)
+    .single();
+
+  if (roomError) throw roomError;
+  if (!roomData) throw new Error("Room not found");
+
+  // If the user is already the host, they can access their room directly
+  if (roomData.host_id === guest_id) {
+    // Return the room data without updating (they're already the host)
+    const { data: existingRoom, error: fetchError } = await supabase
+      .from("rooms")
+      .select("*")
+      .eq("id", room_id)
+      .single();
+
+    if (fetchError) throw fetchError;
+    return existingRoom as RoomData;
+  }
+
+  // Check if the room already has a guest
+  if (roomData.guest_id) {
+    // If the user is already the guest, return the room data
+    if (roomData.guest_id === guest_id) {
+      const { data: existingRoom, error: fetchError } = await supabase
+        .from("rooms")
+        .select("*")
+        .eq("id", room_id)
+        .single();
+
+      if (fetchError) throw fetchError;
+      return existingRoom as RoomData;
+    }
+
+    // If there's already a different guest, the room is full
+    throw new Error("This room is already full. Find another room to join.");
+  }
+
   const guestAvatar = generateUserAvatar(guest_id);
 
   const { data, error } = await supabase

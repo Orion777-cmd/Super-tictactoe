@@ -456,3 +456,38 @@
   color: var(--theme-onSurfaceVariant);
   line-height: 1.5;
 }
+
+/* Waiting for player styles */
+.waiting-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--theme-surfaceVariant);
+  border: 2px dashed var(--theme-boardBorder);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 2s infinite;
+}
+
+.waiting-icon {
+  font-size: 24px;
+  color: var(--theme-onSurfaceVariant);
+}
+
+.waiting-text {
+  color: var(--theme-onSurfaceVariant) !important;
+  font-style: italic;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}

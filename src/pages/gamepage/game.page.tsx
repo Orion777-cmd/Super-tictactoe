@@ -205,16 +205,29 @@ const GamePage: React.FC = () => {
 
         <div className="player-info player-two">
           <div className="player-info-container">
-            <Avatar
-              userId={room?.guest_id}
-              avatarUrl={room?.guest_avatar}
-              username={room?.guest_username || "Guest"}
-              size={60}
-              className={`game-avatar ${
-                gameLogic.turn === room?.guest_id ? "current-turn" : ""
-              }`}
-            />
-            <p className="player-name">{room?.guest_username || "Guest"}</p>
+            {room?.guest_id ? (
+              <>
+                <Avatar
+                  userId={room?.guest_id}
+                  avatarUrl={room?.guest_avatar}
+                  username={room?.guest_username || "Guest"}
+                  size={60}
+                  className={`game-avatar ${
+                    gameLogic.turn === room?.guest_id ? "current-turn" : ""
+                  }`}
+                />
+                <p className="player-name">{room?.guest_username || "Guest"}</p>
+              </>
+            ) : (
+              <>
+                <div className="waiting-avatar">
+                  <span className="waiting-icon">⏳</span>
+                </div>
+                <p className="player-name waiting-text">
+                  Waiting for player...
+                </p>
+              </>
+            )}
           </div>
           <div className="player-score">
             <span className="score-label">Score:</span>
