@@ -10,7 +10,6 @@ import { getRoom } from "../../supabase/gameApi";
 import { supabase } from "../../supabase/supabaseClient";
 import ErrorBoundary from "../../components/ErrorBoundary/ErrorBoundary";
 import GameLoading from "../../components/GameLoading/GameLoading";
-import SoundSettings from "../../components/SoundSettings/SoundSettings";
 import RematchButton from "../../components/RematchButton/RematchButton";
 import GameChat from "../../components/GameChat/GameChat";
 import MusicPlayer from "../../components/MusicPlayer/MusicPlayer";
@@ -293,11 +292,6 @@ const GamePage: React.FC = () => {
       {/* Theme button in bottom right corner */}
       <div className="theme-button-container">
         <ThemeButton />
-      </div>
-
-      {/* Sound settings in bottom left corner */}
-      <div className="sound-settings-container">
-        <SoundSettings />
       </div>
 
       {/* Game Timeout - Temporarily Disabled */}

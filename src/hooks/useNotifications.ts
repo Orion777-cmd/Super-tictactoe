@@ -1,5 +1,4 @@
 import { useState, useCallback } from "react";
-import { useSound } from "./useSound";
 
 export interface Notification {
   id: string;
@@ -36,7 +35,6 @@ interface NotificationHook {
 
 export const useNotifications = (): NotificationHook => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const sound = useSound();
 
   const addNotification = useCallback(
     (notification: Omit<Notification, "id">) => {
@@ -50,22 +48,6 @@ export const useNotifications = (): NotificationHook => {
 
       setNotifications((prev) => [...prev, newNotification]);
 
-      // Play sound based on notification type
-      switch (notification.type) {
-        case "success":
-          sound.playNotification();
-          break;
-        case "error":
-          sound.playError();
-          break;
-        case "warning":
-          sound.playNotification();
-          break;
-        case "info":
-          sound.playNotification();
-          break;
-      }
-
       // Auto-remove notification after duration (unless persistent)
       if (!newNotification.persistent && newNotification.duration) {
         setTimeout(() => {
@@ -73,7 +55,7 @@ export const useNotifications = (): NotificationHook => {
         }, newNotification.duration);
       }
     },
-    [sound]
+    []
   );
 
   const removeNotification = useCallback((id: string) => {

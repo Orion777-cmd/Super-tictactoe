@@ -11,7 +11,6 @@ import {
 import { GridState } from "../types/gridStateType";
 import { calculateWinner, isDrawInevitable } from "../util/findWinner.util";
 import { useUser } from "../state/authContext";
-import { useSound } from "./useSound";
 import { useNotificationContext } from "../context/NotificationContext";
 import { useTimeoutContext } from "../context/TimeoutContext";
 import { useErrorRecovery } from "./useErrorRecovery";
@@ -72,9 +71,7 @@ export default function useGameLogic({
   const [supabaseGameId, setSupabaseGameId] = useState<string | undefined>(
     gameId
   );
-  const [room, setRoom] = useState<any>(null);
   const subscriptionRef = useRef<SupabaseSubscription | null>(null);
-  const sound = useSound();
   const notifications = useNotificationContext();
   const { resetTimeout } = useTimeoutContext();
   const { handleError } = useErrorRecovery(gameId, roomId);
@@ -212,24 +209,11 @@ export default function useGameLogic({
       // Sanitize the game state before applying
       const sanitizedState = sanitizeGameState(stateWithCorrectTypes);
 
-      // Play sound for opponent's move (only if it's not our turn)
-      if (sanitizedState.turn !== user?.userId) {
-        sound.playMove();
-      }
-
       // Play sound for game ending
       if (
         sanitizedState.gameStatus === GameStatus.WIN &&
         sanitizedState.wholeGameWinner
       ) {
-        if (
-          sanitizedState.wholeGameWinner ===
-          (user?.userId === room?.host_id ? "X" : "O")
-        ) {
-          sound.playWin();
-        } else {
-          sound.playLose();
-        }
       }
 
       setBigBoard(sanitizedState.bigBoard as GridState[][]);
@@ -468,8 +452,6 @@ export default function useGameLogic({
         newGameStatus = GameStatus.TIE;
         newWholeGameWinner = "draw";
 
-        // Play draw sound
-        sound.playDraw();
         notifications.showGameNotification(
           "info",
           "🤝 Draw Game",
@@ -481,9 +463,8 @@ export default function useGameLogic({
         newGameStatus = GameStatus.WIN;
         newWholeGameWinner = wholeGameWinnerResult;
 
-        // Play win/lose sound based on who won
+        // Check who won
         if (wholeGameWinnerResult === playerSymbol) {
-          sound.playWin();
           notifications.showGameNotification(
             "success",
             "🎉 Victory!",
@@ -491,7 +472,6 @@ export default function useGameLogic({
             { duration: 8000 }
           );
         } else {
-          sound.playLose();
           notifications.showGameNotification(
             "warning",
             "😔 Game Over",
@@ -517,8 +497,6 @@ export default function useGameLogic({
         newGameStatus = GameStatus.TIE;
         newWholeGameWinner = "draw";
 
-        // Play draw sound
-        sound.playDraw();
         notifications.showGameNotification(
           "info",
           "🤝 Draw Game",
@@ -561,9 +539,6 @@ export default function useGameLogic({
       "Current activeBoard state:",
       activeBoard
     );
-
-    // Play move sound
-    sound.playMove();
 
     // Reset timeout for the next player
     resetTimeout();
@@ -624,9 +599,6 @@ export default function useGameLogic({
         wholeGameWinner: null,
       });
 
-      // Play notification sound
-      sound.playNotification();
-
       // Show rematch notification
       notifications.showGameNotification(
         "info",
@@ -636,7 +608,6 @@ export default function useGameLogic({
       );
     } catch (error) {
       console.error("Rematch error:", error);
-      sound.playError();
       notifications.showGameNotification(
         "error",
         "❌ Rematch Failed",
@@ -699,13 +670,12 @@ export default function useGameLogic({
     const fetchRoom = async () => {
       if (!roomId) return;
       try {
-        const { data, error } = await supabase
+        const { error } = await supabase
           .from("rooms")
           .select("*")
           .eq("id", roomId)
           .single();
         if (error) throw error;
-        setRoom(data);
       } catch (error) {
         console.error("Error fetching room:", error);
       }
