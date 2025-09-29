@@ -76,6 +76,9 @@ function App() {
         <Route path="leaderboard" element={<Leaderboard />} />
         <Route path="achievements" element={<Achievements />} />
 
+        {/* Catch-all route for SPA routing */}
+        <Route path="*" element={<HomePage />} />
+
         {/* <Route element={<ProtectionLayout />}>
           <Route path="create" element={<CreatePage />} />
           <Route path="join" element={<JoinPage />}  action={}/>

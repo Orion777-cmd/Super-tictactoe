@@ -54,6 +54,7 @@ const GameChat: React.FC<GameChatProps> = ({ roomId, className = "" }) => {
   const getMessageTypeClass = (message: ChatMessage) => {
     if (message.type === "system") return "system-message";
     if (message.type === "game_event") return "game-event-message";
+
     if (message.userId === user?.userId) return "own-message";
     return "other-message";
   };
