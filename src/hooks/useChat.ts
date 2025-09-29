@@ -47,7 +47,17 @@ export const useChat = (roomId: string): ChatHook => {
           filter: `room_id=eq.${roomId}`,
         },
         (payload) => {
-          const newMessage = payload.new as ChatMessage;
+          const rawMessage = payload.new as any;
+          // Transform database fields to interface fields
+          const newMessage: ChatMessage = {
+            id: rawMessage.id,
+            roomId: rawMessage.room_id,
+            userId: rawMessage.user_id,
+            username: rawMessage.username,
+            message: rawMessage.message,
+            timestamp: rawMessage.timestamp,
+            type: rawMessage.type,
+          };
           setMessages((prev) => [...prev, newMessage]);
         }
       )
@@ -79,32 +89,46 @@ export const useChat = (roomId: string): ChatHook => {
 
       if (error) throw error;
 
-      setMessages(data || []);
+      // Transform database fields to interface fields
+      const transformedMessages = (data || []).map((msg: any) => ({
+        id: msg.id,
+        roomId: msg.room_id,
+        userId: msg.user_id,
+        username: msg.username,
+        message: msg.message,
+        timestamp: msg.timestamp,
+        type: msg.type,
+      }));
+
+      setMessages(transformedMessages);
     } catch (err) {
       console.error("Error fetching chat messages:", err);
       setError("Failed to load chat messages");
     }
   };
 
-  const sendMessage = useCallback(async (message: string) => {
-    if (!user || !roomId || !message.trim()) return;
+  const sendMessage = useCallback(
+    async (message: string) => {
+      if (!user || !roomId || !message.trim()) return;
 
-    try {
-      const { error } = await supabase.from("chat_messages").insert({
-        room_id: roomId,
-        user_id: user.userId,
-        username: user.username || "Anonymous",
-        message: message.trim(),
-        timestamp: new Date().toISOString(),
-        type: "message",
-      });
+      try {
+        const { error } = await supabase.from("chat_messages").insert({
+          room_id: roomId,
+          user_id: user.userId,
+          username: user.username || "Anonymous",
+          message: message.trim(),
+          timestamp: new Date().toISOString(),
+          type: "message",
+        });
 
-      if (error) throw error;
-    } catch (err) {
-      console.error("Error sending message:", err);
-      setError("Failed to send message");
-    }
-  }, [user, roomId]);
+        if (error) throw error;
+      } catch (err) {
+        console.error("Error sending message:", err);
+        setError("Failed to send message");
+      }
+    },
+    [user, roomId]
+  );
 
   const clearChat = useCallback(async () => {
     try {

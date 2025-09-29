@@ -95,7 +95,25 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  align-items: stretch;
+  align-items: flex-start;
+}
+
+/* Force own messages to the right */
+.chat-messages .own-message {
+  align-self: flex-end !important;
+  margin-left: auto !important;
+  margin-right: 0 !important;
+  float: right !important;
+  clear: both !important;
+}
+
+/* Force other messages to the left */
+.chat-messages .other-message {
+  align-self: flex-start !important;
+  margin-right: auto !important;
+  margin-left: 0 !important;
+  float: left !important;
+  clear: both !important;
 }
 
 .chat-messages::-webkit-scrollbar {
@@ -193,7 +211,10 @@
   max-width: 80% !important;
   border-radius: 12px 12px 4px 12px !important;
   margin-left: auto !important;
-  border: 2px solid #00ff00 !important; /* Debug: green border for own messages */
+  margin-right: 0 !important;
+  width: fit-content !important;
+  float: right !important;
+  clear: both !important;
 }
 
 .own-message .message-username,
@@ -208,7 +229,8 @@
   max-width: 80% !important;
   border-radius: 12px 12px 12px 4px !important;
   margin-right: auto !important;
-  border: 2px solid #ff0000 !important; /* Debug: red border for other messages */
+  margin-left: 0 !important;
+  width: fit-content !important;
 }
 
 .chat-input-form {
