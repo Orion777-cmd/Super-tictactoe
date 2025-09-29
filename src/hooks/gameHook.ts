@@ -8,7 +8,10 @@ import {
   getGameForRoom,
 } from "../supabase/gameApi";
 import { GridState } from "../types/gridStateType";
-import { calculateWinner } from "../util/findWinner.util";
+import {
+  calculateWinner,
+  isDrawInevitable,
+} from "../util/findWinner.util";
 import { useUser } from "../state/authContext";
 import { useSound } from "./useSound";
 import { useNotificationContext } from "../context/NotificationContext";
@@ -444,56 +447,95 @@ export default function useGameLogic({
       }
     }
 
-    // Check if the whole game has a winner
+    // Check if the whole game has a winner or is a draw
+    console.log("[DEBUG] Checking winnerBoard for draw:", newWinnerBoard);
     const wholeGameWinnerResult = calculateWinner(newWinnerBoard);
+    console.log("[DEBUG] calculateWinner returned:", wholeGameWinnerResult);
+
     let newGameStatus: GameStatus = gameStatus;
     let newWholeGameWinner = wholeGameWinner;
     const newScore = [...score];
 
+    // Check for immediate winner or draw
     if (wholeGameWinnerResult) {
-      console.log("[DEBUG] Whole game won by:", wholeGameWinnerResult);
-      newGameStatus = GameStatus.WIN;
-      newWholeGameWinner = wholeGameWinnerResult;
+      console.log("[DEBUG] Whole game result:", wholeGameWinnerResult);
 
-      // Play win/lose sound based on who won
-      if (wholeGameWinnerResult === playerSymbol) {
-        sound.playWin();
+      if (wholeGameWinnerResult === "draw") {
+        // Handle draw
+        newGameStatus = GameStatus.TIE;
+        newWholeGameWinner = "draw";
+
+        // Play draw sound
+        sound.playDraw();
         notifications.showGameNotification(
-          "success",
-          "🎉 Victory!",
-          "Congratulations! You won the game!",
-          { duration: 8000 }
+          "info",
+          "🤝 Draw Game",
+          "The game ended in a draw!",
+          { duration: 6000 }
         );
       } else {
-        sound.playLose();
+        // Handle win
+        newGameStatus = GameStatus.WIN;
+        newWholeGameWinner = wholeGameWinnerResult;
+
+        // Play win/lose sound based on who won
+        if (wholeGameWinnerResult === playerSymbol) {
+          sound.playWin();
+          notifications.showGameNotification(
+            "success",
+            "🎉 Victory!",
+            "Congratulations! You won the game!",
+            { duration: 8000 }
+          );
+        } else {
+          sound.playLose();
+          notifications.showGameNotification(
+            "warning",
+            "😔 Game Over",
+            "Better luck next time!",
+            { duration: 6000 }
+          );
+        }
+
+        // Update score based on winner
+        if (wholeGameWinnerResult === "X") {
+          // Host (X) won
+          newScore[0] += 1;
+        } else if (wholeGameWinnerResult === "O") {
+          // Guest (O) won
+          newScore[1] += 1;
+        }
+        console.log("[DEBUG] Score updated:", newScore);
+      }
+    } else {
+      // Check if a draw is inevitable (optimized early detection)
+      if (isDrawInevitable(newWinnerBoard)) {
+        console.log("[DEBUG] Draw is inevitable - ending game early");
+        newGameStatus = GameStatus.TIE;
+        newWholeGameWinner = "draw";
+
+        // Play draw sound
+        sound.playDraw();
         notifications.showGameNotification(
-          "warning",
-          "😔 Game Over",
-          "Better luck next time!",
+          "info",
+          "🤝 Draw Game",
+          "The game ended in a draw!",
           { duration: 6000 }
         );
       }
-
-      // Update score based on winner
-      if (wholeGameWinnerResult === "X") {
-        // Host (X) won
-        newScore[0] += 1;
-      } else if (wholeGameWinnerResult === "O") {
-        // Guest (O) won
-        newScore[1] += 1;
-      }
-      console.log("[DEBUG] Score updated:", newScore);
     }
 
     // Update the game state - switch to the other player
-    const otherPlayerId = isHost ? room.guest_id : room.host_id;
+    // Get room data to determine the other player
+    const currentRoom = await getRoom(roomId);
+    const otherPlayerId = isHost ? currentRoom.guest_id : currentRoom.host_id;
 
     if (!otherPlayerId) {
       console.error("[DEBUG] ❌ No other player ID found!", {
         isHost,
         isGuest,
-        host_id: room.host_id,
-        guest_id: room.guest_id,
+        host_id: currentRoom.host_id,
+        guest_id: currentRoom.guest_id,
       });
       return;
     }
@@ -505,8 +547,8 @@ export default function useGameLogic({
       otherPlayerId
     );
     console.log("[DEBUG] 🔄 Room data:", {
-      host_id: room.host_id,
-      guest_id: room.guest_id,
+      host_id: currentRoom.host_id,
+      guest_id: currentRoom.guest_id,
       isHost,
       isGuest,
     });
@@ -541,6 +583,7 @@ export default function useGameLogic({
       gameStatus: newGameStatus,
       wholeGameWinner: newWholeGameWinner,
       score: newScore as [number, number],
+      winner: winner,
     });
   };
 
@@ -560,12 +603,12 @@ export default function useGameLogic({
 
   // Rematch functionality
   const requestRematch = async () => {
-    if (!room?.host_id || !room?.guest_id) {
-      console.error("Cannot request rematch: missing players");
-      return;
-    }
-
     try {
+      const room = await getRoom(roomId);
+      if (!room?.host_id || !room?.guest_id) {
+        console.error("Cannot request rematch: missing players");
+        return;
+      }
       // Reset the game state for a new game
       await updateDB({
         bigBoard: EMPTY_BOARD,

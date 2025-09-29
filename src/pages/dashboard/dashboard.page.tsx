@@ -40,6 +40,7 @@ const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"overview" | "games" | "profile">(
     "overview"
   );
+  const [showAvatarSelector, setShowAvatarSelector] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -208,6 +209,15 @@ const Dashboard: React.FC = () => {
       month: "long",
       day: "numeric",
     });
+  };
+
+  const handleAvatarChange = (newAvatarUrl: string) => {
+    if (profile) {
+      setProfile({
+        ...profile,
+        avatar_url: newAvatarUrl,
+      });
+    }
   };
 
   if (isLoading) {
@@ -383,6 +393,12 @@ const Dashboard: React.FC = () => {
                   src={profile.avatar_url || "/default-avatar.png"}
                   alt="Avatar"
                 />
+                <button
+                  className="change-avatar-btn"
+                  onClick={() => setShowAvatarSelector(true)}
+                >
+                  Change Avatar
+                </button>
               </div>
               <div className="profile-details">
                 <div className="profile-item">
@@ -408,6 +424,16 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
           </div>
+        )}
+
+        {/* Avatar Selector Modal */}
+        {showAvatarSelector && user && (
+          <AvatarSelector
+            userId={user.userId}
+            currentAvatar={profile?.avatar_url}
+            onAvatarChange={handleAvatarChange}
+            onClose={() => setShowAvatarSelector(false)}
+          />
         )}
       </div>
     </div>
