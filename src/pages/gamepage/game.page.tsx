@@ -68,11 +68,21 @@ const GamePage: React.FC = () => {
         return;
       }
 
-      if (!user) {
+      // Wait for user authentication to be determined
+      if (user === undefined) {
+        setLoadingMessage("Checking authentication...");
+        console.log("User authentication still loading...");
+        return; // Still loading, wait for user state to be determined
+      }
+
+      if (user === null) {
+        console.log("User not authenticated, redirecting to login");
         setLoadingMessage("Please log in to access this room. Redirecting...");
         setTimeout(() => navigate("/login-signup"), 2000);
         return;
       }
+
+      console.log("User authenticated:", user.userId);
 
       try {
         setLoadingMessage("Checking room access...");
@@ -81,6 +91,15 @@ const GamePage: React.FC = () => {
         // Check if user is part of this room (host or guest)
         const isHost = roomData.host_id === user.userId;
         const isGuest = roomData.guest_id === user.userId;
+
+        console.log("Room access check:", {
+          roomId,
+          userId: user.userId,
+          hostId: roomData.host_id,
+          guestId: roomData.guest_id,
+          isHost,
+          isGuest,
+        });
 
         if (!isHost && !isGuest) {
           // User is not part of this room, redirect to homepage
@@ -92,6 +111,7 @@ const GamePage: React.FC = () => {
           return;
         }
 
+        console.log("User authorized to access room");
         setIsAuthorized(true);
       } catch (error) {
         console.error("Error checking room access:", error);
@@ -202,8 +222,8 @@ const GamePage: React.FC = () => {
     }
   }, [roomId]);
 
-  // Show loading state while initializing or checking authorization
-  if (isLoading || !isAuthorized) {
+  // Show loading state while initializing, checking authorization, or waiting for user
+  if (isLoading || !isAuthorized || user === undefined) {
     return <GameLoading message={loadingMessage} showSkeleton={true} />;
   }
 
