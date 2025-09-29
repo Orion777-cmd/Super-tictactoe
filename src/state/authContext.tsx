@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { supabase } from "../supabase/supabaseClient";
+import { generateUserAvatar } from "../util/avatar.util";
 
 // User profile type
 export type UserDB = {
@@ -30,7 +31,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(undefined);
     const { data, error } = await supabase
       .from("profiles")
-      .select("id, email, username")
+      .select("id, email, username, avatar_url")
       .eq("id", userId)
       .single();
     if (error || !data) {
@@ -40,6 +41,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         userId: data.id,
         email: data.email,
         username: data.username,
+        avatar: data.avatar_url,
       });
     }
   };
@@ -62,6 +64,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
     if (error || !data.user) throw error || new Error("Signup failed");
 
+    // Generate avatar for the new user
+    const avatarUrl = generateUserAvatar(data.user.id);
+
     // Insert profile with retry logic
     let retries = 3;
     let profileError;
@@ -72,6 +77,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           id: data.user.id,
           email,
           username,
+          avatar_url: avatarUrl,
         },
       ]);
 

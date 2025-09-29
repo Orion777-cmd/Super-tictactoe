@@ -1,0 +1,120 @@
+.game-error-boundary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background: var(--theme-primary);
+  color: var(--theme-onSurface);
+}
+
+.game-error-content {
+  text-align: center;
+  max-width: 400px;
+  padding: 2rem;
+  background: var(--theme-surface);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--theme-boardBorder);
+}
+
+.game-error-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.game-error-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--theme-onSurface);
+}
+
+.game-error-message {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+  color: var(--theme-onSurfaceVariant);
+}
+
+.game-error-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.game-retry-button,
+.game-home-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+}
+
+.game-retry-button {
+  background: var(--theme-primary);
+  color: var(--theme-onPrimary);
+}
+
+.game-retry-button:hover {
+  background: var(--theme-primaryVariant);
+  transform: translateY(-2px);
+}
+
+.game-home-button {
+  background: var(--theme-surface);
+  color: var(--theme-onSurface);
+  border: 1px solid var(--theme-boardBorder);
+}
+
+.game-home-button:hover {
+  background: var(--theme-cellHover);
+  transform: translateY(-2px);
+}
+
+.game-error-details {
+  text-align: left;
+}
+
+.game-error-details summary {
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--theme-onSurface);
+  margin-bottom: 0.5rem;
+}
+
+.game-error-stack {
+  background: var(--theme-cellBackground);
+  padding: 1rem;
+  border-radius: 8px;
+  font-family: "Courier New", monospace;
+  font-size: 0.875rem;
+  color: var(--theme-onSurface);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  border: 1px solid var(--theme-boardBorder);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .game-error-boundary {
+    padding: 1rem;
+  }
+
+  .game-error-content {
+    padding: 1.5rem;
+  }
+
+  .game-error-actions {
+    flex-direction: column;
+  }
+
+  .game-retry-button,
+  .game-home-button {
+    width: 100%;
+  }
+}

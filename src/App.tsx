@@ -12,9 +12,27 @@ import LoginSignupPage from "./pages/LoginSignup/login-signup.page";
 import HomePage from "./pages/homepage/homepage";
 import CreatePage from "./pages/createRoomPage/createroom.page";
 import JoinPage from "./pages/joinRoomPage/joinroom.page";
+import Dashboard from "./pages/dashboard/dashboard.page";
+import GameHistory from "./pages/gameHistory/gameHistory.page";
+import Leaderboard from "./pages/leaderboard/leaderboard.page";
+import Achievements from "./pages/achievements/achievements.page";
 
 // Theme provider
 import { ThemeProvider } from "./context/themeContext";
+
+// Notification provider
+import { NotificationProvider } from "./context/NotificationContext";
+import NotificationSystem from "./components/NotificationSystem/NotificationSystem";
+
+// Timeout provider
+import { TimeoutProvider } from "./context/TimeoutContext";
+
+// Connection and error handling
+import ConnectionStatus from "./components/ConnectionStatus/ConnectionStatus";
+
+// Error boundaries
+import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
+import GameErrorBoundary from "./components/GameErrorBoundary/GameErrorBoundary";
 
 // DO NOT FORGET TO ADD JOHN MAYERS SONG X 0 TO THE PROJECT
 
@@ -32,7 +50,14 @@ function App() {
           // action={}
         />
 
-        <Route path="game/:roomId" element={<GamePage />} />
+        <Route
+          path="game/:roomId"
+          element={
+            <GameErrorBoundary>
+              <GamePage />
+            </GameErrorBoundary>
+          }
+        />
 
         <Route
           path="create-room"
@@ -46,6 +71,11 @@ function App() {
           // action={}
         />
 
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="game-history" element={<GameHistory />} />
+        <Route path="leaderboard" element={<Leaderboard />} />
+        <Route path="achievements" element={<Achievements />} />
+
         {/* <Route element={<ProtectionLayout />}>
           <Route path="create" element={<CreatePage />} />
           <Route path="join" element={<JoinPage />}  action={}/>
@@ -56,11 +86,19 @@ function App() {
     )
   );
   return (
-    <ThemeProvider>
-      <div className="app-container">
-        <RouterProvider router={router} />
-      </div>
-    </ThemeProvider>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <NotificationProvider>
+          <TimeoutProvider>
+            <div className="app-container">
+              <ConnectionStatus />
+              <RouterProvider router={router} />
+              <NotificationSystem />
+            </div>
+          </TimeoutProvider>
+        </NotificationProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 }
 
