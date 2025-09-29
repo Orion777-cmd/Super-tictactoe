@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import useGameLogic from "../../hooks/gameHook";
 import BigXO from "../../components/BigXO/bigXo.component";
@@ -54,10 +54,59 @@ const GamePage: React.FC = () => {
   } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingMessage, setLoadingMessage] = useState("Loading game...");
+  const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+  const navigate = useNavigate();
   // const [gameId, setGameId] = useState<string | null>(null);
+
+  // Check if user is authorized to access this room
+  useEffect(() => {
+    const checkRoomAccess = async () => {
+      if (!roomId) {
+        setIsLoading(false);
+        setIsAuthorized(false);
+        navigate("/");
+        return;
+      }
+
+      if (!user) {
+        setLoadingMessage("Please log in to access this room. Redirecting...");
+        setTimeout(() => navigate("/login-signup"), 2000);
+        return;
+      }
+
+      try {
+        setLoadingMessage("Checking room access...");
+        const roomData = await getRoom(roomId);
+
+        // Check if user is part of this room (host or guest)
+        const isHost = roomData.host_id === user.userId;
+        const isGuest = roomData.guest_id === user.userId;
+
+        if (!isHost && !isGuest) {
+          // User is not part of this room, redirect to homepage
+          console.log("User not authorized to access this room");
+          setLoadingMessage(
+            "You don't have access to this room. Redirecting..."
+          );
+          setTimeout(() => navigate("/"), 2000);
+          return;
+        }
+
+        setIsAuthorized(true);
+      } catch (error) {
+        console.error("Error checking room access:", error);
+        navigate("/");
+        return;
+      }
+    };
+
+    checkRoomAccess();
+  }, [roomId, user, navigate]);
 
   // Fetch room data and subscribe to updates
   useEffect(() => {
+    if (!isAuthorized) return;
+
     const fetchRoom = async () => {
       if (roomId) {
         try {
@@ -153,8 +202,8 @@ const GamePage: React.FC = () => {
     }
   }, [roomId]);
 
-  // Show loading state while initializing
-  if (isLoading) {
+  // Show loading state while initializing or checking authorization
+  if (isLoading || !isAuthorized) {
     return <GameLoading message={loadingMessage} showSkeleton={true} />;
   }
 
