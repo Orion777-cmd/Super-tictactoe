@@ -1,4 +1,4 @@
-import { GridState } from "./gridStateType";
+// import { GridState } from "./gridStateType";
 import { GameStatus } from "./gameStatusType";
 
 export interface GameState {

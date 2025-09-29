@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { GameStatus } from "../types/gameStatusType";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../supabase/supabaseClient";
 import {
   updateGameState,
   subscribeToGameState,
@@ -8,10 +9,7 @@ import {
   getGameForRoom,
 } from "../supabase/gameApi";
 import { GridState } from "../types/gridStateType";
-import {
-  calculateWinner,
-  isDrawInevitable,
-} from "../util/findWinner.util";
+import { calculateWinner, isDrawInevitable } from "../util/findWinner.util";
 import { useUser } from "../state/authContext";
 import { useSound } from "./useSound";
 import { useNotificationContext } from "../context/NotificationContext";
@@ -74,12 +72,12 @@ export default function useGameLogic({
   const [supabaseGameId, setSupabaseGameId] = useState<string | undefined>(
     gameId
   );
+  const [room, setRoom] = useState<any>(null);
   const subscriptionRef = useRef<SupabaseSubscription | null>(null);
   const sound = useSound();
   const notifications = useNotificationContext();
   const { resetTimeout } = useTimeoutContext();
-  const { handleError, attemptRecovery, hasError, isRecovering } =
-    useErrorRecovery(gameId, roomId);
+  const { handleError } = useErrorRecovery(gameId, roomId);
 
   // Update game state in Supabase
   const updateDB = useCallback(
@@ -98,7 +96,7 @@ export default function useGameLogic({
         bigBoard: data.bigBoard || bigBoard,
         winnerBoard: data.winnerBoard || winnerBoard,
         turn: data.turn !== undefined ? data.turn : turn,
-        gameStatus: data.gameStatus || gameStatus,
+        gameStatus: (data.gameStatus || gameStatus) as GameStatus,
         winner: data.winner !== undefined ? data.winner : winner,
         score: data.score || score,
         activeBoard:
@@ -197,7 +195,11 @@ export default function useGameLogic({
       });
 
       // Validate the received game state
-      const validation = validateGameState(state);
+      const stateWithCorrectTypes = {
+        ...state,
+        gameStatus: state.gameStatus as GameStatus,
+      };
+      const validation = validateGameState(stateWithCorrectTypes);
       if (!validation.isValid) {
         console.error("Invalid game state received:", validation.errors);
         handleError(
@@ -208,7 +210,7 @@ export default function useGameLogic({
       }
 
       // Sanitize the game state before applying
-      const sanitizedState = sanitizeGameState(state);
+      const sanitizedState = sanitizeGameState(stateWithCorrectTypes);
 
       // Play sound for opponent's move (only if it's not our turn)
       if (sanitizedState.turn !== user?.userId) {
@@ -322,6 +324,7 @@ export default function useGameLogic({
       winnerBoard,
       turn,
       gameStatus,
+      winner: wholeGameWinner || "",
       activeBoard,
       score,
       wholeGameWinner,
@@ -336,9 +339,9 @@ export default function useGameLogic({
     if (!moveValidation.isValid) {
       console.warn("Invalid move:", moveValidation.errors);
       notifications.showGameNotification(
+        "warning",
         "Invalid Move",
         moveValidation.errors[0] || "Move not allowed",
-        "warning",
         { duration: 3000 }
       );
       return;
@@ -349,9 +352,9 @@ export default function useGameLogic({
     if (suspicious.length > 0) {
       console.warn("Suspicious activity detected:", suspicious);
       notifications.showGameNotification(
+        "warning",
         "Suspicious Activity",
         "Unusual game patterns detected",
-        "warning",
         { duration: 5000 }
       );
     }
@@ -690,6 +693,25 @@ export default function useGameLogic({
 
     updatePlayerTurn();
   }, [user, roomId]);
+
+  // Fetch room data
+  useEffect(() => {
+    const fetchRoom = async () => {
+      if (!roomId) return;
+      try {
+        const { data, error } = await supabase
+          .from("rooms")
+          .select("*")
+          .eq("id", roomId)
+          .single();
+        if (error) throw error;
+        setRoom(data);
+      } catch (error) {
+        console.error("Error fetching room:", error);
+      }
+    };
+    fetchRoom();
+  }, [roomId]);
 
   // Auto-start game when both players are present
   useEffect(() => {

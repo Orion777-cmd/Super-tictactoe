@@ -263,7 +263,7 @@ export const detectSuspiciousActivity = (
       const opponentCount = patternCells.filter(
         (cell) => cell === (playerId === "X" ? "O" : "X")
       ).length;
-      const emptyCount = patternCells.filter((cell) => cell === null).length;
+      // const emptyCount = patternCells.filter((cell) => cell === null).length;
 
       // If player has 3 in a row but board isn't won, that's suspicious
       if (playerCount === 3 && boardWinner !== (playerId === "X" ? "X" : "O")) {
@@ -288,8 +288,8 @@ export const detectSuspiciousActivity = (
   const totalMoves = gameState.bigBoard
     .flat()
     .filter((cell) => cell !== null).length;
-  const expectedMoves =
-    gameState.turn === playerId ? totalMoves : totalMoves - 1;
+  // const expectedMoves =
+  //   gameState.turn === playerId ? totalMoves : totalMoves - 1;
 
   if (totalMoves % 2 !== (playerId === "X" ? 0 : 1)) {
     suspicious.push("Inconsistent move count for player");

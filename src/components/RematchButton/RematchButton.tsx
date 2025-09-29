@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import "./RematchButton.styles.css";
 
 interface RematchButtonProps {
@@ -14,7 +14,7 @@ const RematchButton: React.FC<RematchButtonProps> = ({
   className = "",
 }) => {
   const [isRequesting, setIsRequesting] = useState(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleRematch = async () => {
     if (disabled || isRequesting) return;

@@ -3,7 +3,7 @@ import { supabase } from "../../supabase/supabaseClient";
 import {
   generateAvatarOptions,
   AVATAR_STYLES,
-  getUserAvatarWithStyle,
+  // getUserAvatarWithStyle,
 } from "../../util/avatar.util";
 import "./AvatarSelector.styles.css";
 

@@ -21,11 +21,6 @@ interface PlayerStats {
   points: number;
 }
 
-interface LeaderboardProps {
-  timeFilter: "all" | "week" | "month" | "year";
-  sortBy: "winRate" | "wins" | "games" | "streak" | "points";
-}
-
 const Leaderboard: React.FC = () => {
   const { user } = useAuth();
   const [players, setPlayers] = useState<PlayerStats[]>([]);
@@ -94,8 +89,12 @@ const Leaderboard: React.FC = () => {
       // Get unique user IDs
       const userIds = new Set<string>();
       completedGames.forEach((game) => {
-        userIds.add(game.rooms.host_id);
-        userIds.add(game.rooms.guest_id);
+        if (game.rooms && game.rooms.length > 0) {
+          userIds.add(game.rooms[0].host_id);
+          if (game.rooms[0].guest_id) {
+            userIds.add(game.rooms[0].guest_id);
+          }
+        }
       });
 
       // Fetch usernames for all users
@@ -110,8 +109,8 @@ const Leaderboard: React.FC = () => {
       });
 
       completedGames.forEach((game) => {
-        const hostId = game.rooms.host_id;
-        const guestId = game.rooms.guest_id;
+        const hostId = game.rooms?.[0]?.host_id;
+        const guestId = game.rooms?.[0]?.guest_id;
         const hostUsername =
           usernameMap.get(hostId) || `User ${hostId.slice(-4)}`;
         const guestUsername =
@@ -346,7 +345,7 @@ const Leaderboard: React.FC = () => {
           </div>
         ) : (
           <div className="leaderboard-table">
-            {players.slice(0, 50).map((player, index) => (
+            {players.slice(0, 50).map((player) => (
               <div
                 key={player.userId}
                 className={`leaderboard-row ${

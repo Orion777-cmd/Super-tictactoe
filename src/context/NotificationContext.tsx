@@ -1,5 +1,8 @@
 import React, { createContext, useContext, ReactNode } from "react";
-import { useNotifications, NotificationHook } from "../hooks/useNotifications";
+import { useNotifications } from "../hooks/useNotifications";
+
+// Use the actual return type from useNotifications
+type NotificationHook = ReturnType<typeof useNotifications>;
 
 const NotificationContext = createContext<NotificationHook | undefined>(
   undefined

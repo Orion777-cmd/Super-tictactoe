@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useAuth } from "../../state/authContext";
+// import { useAuth } from "../../state/authContext";
 import "./GameTutorial.styles.css";
 
 interface TutorialStep {
@@ -226,7 +226,7 @@ const GameTutorial: React.FC<GameTutorialProps> = ({
   return (
     <div className="tutorial-overlay" ref={overlayRef}>
       {/* Highlighted elements */}
-      {highlightedElements.map((selector, index) => (
+      {highlightedElements.map((_selector, index) => (
         <div
           key={index}
           className="tutorial-highlight"

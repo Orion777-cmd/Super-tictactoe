@@ -47,7 +47,7 @@ export const useGameTimeout = (
   // Update timeout state when it's the player's turn
   useEffect(() => {
     if (isPlayerTurn && !timeoutState.isExpired) {
-      setTimeoutState(prev => ({
+      setTimeoutState((prev) => ({
         ...prev,
         isActive: true,
         timeRemaining: config.moveTimeout,
@@ -56,7 +56,7 @@ export const useGameTimeout = (
       }));
       warningShownRef.current = false;
     } else if (!isPlayerTurn) {
-      setTimeoutState(prev => ({
+      setTimeoutState((prev) => ({
         ...prev,
         isActive: false,
         isWarning: false,
@@ -78,7 +78,7 @@ export const useGameTimeout = (
             abandonedBy: user.userId,
             abandonedReason: "timeout",
             abandonedAt: new Date().toISOString(),
-          }
+          },
         })
         .eq("id", gameId);
 
@@ -97,24 +97,23 @@ export const useGameTimeout = (
 
       // Show notification
       notifications.showGameNotification(
+        "error",
         "Game Timeout",
-        "You have been timed out due to inactivity. The game has been abandoned.",
-        "error"
+        "You have been timed out due to inactivity. The game has been abandoned."
       );
 
-      setTimeoutState(prev => ({
+      setTimeoutState((prev) => ({
         ...prev,
         isExpired: true,
         isActive: false,
         timeRemaining: 0,
       }));
-
     } catch (error) {
       console.error("Error handling timeout:", error);
       notifications.showGameNotification(
+        "error",
         "Timeout Error",
-        "Failed to process timeout. Please refresh the page.",
-        "error"
+        "Failed to process timeout. Please refresh the page."
       );
     }
   }, [user, gameId, roomId, timeoutState.isExpired, notifications]);
@@ -127,9 +126,9 @@ export const useGameTimeout = (
       // For move timeout, we'll just show a warning and potentially auto-pass
       // In a real implementation, you might want to implement auto-pass or forfeit
       notifications.showGameNotification(
+        "warning",
         "Move Timeout",
-        "Your turn has timed out. Please make a move or the game will be abandoned.",
-        "warning"
+        "Your turn has timed out. Please make a move or the game will be abandoned."
       );
 
       // Set a shorter timeout for abandonment
@@ -138,11 +137,17 @@ export const useGameTimeout = (
           handleTimeout();
         }
       }, 30000); // 30 seconds grace period
-
     } catch (error) {
       console.error("Error handling move timeout:", error);
     }
-  }, [user, timeoutState.isExpired, timeoutState.isActive, isPlayerTurn, handleTimeout, notifications]);
+  }, [
+    user,
+    timeoutState.isExpired,
+    timeoutState.isActive,
+    isPlayerTurn,
+    handleTimeout,
+    notifications,
+  ]);
 
   // Timer effect
   useEffect(() => {
@@ -155,17 +160,18 @@ export const useGameTimeout = (
     }
 
     intervalRef.current = setInterval(() => {
-      setTimeoutState(prev => {
+      setTimeoutState((prev) => {
         const newTimeRemaining = Math.max(0, prev.timeRemaining - 1);
-        const isWarning = newTimeRemaining <= config.warningTime && newTimeRemaining > 0;
+        const isWarning =
+          newTimeRemaining <= config.warningTime && newTimeRemaining > 0;
         const isExpired = newTimeRemaining === 0;
 
         // Show warning
         if (isWarning && !warningShownRef.current) {
           notifications.showGameNotification(
+            "warning",
             "Time Warning",
-            `You have ${config.warningTime} seconds left to make your move!`,
-            "warning"
+            `You have ${config.warningTime} seconds left to make your move!`
           );
           warningShownRef.current = true;
         }
@@ -190,11 +196,17 @@ export const useGameTimeout = (
         intervalRef.current = null;
       }
     };
-  }, [timeoutState.isActive, timeoutState.isExpired, config.warningTime, handleMoveTimeout, notifications]);
+  }, [
+    timeoutState.isActive,
+    timeoutState.isExpired,
+    config.warningTime,
+    handleMoveTimeout,
+    notifications,
+  ]);
 
   // Reset timeout when move is made
   const resetTimeout = useCallback(() => {
-    setTimeoutState(prev => ({
+    setTimeoutState((prev) => ({
       ...prev,
       timeRemaining: config.moveTimeout,
       lastMoveTime: Date.now(),
@@ -205,7 +217,7 @@ export const useGameTimeout = (
 
   // Pause timeout (when player is away)
   const pauseTimeout = useCallback(() => {
-    setTimeoutState(prev => ({
+    setTimeoutState((prev) => ({
       ...prev,
       isActive: false,
     }));
@@ -214,7 +226,7 @@ export const useGameTimeout = (
   // Resume timeout
   const resumeTimeout = useCallback(() => {
     if (isPlayerTurn && !timeoutState.isExpired) {
-      setTimeoutState(prev => ({
+      setTimeoutState((prev) => ({
         ...prev,
         isActive: true,
       }));

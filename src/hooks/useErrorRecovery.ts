@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { supabase } from "../supabase/supabaseClient";
 import { useAuth } from "../state/authContext";
 import { useNotificationContext } from "../context/NotificationContext";
-import { GameStatus } from "../types/gameStatus.type";
+// import { GameStatus } from "../types/gameStatus.type";
 
 interface ErrorRecoveryState {
   hasError: boolean;
@@ -12,7 +12,7 @@ interface ErrorRecoveryState {
   isRecovering: boolean;
 }
 
-export const useErrorRecovery = (gameId?: string, roomId?: string) => {
+export const useErrorRecovery = (gameId?: string, _roomId?: string) => {
   const { user } = useAuth();
   const notifications = useNotificationContext();
   const [recoveryState, setRecoveryState] = useState<ErrorRecoveryState>({
@@ -69,9 +69,9 @@ export const useErrorRecovery = (gameId?: string, roomId?: string) => {
 
       // Show notification
       notifications.showGameNotification(
+        "error",
         "Error Occurred",
         errorMessage,
-        "error",
         { duration: 5000 }
       );
     },
@@ -86,10 +86,7 @@ export const useErrorRecovery = (gameId?: string, roomId?: string) => {
       setRecoveryState((prev) => ({ ...prev, isRecovering: true }));
 
       // Test connection
-      const { data, error } = await supabase
-        .from("rooms")
-        .select("id")
-        .limit(1);
+      const { error } = await supabase.from("rooms").select("id").limit(1);
 
       if (error) throw error;
 
@@ -102,9 +99,9 @@ export const useErrorRecovery = (gameId?: string, roomId?: string) => {
       });
 
       notifications.showGameNotification(
+        "success",
         "Recovery Successful",
         "Connection restored!",
-        "success",
         { duration: 3000 }
       );
 
@@ -144,9 +141,9 @@ export const useErrorRecovery = (gameId?: string, roomId?: string) => {
       });
 
       notifications.showGameNotification(
+        "success",
         "Game State Recovered",
         "Your game has been restored!",
-        "success",
         { duration: 3000 }
       );
 
@@ -165,10 +162,7 @@ export const useErrorRecovery = (gameId?: string, roomId?: string) => {
       setRecoveryState((prev) => ({ ...prev, isRecovering: true }));
 
       // Test database connection with a simple query
-      const { data, error } = await supabase
-        .from("rooms")
-        .select("id")
-        .limit(1);
+      const { error } = await supabase.from("rooms").select("id").limit(1);
 
       if (error) throw error;
 
@@ -181,9 +175,9 @@ export const useErrorRecovery = (gameId?: string, roomId?: string) => {
       });
 
       notifications.showGameNotification(
+        "success",
         "Database Recovered",
         "Database connection restored!",
-        "success",
         { duration: 3000 }
       );
 
@@ -209,9 +203,9 @@ export const useErrorRecovery = (gameId?: string, roomId?: string) => {
       }));
 
       notifications.showGameNotification(
+        "error",
         "Recovery Failed",
         "Unable to recover. Please refresh the page.",
-        "error",
         { duration: 8000 }
       );
 

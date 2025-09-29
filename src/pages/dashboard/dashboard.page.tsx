@@ -4,6 +4,7 @@ import { supabase } from "../../supabase/supabaseClient";
 import { Link } from "react-router-dom";
 import ThemeButton from "../../components/themeButton/themeButton.component";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import AvatarSelector from "../../components/AvatarSelector/AvatarSelector";
 import { Profile } from "../../types/profile.type";
 import { GameWithRoom } from "../../types/game.type";
 import "./dashboard.styles.css";
@@ -89,18 +90,24 @@ const Dashboard: React.FC = () => {
       if (gamesError) throw gamesError;
 
       // Filter games where user was either host or guest
-      const userGames = ((gamesData as GameWithRoom[]) || []).filter(
-        (game) =>
-          game.rooms?.[0]?.[0]?.host_id === user.userId ||
-          game.rooms?.[0]?.[0]?.guest_id === user.userId
+      const userGames = (gamesData || []).filter(
+        (game: any) =>
+          game.rooms?.[0]?.host_id === user.userId ||
+          game.rooms?.[0]?.guest_id === user.userId
       );
 
       // Calculate statistics
-      const stats = calculateGameStats(userGames, user.userId);
+      const stats = calculateGameStats(
+        userGames as unknown as GameWithRoom[],
+        user.userId
+      );
       setStats(stats);
 
       // Get recent games
-      const recentGames = getRecentGames(userGames, user.userId);
+      const recentGames = getRecentGames(
+        userGames as unknown as GameWithRoom[],
+        user.userId
+      );
       setRecentGames(recentGames);
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -176,10 +183,9 @@ const Dashboard: React.FC = () => {
     userId: string
   ): RecentGame[] => {
     return games.slice(0, 10).map((game) => {
-      const isHost = game.rooms?.[0]?.host_id === userId;
-      const opponentId = isHost
-        ? game.rooms?.[0]?.guest_id
-        : game.rooms?.[0]?.host_id;
+      const room = (game.rooms as any)?.[0];
+      const isHost = room?.host_id === userId;
+      const opponentId = isHost ? room?.guest_id : room?.host_id;
       const result =
         game.state?.gameStatus === "win"
           ? game.state?.wholeGameWinner === (isHost ? "X" : "O")

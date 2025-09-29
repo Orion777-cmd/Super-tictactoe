@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useAchievements } from "../../hooks/useAchievements";
-import { Achievement, AchievementCategory, AchievementRarity } from "../../types/achievement.type";
+import {
+  AchievementCategory,
+  AchievementRarity,
+} from "../../types/achievement.type";
 import ThemeButton from "../../components/themeButton/themeButton.component";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import "./achievements.styles.css";
@@ -9,62 +12,98 @@ const AchievementsPage: React.FC = () => {
   const {
     achievements,
     userAchievements,
-    achievementProgress,
     loading,
     error,
     getUnlockedAchievements,
     getAchievementProgress,
-    getAchievementsByCategory,
     getTotalPoints,
   } = useAchievements();
 
-  const [selectedCategory, setSelectedCategory] = useState<AchievementCategory | "all">("all");
-  const [selectedRarity, setSelectedRarity] = useState<AchievementRarity | "all">("all");
+  const [selectedCategory, setSelectedCategory] = useState<
+    AchievementCategory | "all"
+  >("all");
+  const [selectedRarity, setSelectedRarity] = useState<
+    AchievementRarity | "all"
+  >("all");
   const [showUnlockedOnly, setShowUnlockedOnly] = useState(false);
 
-  const categories: AchievementCategory[] = ["wins", "streaks", "games", "special", "social", "time"];
-  const rarities: AchievementRarity[] = ["common", "uncommon", "rare", "epic", "legendary"];
+  const categories: AchievementCategory[] = [
+    "wins",
+    "streaks",
+    "games",
+    "special",
+    "social",
+    "time",
+  ];
+  const rarities: AchievementRarity[] = [
+    "common",
+    "uncommon",
+    "rare",
+    "epic",
+    "legendary",
+  ];
 
   const getRarityColor = (rarity: AchievementRarity) => {
     switch (rarity) {
-      case "common": return "#6b7280";
-      case "uncommon": return "#10b981";
-      case "rare": return "#3b82f6";
-      case "epic": return "#8b5cf6";
-      case "legendary": return "#f59e0b";
-      default: return "#6b7280";
+      case "common":
+        return "#6b7280";
+      case "uncommon":
+        return "#10b981";
+      case "rare":
+        return "#3b82f6";
+      case "epic":
+        return "#8b5cf6";
+      case "legendary":
+        return "#f59e0b";
+      default:
+        return "#6b7280";
     }
   };
 
   const getRarityName = (rarity: AchievementRarity) => {
     switch (rarity) {
-      case "common": return "Common";
-      case "uncommon": return "Uncommon";
-      case "rare": return "Rare";
-      case "epic": return "Epic";
-      case "legendary": return "Legendary";
-      default: return "Unknown";
+      case "common":
+        return "Common";
+      case "uncommon":
+        return "Uncommon";
+      case "rare":
+        return "Rare";
+      case "epic":
+        return "Epic";
+      case "legendary":
+        return "Legendary";
+      default:
+        return "Unknown";
     }
   };
 
   const getCategoryName = (category: AchievementCategory) => {
     switch (category) {
-      case "wins": return "Wins";
-      case "streaks": return "Streaks";
-      case "games": return "Games";
-      case "special": return "Special";
-      case "social": return "Social";
-      case "time": return "Time";
-      default: return "Unknown";
+      case "wins":
+        return "Wins";
+      case "streaks":
+        return "Streaks";
+      case "games":
+        return "Games";
+      case "special":
+        return "Special";
+      case "social":
+        return "Social";
+      case "time":
+        return "Time";
+      default:
+        return "Unknown";
     }
   };
 
-  const filteredAchievements = achievements.filter(achievement => {
-    if (selectedCategory !== "all" && achievement.category !== selectedCategory) return false;
-    if (selectedRarity !== "all" && achievement.rarity !== selectedRarity) return false;
+  const filteredAchievements = achievements.filter((achievement) => {
+    if (selectedCategory !== "all" && achievement.category !== selectedCategory)
+      return false;
+    if (selectedRarity !== "all" && achievement.rarity !== selectedRarity)
+      return false;
     if (showUnlockedOnly) {
-      const isUnlocked = userAchievements.some(ua => 
-        ua.achievementId === achievement.id && ua.isUnlocked
+      const isUnlocked = userAchievements.some(
+        (ua) => ua.achievementId === achievement.id && ua.isUnlocked
       );
       return isUnlocked;
     }
@@ -126,11 +165,13 @@ const AchievementsPage: React.FC = () => {
           <label>Category:</label>
           <select
             value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value as AchievementCategory | "all")}
+            onChange={(e) =>
+              setSelectedCategory(e.target.value as AchievementCategory | "all")
+            }
             className="filter-select"
           >
             <option value="all">All Categories</option>
-            {categories.map(category => (
+            {categories.map((category) => (
               <option key={category} value={category}>
                 {getCategoryName(category)}
               </option>
@@ -142,11 +183,13 @@ const AchievementsPage: React.FC = () => {
           <label>Rarity:</label>
           <select
             value={selectedRarity}
-            onChange={(e) => setSelectedRarity(e.target.value as AchievementRarity | "all")}
+            onChange={(e) =>
+              setSelectedRarity(e.target.value as AchievementRarity | "all")
+            }
             className="filter-select"
           >
             <option value="all">All Rarities</option>
-            {rarities.map(rarity => (
+            {rarities.map((rarity) => (
               <option key={rarity} value={rarity}>
                 {getRarityName(rarity)}
               </option>
@@ -178,35 +221,43 @@ const AchievementsPage: React.FC = () => {
           <div className="no-achievements">
             <div className="no-achievements-icon">🎯</div>
             <h3>No achievements found</h3>
-            <p>Try adjusting your filters or play more games to unlock achievements!</p>
+            <p>
+              Try adjusting your filters or play more games to unlock
+              achievements!
+            </p>
           </div>
         ) : (
-          filteredAchievements.map(achievement => {
+          filteredAchievements.map((achievement) => {
             const progress = getAchievementProgress(achievement.id);
             const isUnlocked = progress?.isUnlocked || false;
-            const progressPercentage = progress 
-              ? (progress.currentProgress / progress.maxProgress) * 100 
+            const progressPercentage = progress
+              ? (progress.currentProgress / progress.maxProgress) * 100
               : 0;
 
             return (
               <div
                 key={achievement.id}
-                className={`achievement-card ${isUnlocked ? "unlocked" : "locked"}`}
+                className={`achievement-card ${
+                  isUnlocked ? "unlocked" : "locked"
+                }`}
               >
-                <div className="achievement-icon">
-                  {achievement.icon}
-                </div>
-                
+                <div className="achievement-icon">{achievement.icon}</div>
+
                 <div className="achievement-content">
                   <div className="achievement-header">
                     <h3 className="achievement-name">{achievement.name}</h3>
-                    <div className="achievement-rarity" style={{ color: getRarityColor(achievement.rarity) }}>
+                    <div
+                      className="achievement-rarity"
+                      style={{ color: getRarityColor(achievement.rarity) }}
+                    >
                       {getRarityName(achievement.rarity)}
                     </div>
                   </div>
-                  
-                  <p className="achievement-description">{achievement.description}</p>
-                  
+
+                  <p className="achievement-description">
+                    {achievement.description}
+                  </p>
+
                   <div className="achievement-progress">
                     {isUnlocked ? (
                       <div className="progress-unlocked">
@@ -220,18 +271,20 @@ const AchievementsPage: React.FC = () => {
                     ) : (
                       <div className="progress-bar-container">
                         <div className="progress-bar">
-                          <div 
+                          <div
                             className="progress-fill"
                             style={{ width: `${progressPercentage}%` }}
                           />
                         </div>
                         <span className="progress-text">
-                          {progress?.currentProgress || 0} / {progress?.maxProgress || achievement.requirements[0].value}
+                          {progress?.currentProgress || 0} /{" "}
+                          {progress?.maxProgress ||
+                            achievement.requirements[0].value}
                         </span>
                       </div>
                     )}
                   </div>
-                  
+
                   <div className="achievement-footer">
                     <div className="achievement-category">
                       {getCategoryName(achievement.category)}

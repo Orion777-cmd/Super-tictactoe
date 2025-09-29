@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSound } from "../../hooks/useSound";
 import "./SoundSettings.styles.css";
 
@@ -7,11 +7,23 @@ interface SoundSettingsProps {
 }
 
 const SoundSettings: React.FC<SoundSettingsProps> = ({ className = "" }) => {
-  const { isEnabled, toggleSound, setVolume, volume, playNotification } =
-    useSound();
+  const { isEnabled, toggleSound, setVolume, playNotification } = useSound();
+
+  const [volume, setVolumeState] = useState(() => {
+    const saved = localStorage.getItem("soundVolume");
+    return saved !== null ? parseFloat(saved) : 0.7;
+  });
+
+  useEffect(() => {
+    const saved = localStorage.getItem("soundVolume");
+    if (saved !== null) {
+      setVolumeState(parseFloat(saved));
+    }
+  }, []);
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseFloat(e.target.value);
+    setVolumeState(newVolume);
     setVolume(newVolume);
   };
 

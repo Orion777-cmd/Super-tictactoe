@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useGameTimeout } from "../../hooks/useGameTimeout";
-import { useTimeoutContext } from "../../context/TimeoutContext";
+// import { useTimeoutContext } from "../../context/TimeoutContext";
 import "./GameTimeout.styles.css";
 
 interface GameTimeoutProps {
@@ -29,10 +29,11 @@ const GameTimeout: React.FC<GameTimeoutProps> = ({
     resumeTimeout,
   } = useGameTimeout(gameId, roomId, isPlayerTurn, {
     moveTimeout,
+    gameTimeout: 3600, // 1 hour total game time
     warningTime,
   });
 
-  const { resetTimeout: contextResetTimeout } = useTimeoutContext();
+  // const { resetTimeout: contextResetTimeout } = useTimeoutContext();
 
   // Reset timeout when context is triggered
   useEffect(() => {
@@ -57,16 +58,12 @@ const GameTimeout: React.FC<GameTimeoutProps> = ({
   return (
     <div className={`game-timeout ${isWarning ? "warning" : ""}`}>
       <div className="timeout-content">
-        <div className="timeout-icon">
-          {isWarning ? "⚠️" : "⏱️"}
-        </div>
+        <div className="timeout-icon">{isWarning ? "⚠️" : "⏱️"}</div>
         <div className="timeout-info">
           <div className="timeout-label">
             {isPlayerTurn ? "Your Turn" : "Opponent's Turn"}
           </div>
-          <div className="timeout-timer">
-            {formatTime(timeRemaining)}
-          </div>
+          <div className="timeout-timer">{formatTime(timeRemaining)}</div>
         </div>
         <div className="timeout-actions">
           <button
@@ -85,17 +82,19 @@ const GameTimeout: React.FC<GameTimeoutProps> = ({
           </button>
         </div>
       </div>
-      
+
       {isWarning && (
         <div className="timeout-warning">
           <div className="warning-message">
             ⚠️ Time running out! Make your move soon.
           </div>
           <div className="warning-progress">
-            <div 
+            <div
               className="warning-progress-bar"
               style={{
-                width: `${((moveTimeout - timeRemaining) / moveTimeout) * 100}%`
+                width: `${
+                  ((moveTimeout - timeRemaining) / moveTimeout) * 100
+                }%`,
               }}
             />
           </div>

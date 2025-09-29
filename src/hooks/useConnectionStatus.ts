@@ -32,9 +32,9 @@ export const useConnectionStatus = () => {
       }));
 
       notifications.showGameNotification(
+        "success",
         "Connection Restored",
         "You're back online!",
-        "success",
         { duration: 3000 }
       );
     };
@@ -47,9 +47,9 @@ export const useConnectionStatus = () => {
       }));
 
       notifications.showGameNotification(
+        "warning",
         "Connection Lost",
         "You're offline. Some features may not work.",
-        "warning",
         { duration: 5000 }
       );
     };
@@ -89,9 +89,9 @@ export const useConnectionStatus = () => {
         }));
 
         notifications.showGameNotification(
+          "success",
           "Reconnected",
           "Connection restored successfully!",
-          "success",
           { duration: 3000 }
         );
 
@@ -127,9 +127,9 @@ export const useConnectionStatus = () => {
 
     if (status.reconnectAttempts >= status.maxReconnectAttempts) {
       notifications.showGameNotification(
+        "error",
         "Connection Failed",
         "Unable to reconnect. Please check your internet connection.",
-        "error",
         { duration: 8000 }
       );
       return;

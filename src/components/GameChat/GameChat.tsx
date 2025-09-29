@@ -52,15 +52,15 @@ const GameChat: React.FC<GameChatProps> = ({ roomId, className = "" }) => {
   };
 
   const getMessageTypeClass = (message: ChatMessage) => {
-    if (message.message_type === "system") return "system-message";
-    if (message.message_type === "game_event") return "game-event-message";
-    if (message.user_id === user?.userId) return "own-message";
+    if (message.type === "system") return "system-message";
+    if (message.type === "game_event") return "game-event-message";
+    if (message.userId === user?.userId) return "own-message";
     return "other-message";
   };
 
   const getMessageIcon = (message: ChatMessage) => {
-    if (message.message_type === "system") return "🔧";
-    if (message.message_type === "game_event") return "🎮";
+    if (message.type === "system") return "🔧";
+    if (message.type === "game_event") return "🎮";
     return "💬";
   };
 
@@ -114,12 +114,10 @@ const GameChat: React.FC<GameChatProps> = ({ roomId, className = "" }) => {
                     {getMessageIcon(message)}
                   </span>
                   <span className="message-username">
-                    {message.message_type === "system"
-                      ? "System"
-                      : message.username}
+                    {message.type === "system" ? "System" : message.username}
                   </span>
                   <span className="message-time">
-                    {formatTime(message.created_at)}
+                    {formatTime(message.timestamp)}
                   </span>
                 </div>
                 <div className="message-content">{message.message}</div>

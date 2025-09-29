@@ -2,14 +2,21 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "../supabase/supabaseClient";
 import { useAuth } from "../state/authContext";
 import { useNotificationContext } from "../context/NotificationContext";
-import { Achievement, UserAchievement, AchievementProgress } from "../types/achievement.type";
+import {
+  UserAchievement,
+  AchievementProgress,
+} from "../types/achievement.type";
 import { achievements } from "../data/achievements.data";
 
 export const useAchievements = () => {
   const { user } = useAuth();
   const notifications = useNotificationContext();
-  const [userAchievements, setUserAchievements] = useState<UserAchievement[]>([]);
-  const [achievementProgress, setAchievementProgress] = useState<AchievementProgress[]>([]);
+  const [userAchievements, setUserAchievements] = useState<UserAchievement[]>(
+    []
+  );
+  const [achievementProgress, setAchievementProgress] = useState<
+    AchievementProgress[]
+  >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -52,7 +59,9 @@ export const useAchievements = () => {
         let unlockedAt: Date | undefined;
 
         // Check if already unlocked
-        const userAchievement = userAchievements.find(ua => ua.achievementId === achievement.id);
+        const userAchievement = userAchievements.find(
+          (ua) => ua.achievementId === achievement.id
+        );
         if (userAchievement && userAchievement.isUnlocked) {
           isUnlocked = true;
           unlockedAt = new Date(userAchievement.unlockedAt);
@@ -71,13 +80,15 @@ export const useAchievements = () => {
                 .eq("rooms.host_id", user.userId)
                 .or(`rooms.guest_id.eq.${user.userId}`)
                 .eq("state.gameStatus", "win");
-              
+
               if (winsData) {
-                const userWins = winsData.filter(game => {
+                const userWins = winsData.filter((game) => {
                   const isHost = game.state?.host_id === user.userId;
                   const isGuest = game.state?.guest_id === user.userId;
                   const winner = game.state?.wholeGameWinner;
-                  return (isHost && winner === "X") || (isGuest && winner === "O");
+                  return (
+                    (isHost && winner === "X") || (isGuest && winner === "O")
+                  );
                 }).length;
                 currentProgress = userWins;
               }
@@ -89,7 +100,7 @@ export const useAchievements = () => {
                 .select("id")
                 .eq("rooms.host_id", user.userId)
                 .or(`rooms.guest_id.eq.${user.userId}`);
-              
+
               currentProgress = gamesData?.length || 0;
               break;
 
@@ -108,13 +119,15 @@ export const useAchievements = () => {
                 .or(`rooms.guest_id.eq.${user.userId}`)
                 .order("created_at", { ascending: false })
                 .limit(20);
-              
+
               if (recentGames && recentGames.length >= 20) {
-                const wins = recentGames.filter(game => {
+                const wins = recentGames.filter((game) => {
                   const isHost = game.state?.host_id === user.userId;
                   const isGuest = game.state?.guest_id === user.userId;
                   const winner = game.state?.wholeGameWinner;
-                  return (isHost && winner === "X") || (isGuest && winner === "O");
+                  return (
+                    (isHost && winner === "X") || (isGuest && winner === "O")
+                  );
                 }).length;
                 const winRate = (wins / recentGames.length) * 100;
                 currentProgress = Math.floor(winRate);
@@ -147,7 +160,10 @@ export const useAchievements = () => {
 
     try {
       for (const progress of achievementProgress) {
-        if (!progress.isUnlocked && progress.currentProgress >= progress.maxProgress) {
+        if (
+          !progress.isUnlocked &&
+          progress.currentProgress >= progress.maxProgress
+        ) {
           // Unlock achievement
           const { error: unlockError } = await supabase
             .from("user_achievements")
@@ -165,12 +181,14 @@ export const useAchievements = () => {
           }
 
           // Show notification
-          const achievement = achievements.find(a => a.id === progress.achievementId);
+          const achievement = achievements.find(
+            (a) => a.id === progress.achievementId
+          );
           if (achievement) {
             notifications.showGameNotification(
+              "success",
               "Achievement Unlocked!",
               `${achievement.icon} ${achievement.name}`,
-              "success",
               { duration: 5000 }
             );
           }
@@ -205,23 +223,30 @@ export const useAchievements = () => {
 
   // Get unlocked achievements
   const getUnlockedAchievements = useCallback(() => {
-    return userAchievements.filter(ua => ua.isUnlocked);
+    return userAchievements.filter((ua) => ua.isUnlocked);
   }, [userAchievements]);
 
   // Get achievement progress by ID
-  const getAchievementProgress = useCallback((achievementId: string) => {
-    return achievementProgress.find(ap => ap.achievementId === achievementId);
-  }, [achievementProgress]);
+  const getAchievementProgress = useCallback(
+    (achievementId: string) => {
+      return achievementProgress.find(
+        (ap) => ap.achievementId === achievementId
+      );
+    },
+    [achievementProgress]
+  );
 
   // Get achievements by category
   const getAchievementsByCategory = useCallback((category: string) => {
-    return achievements.filter(a => a.category === category);
+    return achievements.filter((a) => a.category === category);
   }, []);
 
   // Get total points earned
   const getTotalPoints = useCallback(() => {
     return getUnlockedAchievements().reduce((total, userAchievement) => {
-      const achievement = achievements.find(a => a.id === userAchievement.achievementId);
+      const achievement = achievements.find(
+        (a) => a.id === userAchievement.achievementId
+      );
       return total + (achievement?.points || 0);
     }, 0);
   }, [getUnlockedAchievements]);

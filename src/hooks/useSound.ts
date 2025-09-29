@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 
 interface SoundOptions {
   volume?: number;
@@ -146,7 +146,7 @@ export const useSound = (): SoundHook => {
   }, [playSound]);
 
   const toggleSound = useCallback(() => {
-    setIsEnabled((prev) => {
+    setIsEnabled((prev: boolean) => {
       const newValue = !prev;
       localStorage.setItem("soundEnabled", JSON.stringify(newValue));
       return newValue;

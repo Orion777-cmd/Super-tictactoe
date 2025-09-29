@@ -6,7 +6,7 @@ import Avatar from "../../components/avatar/avatar.component";
 import ThemeButton from "../../components/themeButton/themeButton.component";
 import { GameStatus } from "../../types/gameStatusType";
 import { useAuth } from "../../state/authContext";
-import { getRoom, getGameForRoom } from "../../supabase/gameApi";
+import { getRoom } from "../../supabase/gameApi";
 import { supabase } from "../../supabase/supabaseClient";
 import ErrorBoundary from "../../components/ErrorBoundary/ErrorBoundary";
 import GameLoading from "../../components/GameLoading/GameLoading";
@@ -53,9 +53,9 @@ const GamePage: React.FC = () => {
     host_username?: string;
     guest_username?: string;
   } | null>(null);
-  const [gameId, setGameId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingMessage, setLoadingMessage] = useState("Loading game...");
+  // const [gameId, setGameId] = useState<string | null>(null);
 
   // Fetch room data and subscribe to updates
   useEffect(() => {
@@ -66,26 +66,26 @@ const GamePage: React.FC = () => {
           const roomData = await getRoom(roomId);
 
           setLoadingMessage("Loading game data...");
-          const gameData = await getGameForRoom(roomId);
-          setGameId(gameData.id);
+          // const gameData = await getGameForRoom(roomId);
+          // setGameId(gameData.id);
 
           setLoadingMessage("Loading player information...");
           // Fetch user profiles for both players
           const [hostProfile, guestProfile] = await Promise.all([
             roomData.host_id
               ? fetchUserProfile(roomData.host_id)
-              : Promise.resolve({ username: "" }),
+              : Promise.resolve({ username: "", avatar_url: undefined }),
             roomData.guest_id
               ? fetchUserProfile(roomData.guest_id)
-              : Promise.resolve({ username: "" }),
+              : Promise.resolve({ username: "", avatar_url: undefined }),
           ]);
 
           setRoom({
             ...roomData,
             host_username: hostProfile.username,
             guest_username: guestProfile.username,
-            host_avatar: hostProfile.avatar_url,
-            guest_avatar: guestProfile.avatar_url,
+            host_avatar: hostProfile.avatar_url || "",
+            guest_avatar: guestProfile.avatar_url || "",
           });
 
           setLoadingMessage("Initializing game...");
@@ -126,17 +126,17 @@ const GamePage: React.FC = () => {
             const [hostProfile, guestProfile] = await Promise.all([
               roomData.host_id
                 ? fetchUserProfile(roomData.host_id)
-                : Promise.resolve({ username: "" }),
+                : Promise.resolve({ username: "", avatar_url: undefined }),
               roomData.guest_id
                 ? fetchUserProfile(roomData.guest_id)
-                : Promise.resolve({ username: "" }),
+                : Promise.resolve({ username: "", avatar_url: undefined }),
             ]);
 
             setRoom({
               host_id: roomData.host_id || "",
               guest_id: roomData.guest_id,
-              host_avatar: hostProfile.avatar_url,
-              guest_avatar: guestProfile.avatar_url,
+              host_avatar: hostProfile.avatar_url || "",
+              guest_avatar: guestProfile.avatar_url || "",
               host_username: hostProfile.username,
               guest_username: guestProfile.username,
             });
