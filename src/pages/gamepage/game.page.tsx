@@ -160,7 +160,7 @@ const GamePage: React.FC = () => {
           // Small delay to show loading state
           setTimeout(() => {
             setIsLoading(false);
-          }, 500);
+          }, 100);
         } catch (error) {
           console.error("Error fetching room:", error);
           setIsLoading(false);
@@ -220,7 +220,7 @@ const GamePage: React.FC = () => {
         supabase.removeChannel(channel);
       };
     }
-  }, [roomId]);
+  }, [roomId, isAuthorized]);
 
   // Show loading state while initializing, checking authorization, or waiting for user
   if (isLoading || !isAuthorized || user === undefined) {
